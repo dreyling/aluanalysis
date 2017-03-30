@@ -1,3 +1,6 @@
+""" Module myrootlib
+A module for accesing and processing ROOT files"""
+
 #! /usr/bin/python
 import math
 import sys, os
@@ -20,6 +23,10 @@ from root_numpy import root2array, tree2array, hist2array
 
 #################################################################
 
+
+
+
+
 def readRunlist(filename):
   return np.genfromtxt(filename, delimiter='\t', names=True)
 
@@ -33,22 +40,55 @@ def readRunlist(filename):
 # rootfolder: folder name in root file
 def getHist1Data(runlist, runindex, histlist, histindex, path, suffix, rootfolder):
   rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  print rootFile, "is opened"
   # open root file
   histfile = TFile(rootFile)
   # get hist data
   histdata = histfile.Get(rootfolder + histlist[histindex]) #print histdata
   # write as numpy array
   counts, edges = hist2array(histdata, include_overflow=False, return_edges=True)
-  print counts, edges
-  print np.size(counts), np.size(edges)
+  #print counts, edges
+  #print np.size(counts), np.size(edges)
   # shorten length by guess in this direction
   #counts = counts[1:]
   # shift hist data by half of the binwidth, checked with np.where(data[0] > 0.)[0][0]
   binwidth = abs(edges[0][1]-edges[0][0])
-  edges = edges + binwidth/2.
+  edges = np.array(edges) + binwidth/2.
   # return x and y data
-  print edges[0][:-1]
-  return edges[0][:-1], counts
+  #print edges[0][:-1]
+  data0 = edges[0][:-1]
+  data1 = counts
+  data = np.vstack((data0, data1))
+  return data
+  #return edges[0][:-1], counts
+
+def cutData(data, cutbins):
+  data0 = data[0][cutbins:-cutbins]
+  data1 = data[1][cutbins:-cutbins]
+  data = np.vstack((data0, data1))
+  return data
+
+
+def getHistSpecs(runlist, runindex, histlist, histindex, path, suffix, rootfolder):
+  rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  # open root file
+  histfile = TFile(rootFile)
+  # get hist data
+  histdata = histfile.Get(rootfolder + histlist[histindex]) #print histdata
+  print histdata.GetBin(1)
+  print histdata.GetBinCenter(1)
+  #print histdata.GetStats(1)
+  #print histdata.GetXaxis().SetRange(50, 100)
+  return {'mean':histdata.GetMean(1), 'stddev':histdata.GetStdDev(1), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
+
+def getHistSpecsMod(runlist, runindex, histlist, histindex, path, suffix, rootfolder, mod):
+  rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  # open root file
+  histfile = TFile(rootFile)
+  # get hist data
+  histdata = histfile.Get(rootfolder + histlist[histindex]) #print histdata
+  
+  return {'mean':histdata.GetMean(), 'stddev':histdata.GetStdDev(), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
 
 def loopRunAndSum(runlist, histlist, histindex, path, suffix, rootfolder):
   data = np.zeros((2, np.size(runlist['runnr'])))
@@ -70,12 +110,15 @@ def getHistFraction(data, fraction):
     indexEnd = np.size(data[0])-1
   # set range to fit
   entriesTotal = calcEntries(data[1])
+  #print type(entriesTotal)
   cumsumNormal = np.cumsum(data[1])/entriesTotal # normalized cumulative sum array
+  #print cumsumNormal
+  #print type(cumsumNormal)
   indexStart = np.where(cumsumNormal > (1.-fraction)/2.)[0][0]
   indexEnd = np.where(cumsumNormal > fraction+(1.-fraction)/2.)[0][0]# print indexStart, indexEnd
   # set data to fit
-  data0 = data[0][indexStart:indexEnd]
-  data1 = data[1][indexStart:indexEnd]
+  data0 = data[0][indexStart:indexEnd].copy()
+  data1 = data[1][indexStart:indexEnd].copy()
   data = np.vstack((data0, data1))
   return data
 
@@ -93,8 +136,8 @@ def fitGaussHisto1d(data, mu0, sigma0, height0):
   dsi = np.sqrt(cov[1][1])
   # chi**2
   chi2 = np.sum(((ydata - fitfunc_gauss(xdata, *para)) / dydata)**2)
-  chi2Reduced = chi2 / (len(ydata)-len(para))
-  fitResult = [mu, si, height, dmu, dsi, chi2, chi2Reduced]
+  chi2red = chi2 / (len(ydata)-len(para))
+  fitResult = {'mu':mu, 'si':si, 'height':height, 'dmu':dmu, 'dsi':dsi, 'chi2':chi2, 'chi2red':chi2red}
   return fitResult
 
 def printData(data):
@@ -119,14 +162,23 @@ def calcMean(data):
 def calcRMS(data):
   return np.sqrt(np.mean(np.square(data)))
 
+def calcHistMedian(data):
+  index = np.where(np.cumsum(data[1]) > calcEntries(data[1]) / 2.)
+  return data[0][index]
+
 def calcHistMean(data):
-  weight = np.multiply(data[0], data[1])
-  return np.mean(np.multiply(data[0], data[1]))
-  #return np.sum(weight)/np.size(data[0])
+  weights = np.multiply(data[0], data[1])
+  return np.sum(weights)/np.sum(data[1])
 
 def calcHistRMS(data):
-  weight = np.multiply(data[0], data[1])
-  return np.sqrt(np.mean(np.square(weight)))
+  weights = np.multiply(np.square(data[0]-calcHistMean(data)), data[1])
+  return np.sqrt(np.sum(weights)/np.sum(data[1]))
+  #qsum = np.sqrt (calcRMS(data[0])**2 + calcMean(data[0]))
+  #return qsum
+  #weight2 = np.multiply(data[0], np.square(data[1]))
+  #return np.sqrt(np.sum(weight2))/np.sum(data[1])
+  #return np.sqrt(np.sum(np.square(weight)/np.sum(data[1])))
+  #return np.sqrt(np.mean(np.square(np.multiply(data[0], data[1]))))
 
 #########
 
