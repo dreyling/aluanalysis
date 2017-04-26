@@ -12,14 +12,9 @@ from scipy.optimize import curve_fit
 
 from ROOT import TFile #, TF1, TCanvas, TH1
 
-#from rootpy.plotting import set_style, root2matplotlib
 from rootpy.io import root_open # Look at http://www.rootpy.org/ for full documentation
 
 from root_numpy import root2array, tree2array, hist2array
-#from root_numpy.testdata import get_filepath
-
-#from matplotlib import rcParams
-#import matplotlib.pyplot as plt
 
 #################################################################
 
@@ -29,18 +24,17 @@ def readRunlist(filename):
 # get Data
 # runlist: csv file (same folder)
 # runindex: index to loop, max. is  length of runlist['runnr'] e.g.
-# histlist: hard coded Root Histograms names
-# histindex: index to loop, max. is length of histlist
+# histname: string, name of Root Histogram
 # path: path of rrot files
 # suffix: filename: run000X + suffix + .root
 # rootfolder: folder name in root file
-def getHist1Data(runlist, runindex, histlist, histindex, path, suffix, rootfolder):
+def getHist1Data(runlist, runindex, histname, path, suffix, rootfolder):
   rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
   print rootFile, "is opened"
   # open root file
   histfile = TFile(rootFile)
   # get hist data
-  histdata = histfile.Get(rootfolder + histlist[histindex]) #print histdata
+  histdata = histfile.Get(rootfolder + histname) #print histdata
   # write as numpy array
   counts, edges = hist2array(histdata, include_overflow=False, return_edges=True)
   #print counts, edges
@@ -49,7 +43,7 @@ def getHist1Data(runlist, runindex, histlist, histindex, path, suffix, rootfolde
   #counts = counts[1:]
   # shift hist data by half of the binwidth, checked with np.where(data[0] > 0.)[0][0]
   binwidth = abs(edges[0][1]-edges[0][0])
-  edges = np.array(edges) + binwidth/2.
+  edges = np.array(edges) + binwidth/2. # root probably adds a whole binwidth, irrelevant for rms
   # return x and y data
   #print edges[0][:-1]
   data0 = edges[0][:-1]
@@ -63,38 +57,6 @@ def cutData(data, cutbins):
   data1 = data[1][cutbins:-cutbins]
   data = np.vstack((data0, data1))
   return data
-
-
-def getHistSpecs(runlist, runindex, histlist, histindex, path, suffix, rootfolder):
-  rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
-  # open root file
-  histfile = TFile(rootFile)
-  # get hist data
-  histdata = histfile.Get(rootfolder + histlist[histindex]) #print histdata
-  print histdata.GetBin(1)
-  print histdata.GetBinCenter(1)
-  #print histdata.GetStats(1)
-  #print histdata.GetXaxis().SetRange(50, 100)
-  return {'mean':histdata.GetMean(1), 'stddev':histdata.GetStdDev(1), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
-
-def getHistSpecsMod(runlist, runindex, histlist, histindex, path, suffix, rootfolder, mod):
-  rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
-  # open root file
-  histfile = TFile(rootFile)
-  # get hist data
-  histdata = histfile.Get(rootfolder + histlist[histindex]) #print histdata
-  return {'mean':histdata.GetMean(), 'stddev':histdata.GetStdDev(), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
-
-def loopRunAndSum(runlist, histlist, histindex, path, suffix, rootfolder):
-  data = np.zeros((2, np.size(runlist['runnr'])))
-  counts = 1 
-  for index, value in enumerate(runlist['runnr']):
-    data[0][index] = value
-    data[1][index] = np.sum(getHist1Data(runlist, index, histlist, histindex, path, suffix, rootfolder)[counts])
-  return data
-
-fitfunc_gauss = lambda xdata, *para: para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
-
 
 def getHistFraction(data, fraction):
   if fraction <= 0:
@@ -116,6 +78,41 @@ def getHistFraction(data, fraction):
   data1 = data[1][indexStart:indexEnd].copy()
   data = np.vstack((data0, data1))
   return data
+
+def getHistSpecs(runlist, runindex, histname, path, suffix, rootfolder):
+  rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  # open root file
+  histfile = TFile(rootFile)
+  # get hist data
+  histdata = histfile.Get(rootfolder + histname) #print histdata
+  #print histdata.GetBin(1)
+  #print histdata.GetBinCenter(1)
+  #print histdata.GetStats(1)
+  #print histdata.GetXaxis().SetRange(50, 100)
+  return {'mean':histdata.GetMean(1), 'stddev':histdata.GetStdDev(1), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
+
+
+#########33
+
+def getHistSpecsMod(runlist, runindex, histname, path, suffix, rootfolder, mod):
+  rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  # open root file
+  histfile = TFile(rootFile)
+  # get hist data
+  histdata = histfile.Get(rootfolder + histname) #print histdata
+  return {'mean':histdata.GetMean(), 'stddev':histdata.GetStdDev(), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
+
+def loopRunAndSum(runlist, histname, path, suffix, rootfolder):
+  data = np.zeros((2, np.size(runlist['runnr'])))
+  counts = 1 
+  for index, value in enumerate(runlist['runnr']):
+    data[0][index] = value
+    data[1][index] = np.sum(getHist1Data(runlist, index, histname, path, suffix, rootfolder)[counts])
+  return data
+
+fitfunc_gauss = lambda xdata, *para: para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
+
+
 
 def fitGaussHisto1d(data, mu0, sigma0, height0):
   xdata = data[0]
