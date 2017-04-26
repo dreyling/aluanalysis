@@ -9,6 +9,8 @@ import time
 import numpy as np
 from scipy.optimize import curve_fit
 #import scipy as sp #import optimize.curve_fit
+# for joining&combining structured arrays
+import numpy.lib.recfunctions as rfn
 
 from ROOT import TFile #, TF1, TCanvas, TH1
 
@@ -21,6 +23,14 @@ from root_numpy import root2array, tree2array, hist2array
 def readRunlist(filename):
   return np.genfromtxt(filename, delimiter='\t', names=True)
 
+def extendList(runlist, newcol_name):
+  newcol = np.zeros(np.size(runlist), dtype = {'names': [newcol_name], 'formats': ['f8']} )
+  newlist = rfn.merge_arrays((runlist, newcol), flatten = True, usemask = False)
+  return newlist
+  
+
+
+
 # get Data
 # runlist: csv file (same folder)
 # runindex: index to loop, max. is  length of runlist['runnr'] e.g.
@@ -30,7 +40,7 @@ def readRunlist(filename):
 # rootfolder: folder name in root file
 def getHist1Data(runlist, runindex, histname, path, suffix, rootfolder):
   rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
-  print rootFile, "is opened"
+  print "opening...", rootFile
   # open root file
   histfile = TFile(rootFile)
   # get hist data
@@ -81,6 +91,7 @@ def getHistFraction(data, fraction):
 
 def getHistSpecs(runlist, runindex, histname, path, suffix, rootfolder):
   rootFile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  print "opening...", rootFile
   # open root file
   histfile = TFile(rootFile)
   # get hist data
