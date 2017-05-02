@@ -52,12 +52,12 @@ for index, thickness in enumerate(thicknesses):
 # scaling and range
 plt.yscale("log")
 plt.xlim([0.5, 5.5])
-plt.ylim([0.01, 10.0])
+plt.ylim([0.02, 5.0])
 
 # labeling
 plt.title("kink angle (gblaxprime6, 1 scatterer)")
 plt.xlabel("beam energy [GeV]")
-plt.ylabel(r'$\sqrt{\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$')
+plt.ylabel(r'$\sqrt{\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$ [mrad]')
 plt.grid(True)
 #ax.yaxis.set_major_formatter(matplotlib.ticker.LogFormatter())
 
@@ -113,7 +113,7 @@ plt.ylim([0.0005, 10.0])
 # labeling
 plt.title("kink angle $^2$ (gblaxprime6, 1 scatterer)")
 plt.xlabel("beam energy [GeV]")
-plt.ylabel(r'${\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$')
+plt.ylabel(r'${\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$ [mrad$^2$]')
 plt.grid(True)
 #ax.yaxis.set_major_formatter(matplotlib.ticker.LogFormatter())
 

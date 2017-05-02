@@ -54,7 +54,7 @@ plt.ylim([0.01, 10.0])
 # labeling
 plt.title("kink angle (gblaxprime6, 1 scatterer)")
 plt.xlabel("thickness Alu [mm]")
-plt.ylabel(r'$\sqrt{\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$')
+plt.ylabel(r'$\sqrt{\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$ [mrad]')
 plt.grid(True)
 #ax.yaxis.set_major_formatter(matplotlib.ticker.LogFormatter())
 
@@ -69,8 +69,8 @@ fig.savefig(nameSave)
 print "evince " + nameSave + "&"
 
 ###################################
-# 1/E
-name = '_quadratic'
+# epsilon
+name = '_epsilon'
 
 fig, ax = plt.subplots(figsize=(8, 5))#, dpi=100)
 plt.subplots_adjust(left=0.1, right=0.8, top=0.94, bottom=0.1)
@@ -84,7 +84,7 @@ for index, thickness in enumerate(thicknesses):
   #print data[cut]['thickness'], data[cut]['energy'], data[cut]['rms98_norm']
   for index2, energy in enumerate(data[cut]['energy']):
     #print colors[int(energy-1)], energy, data[cut]['energy'][index2]
-    plt.plot(data[cut]['thickness'][index2], data[cut]['rms98_norm'][index2], 
+    plt.plot(math.sqrt(data[cut]['thickness'][index2]/x0alu), data[cut]['rms98_norm'][index2], 
 			color=colors[int(energy-1)], 
 			#label=thickness, 
 			marker=markers[index], 
@@ -101,13 +101,13 @@ for index, thickness in enumerate(thicknesses):
 # scaling and range
 plt.xscale("log")
 plt.yscale("log")
-plt.xlim([0.008, 12.0])
-plt.ylim([0.01, 10.0])
+plt.xlim([0.008, 0.6])
+plt.ylim([0.01, 4.0])
 
 # labeling
 plt.title("kink angle (gblaxprime6, 1 scatterer)")
-plt.xlabel("thickness Alu [mm]")
-plt.ylabel(r'$\sqrt{\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$')
+plt.xlabel("$\sqrt{\epsilon}$")
+plt.ylabel(r'$\sqrt{\theta_{rms_{98}}^2 - \theta_{0,rms_{98}}^2}$ [mrad]')
 plt.grid(True)
 #ax.yaxis.set_major_formatter(matplotlib.ticker.LogFormatter())
 

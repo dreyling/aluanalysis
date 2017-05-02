@@ -17,4 +17,4 @@ nameRootHistos = np.array([
 ##################################################
 # Physical constants
 
-x0alu = 88.97
+x0alu = 88.97 # mm
