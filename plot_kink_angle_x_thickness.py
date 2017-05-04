@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-import myrootlib2 as mrl
 from myparams import * 
 
 print "Starting script:", sys.argv[0]

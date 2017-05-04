@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-import myrootlib2 as mrl
 from myparams import * 
 
 print "Starting script:", sys.argv[0]
@@ -15,7 +14,10 @@ input_file = sys.argv[0][5:17] # without plot_ and .py
 data = np.load(input_file + '.npy')
 #print data.dtype; print data
 
-#exit()
+# Function
+def highland(momentum, thickness):
+    return 13.6/momentum*np.sqrt(thickness/x0alu)*(1.+0.038*np.log(thickness/x0alu))
+highland_x = np.linspace(0.5, 6, 50)
 
 #########################################
 # Plotting Data
@@ -27,8 +29,16 @@ plt.subplots_adjust(left=0.1, right=0.8, top=0.94, bottom=0.1)
 thicknesses = [0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0]
 markers = ['^', 'd', 's', 'p', '*', 'h', 'o']
 markersizes = [6, 6, 6, 8, 10, 10, 10]
-colors = ['0.4', '0.5', '0.6', '0.7', '0.8']
+colors = ['0.2', '0.3', '0.4', '0.5', '0.6']
 for index, thickness in enumerate(thicknesses):
+  # highland theory 
+  highland_y = highland(highland_x, thickness)
+  plt.plot(highland_x, highland_y, 
+			color='0.8',
+			marker=markers[index], 
+			markersize=4, 
+			label=str(thickness))
+  # data
   cut = (data['thickness'] == thickness)
   #print data[cut]['thickness'], data[cut]['energy'], data[cut]['rms98_norm']
   for index2, energy in enumerate(data[cut]['energy']):
