@@ -18,3 +18,12 @@ nameRootHistos = np.array([
 # Physical constants
 
 x0alu = 88.97 # mm
+
+# Function
+def highland(momentum, thickness, x0):
+    epsilon = thickness/x0
+    if epsilon < 1e-3: 
+      print "Warning! epsilon < 0.001 for thickness", thickness
+    if epsilon > 100.:
+      print "Warning! epsilon > 100 for thickness", thickness
+    return 13.6/momentum*np.sqrt(epsilon)*(1.+0.038*np.log(epsilon))

@@ -15,29 +15,27 @@ data = np.load(input_file + '.npy')
 #print data.dtype; print data
 
 # Function
-def highland(momentum, thickness):
-    return 13.6/momentum*np.sqrt(thickness/x0alu)*(1.+0.038*np.log(thickness/x0alu))
-highland_x = np.linspace(0.5, 6, 50)
 
 #########################################
 # Plotting Data
 fig, ax = plt.subplots(figsize=(8, 5))#, dpi=100)
 plt.subplots_adjust(left=0.1, right=0.8, top=0.94, bottom=0.1)
 
-#plt.plot(data['energy'], data['rms98_norm'], 'kx')
-
+# iterators
 thicknesses = [0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0]
 markers = ['^', 'd', 's', 'p', '*', 'h', 'o']
 markersizes = [6, 6, 6, 8, 10, 10, 10]
 colors = ['0.2', '0.3', '0.4', '0.5', '0.6']
+# highland x data
+highland_x = np.linspace(0.5, 6, 50)
 for index, thickness in enumerate(thicknesses):
   # highland theory 
-  highland_y = highland(highland_x, thickness)
+  highland_y = highland(highland_x, thickness, x0alu)
   plt.plot(highland_x, highland_y, 
 			color='0.8',
 			marker=markers[index], 
 			markersize=4, 
-			label=str(thickness))
+			label='$\epsilon = ${:.4f}'.format(thickness/x0alu))
   # data
   cut = (data['thickness'] == thickness)
   #print data[cut]['thickness'], data[cut]['energy'], data[cut]['rms98_norm']
