@@ -38,6 +38,7 @@ for index, thickness in enumerate(thicknesses):
   highland_y = highland_multi_scatterer(highland_x, thickness, x0alu)
   ax1.plot(highland_x, highland_y, 
 			color='0.6',
+      markeredgecolor='0.6',
 			marker=markers[index], 
 			markersize=4, 
 			label=r'$\epsilon_{\rm Al} = $' + '{:.4f}'.format(thickness/x0alu))
@@ -50,13 +51,12 @@ for index, thickness in enumerate(thicknesses):
 			markersize=markersizes[index], 
 			linestyle='None')
   # deviation: theory - measurement
-  print data[cut]['energy']
-  highland_points = highland_multi_scatterer(data[cut]['rms98_norm'], thickness, x0alu)
+  highland_points = highland_multi_scatterer(data[cut]['energy'], thickness, x0alu)
   deviation = (highland_points - data[cut]['rms98_norm']) / highland_points
   ax2.plot(data[cut]['energy'], deviation,
 			color='0.6',
 			marker=markers[index], 
-			markersize=4)
+			markersize=markersizes[index])
   
   
 
