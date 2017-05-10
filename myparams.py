@@ -6,7 +6,8 @@ import numpy as np
 name_runlist = "runlistX0meas.csv"
 name_path_1scatterer = "/home/jande/Documents/ownCloud/X0_hendrik/measurement_1scatterer/"
 name_path_2scatterer = "/home/jande/Documents/ownCloud/X0_hendrik/measurement_2scatterer/"
-name_suffix = "-GBLKinkEstimator_kappa100" 
+name_suffix_1scatterer = "-GBLKinkEstimator_kappa100" 
+name_suffix_2scatterer = "-GBLKinkEstimator_kappa100_test" 
 name_rootfolder = "Fitter06/GBL/"
 #nameRootHistos = np.array([
 #"gblrx0", "gblry0", "gblrx1", "gblry1", "gblrx2", "gblry2", "gblrx3", "gblry3", "gblrx4", "gblry4", "gblrx5", "gblry5",

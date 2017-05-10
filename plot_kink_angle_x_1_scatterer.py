@@ -45,7 +45,7 @@ for index, thickness in enumerate(thicknesses):
       markeredgecolor='0.7',
 			marker=markers[index], 
 			markersize=4, 
-			label=r'$\theta_{\rm High.}(\epsilon_{\rm Al} = $' + '{:.4f}'.format(thickness/x0alu) + ' )')
+			label=r'$\theta_{\rm High.}(\epsilon_{\rm Al} = $' + '{:.4f}'.format(thickness/x0alu) + ')')
   # data
   cut = (data['thickness'] == thickness)
   ax1.plot(data[cut]['energy'], data[cut]['rms98_norm'], 

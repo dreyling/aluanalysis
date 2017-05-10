@@ -34,13 +34,13 @@ for index, value in enumerate(newlist):
 	# 0. test
 	#print index, value['energy']
 	# 1./2. add ROOT entries and rms ('stddev')
-	specs = mrl.getHistSpecs(runlist, index, histname, name_path_1scatterer, name_suffix, name_rootfolder)
+	specs = mrl.getHistSpecs(runlist, index, histname, name_path_1scatterer, name_suffix_1scatterer, name_rootfolder)
 	#print specs['entries']
 	newlist['proc_events'][index] = specs['entries']
 	#print specs['stddev']
 	newlist['rmsROOT'][index] = specs['stddev']
 	# 3. add rms98
-	data = mrl.getHist1Data(runlist, index, histname, name_path_1scatterer, name_suffix, name_rootfolder)
+	data = mrl.getHist1Data(runlist, index, histname, name_path_1scatterer, name_suffix_1scatterer, name_rootfolder)
 	data98 = mrl.getHistFraction(data, 0.98)
 	#print mrl.calcHistRMS(data98)
 	newlist['rms98'][index] = mrl.calcHistRMS(data98)
