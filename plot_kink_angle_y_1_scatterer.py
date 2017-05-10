@@ -70,7 +70,7 @@ ax1.set_ylim([0.02, 5.0])
 ax2.set_ylim([-0.35, 0.48])
 
 # labeling
-ax1.set_title("kink angle (1 scatterer, gblaxprime6)")
+ax1.set_title("kink angle (1 scatterer, gblayprime6)")
 ax2.set_xlabel("beam energy [GeV]")
 ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm tot,\,rms_{98}}^2 - \theta_{0,rms_{98}}^2}$ [mrad]')
 ax2.set_ylabel(r'$\sigma_{\rm norm.} = \frac{{\rm Highland}-{\rm meas.}}{\rm Highland}$')
