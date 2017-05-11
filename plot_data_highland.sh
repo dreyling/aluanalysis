@@ -1,0 +1,1 @@
+python plot_data_highland.py data/2_scatterer_gblsumkx.npy

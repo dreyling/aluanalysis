@@ -185,10 +185,6 @@ def calcHistRMS(data):
 
 #########
 
-def highfunc(momentum, thickness, x0material, offset):
-    energyfactor = 13.6 # in MeV
-    return energyfactor/momentum*np.sqrt(thickness/x0material)*(1.+0.038*np.log(thickness/x0material))+offset
-
 def linfunc(xdata, slope, offset):
     return slope * xdata + offset
    

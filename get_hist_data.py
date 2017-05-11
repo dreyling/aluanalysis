@@ -14,10 +14,10 @@ print "Starting script:", sys.argv[0], nameScript
 
 # 1st argument
 if sys.argv[1] == '1':
-  name_path = name_path_1scatterer
+  name_path 	= name_path_1scatterer
   name_suffix = name_suffix_1scatterer
 elif sys.argv[1] == '2':
-  name_path = name_path_2scatterer
+  name_path 	= name_path_2scatterer
   name_suffix = name_suffix_2scatterer
 else:
   print "1st argument wrong...no valid data!"
@@ -26,7 +26,7 @@ print sys.argv[1], "scatterer"
 
 # 2nd argument
 histname = sys.argv[2]
-print sys.argv[2], "histogram collecetion"
+print sys.argv[2], "histogram collection"
 
 # save name in folder
 outfile = "data/" + sys.argv[1] + "_scatterer_" + sys.argv[2]
