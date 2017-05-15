@@ -35,6 +35,10 @@ print "selected energy:", energy
 thickness = sys.argv[4]
 print "selected thickness:", thickness
 
+# 5th argument
+fraction = sys.argv[5]
+print "selected data fraction:", fraction
+
 #####################################
 # Start
 
@@ -49,30 +53,33 @@ print "selected run:", runnr
 
 # Getting histogram data
 data = mrl.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
-data98 = mrl.getHistFraction(data, 0.98)
+datafrac = mrl.getHistFraction(data, float(fraction))
 #print np.sum(data[1])
-#print np.sum(data98[1])
-#print mrl.calcHistRMS(data98)
-#print mrl.calcHistMean(data98)
+#print np.sum(datafrac[1])
+#print mrl.calcHistRMS(datafrac)
+#print mrl.calcHistMean(datafrac)
 
 ##########################################
 # Plotting Data
 fig, ax = plt.subplots(figsize=(6, 4))#, dpi=100)
-fig.subplots_adjust(left=0.1, right=0.99, top=0.94, bottom=0.12)
+fig.subplots_adjust(left=0.11, right=0.99, top=0.94, bottom=0.12)
 
-#plt.axvline(data98[0][0],  color='0.5', ls='--')
-#plt.axvline(data98[0][-1], color='0.5', ls='--')
-plt.axvspan(data98[0][0], data98[0][-1], color='yellow', alpha=0.2)
+#plt.axvline(datafrac[0][0],  color='0.5', ls='--')
+#plt.axvline(datafrac[0][-1], color='0.5', ls='--')
+plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.2)
 plt.axvline(0, color='0.5')
 
-plt.plot(data[0], data[1], 'k', label='k')
+norm = np.max(data[1])
+print norm
+
+plt.plot(data[0], data[1]/norm, 'k', label='k')
 
 # text box
 textbox = (
 	r'$\theta_{{\rm rms}_{100}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(data)) + ' mrad' + '\n' + 
-	r'$\theta_{{\rm rms}_{98}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(data98)) + ' mrad' + '\n' + 
-	r'$\theta_{{\rm mean}_{98}} =$ ' + '{:.4f}'.format(mrl.calcHistMean(data98)) + ' mrad' + '\n' + 
-	r'events$_{98} = $ ' + '{:.2e}'.format(np.sum(data98[1])) + ' ({:.2f} \%)'.format(100*np.sum(data98[1])/np.sum(data[1])) 
+	r'$\theta_{{\rm rms}_{frac}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(datafrac)) + ' mrad' + '\n' + 
+	r'$\theta_{{\rm mean}_{frac}} =$ ' + '{:.4f}'.format(mrl.calcHistMean(datafrac)) + ' mrad' + '\n' + 
+	r'events$_{frac} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1])) 
   )
 props = dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.9)
 ax.text(0.5, 0.05, textbox, transform=ax.transAxes, fontsize=10,
@@ -80,14 +87,15 @@ ax.text(0.5, 0.05, textbox, transform=ax.transAxes, fontsize=10,
 
 plt.yscale("log")
 plt.xlim(-4.2, 4.2)
-plt.ylim(2e1, 9e5)
+#plt.xlim(-1.9, 1.9)
+plt.ylim(5e-5, 5)
 
-texttitle = (scatterer + " scatterer model, " + histname + ", " + energy + " GeV, " + thickness + " mm, " + "run " + str(runnr)[:-2])
+texttitle = (scatterer + " scatterer model, " + histname + ", " + energy + " GeV, " + thickness + " mm, " + "run " + str(runnr)[:-2]) + ", fraction" + fraction
 plt.title(texttitle)
 plt.xlabel(r'$\theta$ [mrad]')
-plt.ylabel("events")
+plt.ylabel("events normalized")
 
 # save name in folder
-outfile = "output/" + sys.argv[1] + "_scatterer_" + sys.argv[2] + "_" + energy + "gev_" + thickness + "mm_" + "run" + str(runnr)[:-2] + ".pdf"
+outfile = "output/" + sys.argv[1] + "_scatterer_" + sys.argv[2] + "_" + energy + "gev_" + thickness + "mm_" + "run" + str(runnr)[:-2] + "fraction" + fraction + ".pdf"
 fig.savefig(outfile)
 print "evince " + outfile + "&"
