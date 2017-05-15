@@ -35,11 +35,11 @@ def highland(momentum, thickness, x0):
 def highland_multi_scatterer(momentum, thickness_dut, x0_dut):
     epsilon_dut = thickness_dut/x0_dut
     epsilon_total = epsilon_dut + thickness_mimosa/x0sil + thickness_kapton/x0kap + thickness_air/x0air
-    print epsilon_total, thickness_dut
-    if epsilon_dut < 1e-3: 
-      print "Warning! epsilon < 0.001 for thickness", thickness_dut
-    if epsilon_dut > 100.:
-      print "Warning! epsilon > 100 for thickness", thickness_dut
+    #print epsilon_total, thickness_dut
+    #if epsilon_dut < 1e-3: 
+    #  print "Warning! epsilon < 0.001 for thickness", thickness_dut
+    #if epsilon_dut > 100.:
+    #  print "Warning! epsilon > 100 for thickness", thickness_dut
     return 13.6/momentum*np.sqrt(epsilon_dut)*(1.+0.038*np.log(epsilon_total))
 
 # Energy loss
