@@ -23,12 +23,12 @@ from root_numpy import root2array, tree2array, hist2array
 def readRunlist(filename):
   return np.genfromtxt(filename, delimiter='\t', names=True)
 
-def extendList(runlist, newcol_name):
-  newcol = np.zeros(np.size(runlist), dtype = {'names': [newcol_name], 'formats': ['f8']} )
-  newlist = rfn.merge_arrays((runlist, newcol), flatten = True, usemask = False)
-  return newlist
-  
-
+def extendList(runlist, *newcol_name):
+    newlist = runlist
+    for index, value in enumerate(newcol_name):
+        newcol = np.zeros(np.size(runlist), dtype = {'names': [value], 'formats': ['f8']} )
+        newlist = rfn.merge_arrays((newlist, newcol), flatten = True, usemask = False)
+    return newlist
 
 
 # get Data
@@ -122,8 +122,6 @@ def loopRunAndSum(runlist, histname, path, suffix, rootfolder):
   return data
 
 fitfunc_gauss = lambda xdata, *para: para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
-
-
 
 def fitGaussHisto1d(data, mu0, sigma0, height0):
   xdata = data[0]

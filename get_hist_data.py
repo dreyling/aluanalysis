@@ -45,14 +45,13 @@ outfile = "data/" + sys.argv[1] + "_scatterer_" + sys.argv[2] + "_" + fraction
 print "Reading...", name_runlist
 runlist = mrl.readRunlist(name_runlist)
 
-# Naming empty columns
-newcol_name1 = 'proc_events'
-newcol_name2 = 'rmsROOT'
-newcol_name3 = 'rmsfrac'
-newcol_name4 = 'rmsfrac_norm'
 # Adding new columns
-newlist = mrl.extendList(mrl.extendList(mrl.extendList(mrl.extendList(runlist, newcol_name1), newcol_name2), newcol_name3), newcol_name4) 
-#print newlist.dtype; print newlist[0]
+newlist = mrl.extendList(runlist, 
+        'proc_events', 
+        'rmsROOT', 
+        'rmsfrac', 
+        'rmsfrac_norm', 
+        )
 
 ########################################
 # Getting values 
@@ -80,6 +79,7 @@ data_zero_rmsfrac = newlist[cut_zero]['rmsfrac']
 for index, value in enumerate(newlist):
   newlist['rmsfrac_norm'][index] = math.sqrt(newlist['rmsfrac'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
 
+print newlist.dtype
 print newlist
 
 ############################################
