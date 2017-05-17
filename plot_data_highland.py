@@ -20,12 +20,21 @@ energies = [1., 2., 3., 4., 5.]
 
 #####################################
 # Open npy file
-if sys.argv[1] == None:
+if len(sys.argv) < 2:
   print "No data input. Run get_hist_data.py or select npy-file in data/..."
   exit()
 input_file = sys.argv[1]
 data = np.load(input_file)
 
+# scattering data
+if len(sys.argv) < 3:
+  print "please select data..."
+  print data.dtype
+  exit()
+scattering_data = sys.argv[2]
+
+title_save = "kinkangle_" + input_file[5:-4] + "_" + scattering_data 
+title_plot = title_save.replace("_", " ")
 
 #########################################
 # Plotting
@@ -52,7 +61,7 @@ for index, thickness in enumerate(thicknesses):
 			label=r'$\theta_{\rm High.}(\epsilon_{\rm Al} = $ ' + '{:.4f}'.format(thickness/x0alu) + ')')
   # data
   cut = (data['thickness'] == thickness)
-  ax1.plot(data[cut]['energy'], data[cut]['rmsfrac_norm'], 
+  ax1.plot(data[cut]['energy'], data[cut][scattering_data], 
 			color='k', 
 			label=r'$\theta_{\rm Al}(d_{\rm Al} = $' + str(thickness) + ' mm)' , 
 			marker=markers[index], 
@@ -60,7 +69,7 @@ for index, thickness in enumerate(thicknesses):
 			linestyle='None')
   # deviation: theory - measurement
   highland_points = highland_multi_scatterer(data[cut]['energy'], thickness, x0alu)
-  deviation = (highland_points - data[cut]['rmsfrac_norm']) / highland_points
+  deviation = (highland_points - data[cut][scattering_data]) / highland_points
   ax2.plot(data[cut]['energy'], deviation,
 			color='0.5',
       markeredgecolor='0.5',
@@ -74,9 +83,9 @@ ax1.set_ylim([0.02, 5.0])
 ax2.set_ylim([-0.25, 0.19])
 
 # labeling
-ax1.set_title("kink angle, (" + input_file[5:-4].replace("_", " ") + ")")
+ax1.set_title(title_plot)
 ax2.set_xlabel("beam energy [GeV]")
-ax1.set_ylabel(r'$\theta_{\rm Al,\,rms_{frac}} = \sqrt{\theta_{\rm tot,\,rms_{frac}}^2 - \theta_{0,rms_{frac}}^2}$ [mrad]')
+ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm tot}^2 - \theta_{0}^2}$ [mrad]')
 ax2.set_ylabel(r'$\sigma_{\rm norm.} = \frac{{\rm Highland}-{\rm meas.}}{\rm Highland}$')
 
 # grids
@@ -84,7 +93,6 @@ ax1.grid(True)
 ax2.grid(True)
 ax2.axhline(0, color='k')
 ax2.axhspan(-0.11, 0.11, alpha=0.5, color='yellow')
-#ax.yaxis.set_major_formatter(matplotlib.ticker.LogFormatter())
 
 # legend
 ax1.legend()
@@ -95,9 +103,9 @@ ax1.legend(reversed(handles), reversed(labels),
 			bbox_to_anchor=(1, 0.5), 	
 			prop={'size':12})  
 
-nameSave =  "output/" + sys.argv[1][5:-4] + "_" + plotname + str(".pdf") 
-fig.savefig(nameSave)
-print "evince " + nameSave + "&"
+name_save =  "output/" + title_save + "_" + plotname + str(".pdf") 
+fig.savefig(name_save)
+print "evince " + name_save + "&"
 
 #############################################################
 ############################################################
@@ -133,7 +141,7 @@ for index, energy in enumerate(energies):
     cut  = (data['thickness'] == thickness)
     cut2 = (data[cut]['energy'] == energy)
 		# data
-    ax1.plot(data[cut][cut2]['thickness'], data[cut][cut2]['rmsfrac_norm'], 
+    ax1.plot(data[cut][cut2]['thickness'], data[cut][cut2][scattering_data], 
       color=colors[index],
       markeredgecolor=colors[index], 
       #label=r'$\theta_{\rm Al}(d_{\rm Al} = $ ' + str(thickness) + ' mm)' , 
@@ -142,7 +150,7 @@ for index, energy in enumerate(energies):
       linestyle='None')
     # deviation points
     highland_point = highland_multi_scatterer(energy, data[cut][cut2]['thickness'], x0alu)
-    deviation = (highland_point - data[cut][cut2]['rmsfrac_norm']) / highland_point
+    deviation = (highland_point - data[cut][cut2][scattering_data]) / highland_point
     deviations = np.append(deviations, deviation)
     thickness_order = np.append(thickness_order, data[cut][cut2]['thickness'])
     ax2.plot(data[cut][cut2]['thickness'], deviation,
@@ -164,9 +172,9 @@ ax1.set_ylim([0.02, 5.0])
 ax2.set_ylim([-0.25, 0.19])
 
 # labeling
-ax1.set_title("kink angle, (" + input_file[5:-4].replace("_", " ") + ")")
+ax1.set_title(title_plot)
 ax2.set_xlabel("thickness [mm]")
-ax1.set_ylabel(r'$\theta_{\rm Al,\,rms_{frac}} = \sqrt{\theta_{\rm tot,\,rms_{frac}}^2 - \theta_{0,rms_{frac}}^2}$ [mrad]')
+ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm tot}^2 - \theta_{0}^2}$ [mrad]')
 ax2.set_ylabel(r'$\sigma_{\rm norm.} = \frac{{\rm Highland}-{\rm meas.}}{\rm Highland}$')
 
 # grids
@@ -181,6 +189,6 @@ ax1.legend(loc='center left',
 			bbox_to_anchor=(1, 0.5), 	
 			prop={'size':12})  
 
-nameSave =  "output/" + sys.argv[1][5:-4] + "_" + plotname + str(".pdf") 
-fig.savefig(nameSave)
-print "evince " + nameSave + "&"
+name_save = "output/" + title_save + "_" + plotname + str(".pdf") 
+fig.savefig(name_save)
+print "evince " + name_save + "&"
