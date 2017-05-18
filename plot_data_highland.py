@@ -9,14 +9,6 @@ from myparams import *
 
 print "Starting script:", sys.argv[0]
 
-####################
-# iterators
-thicknesses = np.array([0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0])
-markers = ['^', 'd', 's', 'p', '*', 'h', 'o']
-markersizes = [6, 6, 6, 8, 10, 10, 10]
-colors = ['0.0', '0.15', '0.3', '0.45', '0.6']
-energies = [1., 2., 3., 4., 5.]
-
 
 #####################################
 # Open npy file
@@ -33,8 +25,35 @@ if len(sys.argv) < 3:
   exit()
 scattering_data = sys.argv[2]
 
-title_save = "kinkangle_" + input_file[5:-4] + "_" + scattering_data 
+# only sample
+start_sample = 0
+end_sample = None
+samples = 'all'
+
+if len(sys.argv) < 4:
+    print "please select samples: all or 5samples"
+    exit()
+if sys.argv[3] == '5samples':
+    samples = '5samples'
+    start_sample = 1
+    end_sample = -1
+
+
+####################
+# iterators
+# seven elements
+thicknesses = np.array([0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0])[start_sample:end_sample]
+markers = ['^', 'd', 's', 'p', '*', 'h', 'o'][start_sample:end_sample]
+markersizes = [6, 6, 6, 8, 10, 10, 10][start_sample:end_sample]
+# five
+colors = ['0.0', '0.15', '0.3', '0.45', '0.6']
+energies = [1., 2., 3., 4., 5.]
+
+#####################
+# output names
+title_save = "kinkangle_" + input_file[5:-4] + "_" + scattering_data + "_" + samples
 title_plot = title_save.replace("_", " ")
+
 
 #########################################
 # Plotting
@@ -61,7 +80,8 @@ for index, thickness in enumerate(thicknesses):
 			label=r'$\theta_{\rm High.}(\epsilon_{\rm Al} = $ ' + '{:.4f}'.format(thickness/x0alu) + ')')
   # data
   cut = (data['thickness'] == thickness)
-  ax1.plot(data[cut]['energy'], data[cut][scattering_data], 
+  ax1.errorbar(data[cut]['energy'], data[cut][scattering_data], 
+                        yerr=0.05*data[cut][scattering_data],
 			color='k', 
 			label=r'$\theta_{\rm Al}(d_{\rm Al} = $' + str(thickness) + ' mm)' , 
 			marker=markers[index], 
@@ -140,8 +160,9 @@ for index, energy in enumerate(energies):
   for index2, thickness in enumerate(thicknesses):
     cut  = (data['thickness'] == thickness)
     cut2 = (data[cut]['energy'] == energy)
-		# data
-    ax1.plot(data[cut][cut2]['thickness'], data[cut][cut2][scattering_data], 
+    # data
+    ax1.errorbar(data[cut][cut2]['thickness'], data[cut][cut2][scattering_data], 
+      yerr=0.05*data[cut][cut2][scattering_data],
       color=colors[index],
       markeredgecolor=colors[index], 
       #label=r'$\theta_{\rm Al}(d_{\rm Al} = $ ' + str(thickness) + ' mm)' , 
