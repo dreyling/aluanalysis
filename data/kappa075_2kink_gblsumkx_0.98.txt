@@ -1,0 +1,128 @@
+Starting script: get_hist_data.py
+path: /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/
+histogram collection gblsumkx
+fraction 0.98
+data/kappa075_2kink_gblsumkx_0.98
+Reading... runlistX0meas.csv
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000001-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000001-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000002-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000002-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000003-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000003-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000004-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000004-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000005-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000005-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000007-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000007-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000009-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000009-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000011-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000011-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000012-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000012-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000013-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000013-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000015-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000015-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000017-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000017-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000018-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000018-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000019-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000019-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000020-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000020-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000022-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000022-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000023-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000023-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000024-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000024-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000026-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000026-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000028-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000028-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000030-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000030-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000032-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000032-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000033-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000033-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000035-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000035-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000036-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000036-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000038-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000038-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000039-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000039-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000041-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000041-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000042-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000042-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000044-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000044-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000046-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000046-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000047-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000047-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000048-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000048-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000049-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000049-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000050-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000050-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000052-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000052-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000054-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000054-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000055-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000055-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000056-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000056-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000057-GBLKinkEstimator_kappa075_2kink.root
+opening... /home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/run000057-GBLKinkEstimator_kappa075_2kink.root
+('runnr', 'thickness', 'energy', 'events', 'proc_events', 'rmsROOT', 'rmsfrac', 'rmsfrac_norm', 'gauss_mu', 'gauss_si', 'gauss_height', 'gauss_dmu', 'gauss_dsi', 'gauss_chi2', 'gauss_chi2red', 'gauss_si_norm')
+[ (1.0, 0.0, 2.0, 2000000.0, 6335464.0, 0.3667280615143275, 0.29739949809402905, 0.0, 0.0009969076669000675, 0.29583928818488786, 166668.56641111436, 0.0024688930964118965, 0.0019407806595814142, 37973.594913708046, 421.92883237453384, 0.0)
+ (2.0, 0.0, 1.0, 2000000.0, 2800323.0, 0.546136348821127, 0.45550646873308925, 0.0, 0.0004972985371555568, 0.45301398426553324, 48030.90944972783, 0.0033248235037260493, 0.0026373468951448415, 19836.827632487886, 143.74512777165134, 0.0)
+ (3.0, 0.0, 3.0, 2000000.0, 8105766.0, 0.29509837798936417, 0.2393836928006935, 0.0, -0.00015181115589964374, 0.23988035530259003, 263508.8001874502, 0.0019409145892598297, 0.0015257727404891861, 35356.91863335616, 505.0988376193737, 0.0)
+ (4.0, 0.0, 4.0, 2000000.0, 7492477.0, 0.2594130307325983, 0.2119293748634364, 0.0, 6.477003747541556e-05, 0.21385155917933388, 273801.08435871825, 0.0015788202745704877, 0.0012441194832126974, 23182.216553870665, 386.3702758978444, 0.0)
+ (5.0, 0.0, 5.0, 2000000.0, 5387904.0, 0.2364592763424135, 0.19610631118564137, 0.0, -0.0002988810217953232, 0.19917412138206436, 211960.5591379863, 0.0012569844957192444, 0.0009935134041166296, 10896.658039495027, 201.78996369435234, 0.0)
+ (7.0, 0.025, 5.0, 2000000.0, 5326108.0, 0.24300158550177955, 0.20085714201712662, 0.04342702168521997, -9.721719361107105e-05, 0.20338951130446814, 205091.81642392592, 0.0013698057984457745, 0.0010796193051125073, 12769.7307421692, 228.0309061101643, 0.04119420687855355)
+ (9.0, 0.025, 4.0, 2000000.0, 7622375.0, 0.26752629390025023, 0.21790476612265158, 0.05067965241554574, 4.582099495411259e-06, 0.2196330756579222, 271118.78211365436, 0.0016427211941296368, 0.0012943217459445852, 25049.341576854316, 404.02163833635996, 0.0500619472206829)
+ (11.0, 0.025, 3.0, 2000000.0, 8073924.0, 0.3065272988066654, 0.2491486573109531, 0.06906881395357782, 9.011344202073295e-05, 0.2488869653085564, 252950.96552869971, 0.0020704013272493317, 0.0016246286845744834, 39489.11039679622, 533.6366269837326, 0.06634859938541071)
+ (12.0, 0.025, 2.0, 2000000.0, 6469670.0, 0.3821648502724425, 0.31148361317961865, 0.09260442652945869, 0.00014346859340033769, 0.3101378309954729, 162387.07898535108, 0.0025188531612494605, 0.001982885046065426, 38331.5937159391, 407.7829118716926, 0.09308377829050213)
+ (13.0, 0.025, 1.0, 2000000.0, 2769280.0, 0.5817077549109593, 0.4883913352676827, 0.17618159185017385, -4.586887620089921e-05, 0.48565913102739355, 44288.94687249598, 0.0034936873520921233, 0.0027748443469958494, 20201.06659467869, 136.49369320728846, 0.1750517683719597)
+ (15.0, 0.05, 1.0, 2000000.0, 2711778.0, 0.6113290112356887, 0.5163968149700366, 0.24326842675018365, -6.23156691072329e-05, 0.5139945684196183, 40990.760076309474, 0.0035713773025871577, 0.0028385656549557623, 19437.526396032426, 124.59952817969504, 0.2428348130411637)
+ (17.0, 0.05, 2.0, 2000000.0, 5963873.0, 0.3987276689964263, 0.3252669721237066, 0.13172752820858566, -0.00029704748477663224, 0.3239967792828816, 143261.13863805888, 0.0025694128040616463, 0.0020241636262139395, 35095.25369437378, 358.114833616059, 0.13210991087703894)
+ (18.0, 0.05, 3.0, 2000000.0, 7507557.0, 0.31629122431213336, 0.25685775038672565, 0.09312009211138414, -0.0006234375296895635, 0.2567949078304342, 227895.6987692136, 0.0020922677085257993, 0.0016435940121543985, 36124.75791950966, 475.32576209881137, 0.09165718644789593)
+ (19.0, 0.05, 4.0, 2000000.0, 7389608.0, 0.2745889454471009, 0.22338517648688272, 0.07061782454925092, -0.00030724691228898763, 0.22497639535485042, 256555.73714387778, 0.001679233525497602, 0.0013211425743248854, 24988.263709119117, 390.4416204549862, 0.0698705166964566)
+ (20.0, 0.05, 5.0, 2000000.0, 5307947.0, 0.24947282212182398, 0.2053992346799876, 0.0610832245406627, -0.0005059450360647066, 0.20758024713312406, 200237.79699529256, 0.0014147972387132458, 0.0011115094284931497, 13548.661622233323, 233.5976141764366, 0.058474168412484144)
+ (22.0, 0.1, 5.0, 2000000.0, 5466348.0, 0.2623045065679536, 0.21349547906898128, 0.08439570069650597, -0.000992732551084964, 0.21587547409493793, 198062.9597225675, 0.0014921860444287907, 0.001177103704341096, 14800.313137516587, 246.67188562527645, 0.0832579707139017)
+ (23.0, 0.1, 4.0, 2000000.0, 7815450.0, 0.291096339489554, 0.23585773987672673, 0.10351238346087265, -0.0003527773743651089, 0.23714671080065677, 257212.66635257323, 0.0018288369255638987, 0.0014407401917263844, 29992.947645842436, 441.0727594976829, 0.10249913697265065)
+ (24.0, 0.1, 3.0, 2000000.0, 8442719.0, 0.3385686956321909, 0.2749653407488241, 0.13528261615677073, -0.00016473649201190132, 0.2743962680766744, 239725.68701414304, 0.002260172101702816, 0.0017772128489926063, 44839.31704482473, 546.8209395710334, 0.13323185457805997)
+ (26.0, 0.1, 2.0, 2000000.0, 6953339.0, 0.4304418015330463, 0.3530371679308603, 0.19023348935994966, 0.0002566572310227836, 0.35199512413397716, 153711.3903401316, 0.0026891547097576177, 0.002122595815725491, 41011.16913975741, 386.89782207318314, 0.19073458779244223)
+ (28.0, 0.1, 1.0, 2000000.0, 2985137.0, 0.6715565436775564, 0.5725393717621488, 0.34686479954026345, -0.0006453342399800687, 0.5707598559772783, 40635.71596020852, 0.003718559483783146, 0.002960233342696733, 20703.733914703225, 120.37054601571643, 0.347196116417034)
+ (30.0, 0.2, 1.0, 2000000.0, 2930605.0, 0.7759287196638954, 0.6720478873078488, 0.49412773629624784, -0.0006395194610897247, 0.6720240521369094, 33894.91438791669, 0.003955989923932963, 0.003157853125582865, 19237.605417140556, 96.18802708570279, 0.4963815636286049)
+ (32.0, 0.2, 2.0, 2000000.0, 7191166.0, 0.488125776158572, 0.40456043057536895, 0.2742675345729923, 0.0018330172929816458, 0.40313977621154273, 138777.41823047682, 0.002911860696971914, 0.0022994530852131685, 43639.010058537046, 357.6968037585004, 0.27386272972084325)
+ (33.0, 0.2, 3.0, 2000000.0, 8810190.0, 0.37643302294533687, 0.30659549157777827, 0.1915626348663087, -0.000546967193539045, 0.30567125654373484, 224444.47486472217, 0.0024566593750000726, 0.0019339476516201974, 49985.628739509804, 543.322051516411, 0.1894527176287765)
+ (35.0, 0.2, 4.0, 2000000.0, 7978552.0, 0.3190804436003691, 0.2581510800356884, 0.14740393547522887, -0.0004245250660949956, 0.25845316904271143, 240759.99389394303, 0.0020685095090020207, 0.001626805104989346, 37011.31717188349, 486.99101541951967, 0.1451397644506433)
+ (36.0, 0.2, 5.0, 2000000.0, 5623031.0, 0.28482858169264885, 0.2300812604733256, 0.12033162981591622, -0.0005985468493103212, 0.23178139034739212, 189603.21375943418, 0.0016694859555258497, 0.0013125583958004613, 18269.703284406758, 276.81368612737515, 0.11854232275036984)
+ (38.0, 1.0, 5.0, 2000000.0, 5218745.0, 0.4245234306211807, 0.3389172894866752, 0.2764186025327442, -6.739398533536018e-05, 0.33682687065059935, 120523.765623282, 0.0026124434096571362, 0.002047844098375855, 31262.42306663277, 300.60022179454586, 0.27162844137526965)
+ (39.0, 1.0, 4.0, 2000000.0, 6799605.0, 0.4905349272889084, 0.39860901914376223, 0.3376019700960663, -0.00037482106588472683, 0.39610078633059465, 133433.4396395844, 0.0029206155346618115, 0.0022970537605231022, 43104.02874079648, 353.31171099013505, 0.33341167281348033)
+ (41.0, 1.0, 3.0, 2000000.0, 9534161.0, 0.5979037218540821, 0.49958083385658897, 0.4384933946799518, 0.00022168642275697772, 0.49741021203704716, 149013.74816369172, 0.003249383995891623, 0.002563328045913428, 58981.10828228923, 388.0336071203239, 0.4357457219281027)
+ (42.0, 1.0, 2.0, 2000000.0, 7138249.0, 0.8039868427555611, 0.6968361133384263, 0.6301857721228112, -0.0014119093458499277, 0.6983740054886125, 79512.9816233881, 0.0036398498985052504, 0.00289049563029098, 38009.080281888324, 183.618745323132, 0.6326178681545973)
+ (44.0, 1.0, 1.0, 2000000.0, 2780734.0, 1.3193880903761281, 1.204687853359683, 1.1152518464341012, 0.0023190468688941957, 1.2289702203086736, 17573.107836299943, 0.004520025048775632, 0.003698812811459106, 11531.144647695464, 34.524385172740914, 1.1424299245316611)
+ (46.0, 10.0, 1.0, 2000000.0, 2590989.0, 2.5563399089152608, 2.484523817035437, 2.4424111968214217, 0.8111518839091194, 3.806005964557645, 5152.882390000358, 0.005216260519438903, 0.007121122445058731, 605.482557681205, 1.2640554440108664, 3.778949554083547)
+ (47.0, 10.0, 2.0, 2000000.0, 7016779.0, 2.0534025819536597, 1.9595220762294554, 1.9368222184196502, 0.1658356718646037, 2.196441363141537, 24445.564482419628, 0.003271707524784576, 0.003140798750270558, 5119.336708163071, 11.376303795917936, 2.1764268371083166)
+ (48.0, 10.0, 3.0, 2000000.0, 8819549.0, 1.6090824186935828, 1.4970976172372634, 1.4778351474906106, 0.11195358344670767, 1.5523286367689662, 43628.47318654408, 0.004718075754914173, 0.003961508817567279, 28274.64518489092, 71.58138021491372, 1.5336823698774462)
+ (49.0, 10.0, 4.0, 2000000.0, 6856168.0, 1.320768785086437, 1.1979870514908693, 1.1790924118192687, 0.006629331997612863, 1.2069839887032623, 43635.479143226476, 0.005058007400900789, 0.004083684679532423, 38393.79977346395, 111.28637615496797, 1.1878879827755666)
+ (50.0, 10.0, 5.0, 2000000.0, 4075593.0, 1.1313967528494646, 1.00079758781163, 0.98139600900082, -0.02292006946881691, 0.9893767609486533, 31584.301113256603, 0.005511397962416414, 0.00439099113388689, 36556.600223956964, 119.07687369367089, 0.969121274390843)
+ (52.0, 0.013, 1.0, 2000000.0, 2600797.0, 0.5662405516119855, 0.4727522098744746, 0.12652473625149535, 0.0026838439648263833, 0.46935387855958205, 43028.51798437181, 0.0034930043531007596, 0.002772594452020529, 19777.336210715403, 137.34261257441253, 0.12276560340254146)
+ (54.0, 0.013, 2.0, 2000000.0, 7575019.0, 0.3731935269193942, 0.304174990061671, 0.0638432699071504, 0.00024597929454643613, 0.3026714739913676, 194828.35278381154, 0.002507075211586736, 0.001972601062783495, 45721.45948262912, 496.9723856807513, 0.06394635825726115)
+ (55.0, 0.013, 3.0, 2000000.0, 9136753.0, 0.30028605132376335, 0.24408060227610714, 0.0476527861574789, 0.0001625661604175061, 0.24414521667441394, 291888.0558952806, 0.0020122376699502663, 0.0015798809307686456, 42630.67205941776, 592.0926674919133, 0.045434589960730354)
+ (56.0, 0.013, 4.0, 2000000.0, 8334887.0, 0.2627868184998431, 0.21561880533684027, 0.039716612202946866, -0.0004154897464083849, 0.21691001356569997, 300357.24995295954, 0.001659923784778148, 0.0013035767226209096, 28767.22280109271, 463.9874645337534, 0.03629689548212089)
+ (57.0, 0.013, 5.0, 2000000.0, 5868617.0, 0.23980698335158984, 0.19834648898040405, 0.029726156899504117, -0.000533269512603268, 0.20117098314471998, 228521.23306116072, 0.001332114171998237, 0.0010525533492151328, 13324.120472717515, 242.2567358675912, 0.02827426092926055)]
+saving npy-data in: data/kappa075_2kink_gblsumkx_0.98
