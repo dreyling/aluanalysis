@@ -18,7 +18,7 @@ if len(sys.argv) < 2:
 input_file = sys.argv[1]
 data = np.load(input_file)
 
-# scattering data
+# scattering angle, y-axis data
 if len(sys.argv) < 3:
   print "please select data..."
   print data.dtype
