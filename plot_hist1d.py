@@ -13,30 +13,31 @@ from myparams import *
 # setting which data
 print "Starting script:", sys.argv[0]
 
-# 1st argument
-scatterer = sys.argv[1]
-if scatterer 		== '1':
-  name_path 	= name_path_1scatterer
-  name_suffix = name_suffix_1scatterer
-elif scatterer 	== '2':
-  name_path 	= name_path_2scatterer
-  name_suffix = name_suffix_2scatterer
-else:
-  print "1st argument wrong...no valid data!"
-  exit()
-print "scatterer number:", scatterer
+# 1st argument, data
+name_path = sys.argv[1]
+print "path:", name_path
+name_kappa = name_path[-15:-7]
+name_kinks = name_path[-6:-1]
+name_suffix = "-GBLKinkEstimator_" + name_kappa + "_" + name_kinks
 
 # 2nd argument
 histname 	= sys.argv[2]
 print "histogram collection:", histname
+
 # 3rd/4th argument
 energy 		= sys.argv[3]
 print "selected energy:", energy
 thickness = sys.argv[4]
 print "selected thickness:", thickness
 
-# 5th argument
-fraction = sys.argv[5]
+# 5th argument, npy results
+if len(sys.argv) < 2:
+  print "No data input. Run get_hist_data.py or select npy-file in data/..."
+  exit()
+input_file = sys.argv[5]
+data_analysis = np.load(input_file)
+#print data_analysis
+fraction = input_file[-8:-4]
 print "selected data fraction:", fraction
 
 #####################################
@@ -59,27 +60,53 @@ datafrac = mrl.getHistFraction(data, float(fraction))
 #print mrl.calcHistRMS(datafrac)
 #print mrl.calcHistMean(datafrac)
 
+#####################
+# output names
+title_save = "run" + str(runnr)[:-2] + "_" + energy + "GeV" + "_" + thickness + "mm" + "_" + input_file[5:-4] 
+title_plot = title_save.replace("_", " ")
+
+
 ##########################################
 # Plotting Data
 fig, ax = plt.subplots(figsize=(6, 4))#, dpi=100)
 fig.subplots_adjust(left=0.11, right=0.99, top=0.94, bottom=0.12)
 
-#plt.axvline(datafrac[0][0],  color='0.5', ls='--')
-#plt.axvline(datafrac[0][-1], color='0.5', ls='--')
 plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.2)
 plt.axvline(0, color='0.5')
 
-norm = np.max(data[1])
-print norm
-
+norm = np.max(data[1]); print norm
 plt.plot(data[0], data[1]/norm, 'k', label='k')
+
+# Fit line
+fitfunc_gauss = lambda xdata, *para: para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
+gauss_mu = data_analysis['gauss_mu'][runindex]
+gauss_si = data_analysis['gauss_si'][runindex]
+gauss_he = data_analysis['gauss_height'][runindex]
+gauss_c2 = data_analysis['gauss_chi2red'][runindex]
+print gauss_mu
+print gauss_si
+print gauss_he
+print gauss_c2
+
+x_fit = data[0]
+para = [gauss_mu, gauss_si, gauss_he/norm]
+y_fit = fitfunc_gauss(x_fit, *para)
+
+plt.plot(x_fit, y_fit, ls='--', lw=2, alpha=0.8, color='red')
+
+
+
+
+
+
 
 # text box
 textbox = (
 	r'$\theta_{{\rm rms}_{100}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(data)) + ' mrad' + '\n' + 
 	r'$\theta_{{\rm rms}_{frac}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(datafrac)) + ' mrad' + '\n' + 
 	r'$\theta_{{\rm mean}_{frac}} =$ ' + '{:.4f}'.format(mrl.calcHistMean(datafrac)) + ' mrad' + '\n' + 
-	r'events$_{frac} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1])) 
+	r'events$_{frac} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1]))  + '\n' +
+        r'$\chi^2_{\rm red.} = $ ' + '{:.1f}'.format(gauss_c2)
   )
 props = dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.9)
 ax.text(0.5, 0.05, textbox, transform=ax.transAxes, fontsize=10,
@@ -90,12 +117,11 @@ plt.xlim(-4.2, 4.2)
 #plt.xlim(-1.9, 1.9)
 plt.ylim(5e-5, 5)
 
-texttitle = (scatterer + " scatterer model, " + histname + ", " + energy + " GeV, " + thickness + " mm, " + "run " + str(runnr)[:-2]) + ", fraction" + fraction
-plt.title(texttitle)
+plt.title(title_plot)
 plt.xlabel(r'$\theta$ [mrad]')
 plt.ylabel("events normalized")
 
 # save name in folder
-outfile = "output/" + sys.argv[1] + "_scatterer_" + sys.argv[2] + "_" + energy + "gev_" + thickness + "mm_" + "run" + str(runnr)[:-2] + "fraction" + fraction + ".pdf"
-fig.savefig(outfile)
-print "evince " + outfile + "&"
+name_save =  "output/" + title_save + str(".pdf") 
+fig.savefig(name_save)
+print "evince " + name_save + "&"
