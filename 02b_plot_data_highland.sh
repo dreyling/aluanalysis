@@ -1,14 +1,20 @@
-python plot_data_highland.py data/kappa100_1kink_gblsumkx_0.98.npy rmsfrac_norm all
-python plot_data_highland.py data/kappa100_1kink_gblsumkx_0.98.npy gauss_si_norm all
+#python plot_data_highland.py data/kappa100_1kink_gblsumkx_0.98.npy rmsfrac_norm all
+#python plot_data_highland.py data/kappa100_1kink_gblsumkx_0.98.npy gauss_si_norm all
 
+#python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.98.npy rmsfrac all
 python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.98.npy rmsfrac_norm all
 python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.98.npy gauss_si_norm all
+python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.955.npy rmsfrac_norm all
+python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.955.npy gauss_si_norm all
+python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.90.npy rmsfrac_norm all
+python plot_data_highland.py data/kappa100_2kink_gblsumkx_0.90.npy gauss_si_norm all
 
-python plot_data_highland.py data/kappa075_1kink_gblsumkx_0.98.npy rmsfrac_norm all
-python plot_data_highland.py data/kappa075_1kink_gblsumkx_0.98.npy gauss_si_norm all
+#python plot_data_highland.py data/kappa075_1kink_gblsumkx_0.98.npy rmsfrac_norm all
+#python plot_data_highland.py data/kappa075_1kink_gblsumkx_0.98.npy gauss_si_norm all
 
-python plot_data_highland.py data/kappa075_2kink_gblsumkx_0.98.npy rmsfrac_norm all
-python plot_data_highland.py data/kappa075_2kink_gblsumkx_0.98.npy gauss_si_norm all
+#python plot_data_highland.py data/kappa075_2kink_gblsumkx_0.98.npy rmsfrac all
+#python plot_data_highland.py data/kappa075_2kink_gblsumkx_0.98.npy rmsfrac_norm all
+#python plot_data_highland.py data/kappa075_2kink_gblsumkx_0.98.npy gauss_si_norm all
 
 
 # should be the same
