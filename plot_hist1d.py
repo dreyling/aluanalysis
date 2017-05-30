@@ -109,11 +109,11 @@ textbox = (
         r'$\chi^2_{\rm red.} = $ ' + '{:.1f}'.format(gauss_c2)
   )
 props = dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.9)
-ax.text(0.5, 0.05, textbox, transform=ax.transAxes, fontsize=10,
-        verticalalignment='bottom', horizontalalignment='center', bbox=props)
+ax.text(0.05, 0.95, textbox, transform=ax.transAxes, fontsize=10,
+        verticalalignment='top', horizontalalignment='left', bbox=props)
 
 plt.yscale("log")
-plt.xlim(-4.2, 4.2)
+#plt.xlim(-4.2, 4.2)
 #plt.xlim(-1.9, 1.9)
 plt.ylim(5e-5, 5)
 

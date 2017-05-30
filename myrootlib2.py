@@ -121,7 +121,15 @@ def loopRunAndSum(runlist, histname, path, suffix, rootfolder):
     data[1][index] = np.sum(getHist1Data(runlist, index, histname, path, suffix, rootfolder)[counts])
   return data
 
-fitfunc_gauss = lambda xdata, *para: para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
+########################################
+def fitfunc_gauss(xdata, *para):
+    # para = [mu, sigma, height]
+    return para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
+
+from scipy.stats import t
+def fitfunc_studentt(xdata, *para):
+    # para = [mu, nu, height]
+    return para[2] * t.pdf(xdata, para[1], para[0])
 
 def fitGaussHisto1d(data, mu0, sigma0, height0):
   xdata = data[0]
@@ -140,6 +148,11 @@ def fitGaussHisto1d(data, mu0, sigma0, height0):
   chi2red = chi2 / (len(ydata)-len(para))
   fitResult = {'mu':mu, 'si':si, 'height':height, 'dmu':dmu, 'dsi':dsi, 'chi2':chi2, 'chi2red':chi2red}
   return fitResult
+
+
+
+
+##########################################################################
 
 def printData(data):
   print "xdata:", data[0]
