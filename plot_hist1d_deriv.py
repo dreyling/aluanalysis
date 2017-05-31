@@ -1,5 +1,5 @@
 #! /usr/bin/python
-import inspect, os
+#import inspect, os
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -7,7 +7,9 @@ import numpy as np
 #from scipy.optimize import curve_fit
 #import math
 
-import myrootlib2 as mrl
+import my_rootread as mrr
+import my_fitfuncs as mff
+import my_dataproc as mdp
 from myparams import * 
 
 ############################################
@@ -45,8 +47,7 @@ print "selected data fraction:", fraction
 # Start
 
 # Getting runlist
-runlist = mrl.readRunlist(name_runlist)
-print "Reading...", name_runlist
+runlist = mrr.readRunlist(name_runlist)
 
 # getting right runindex
 runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np.where(runlist['energy'] == float(energy)))[0]
@@ -54,20 +55,14 @@ runnr = runlist['runnr'][runindex]
 print "selected run:", runnr
 
 # Getting histogram data
-data = mrl.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
-datafrac = mrl.getHistFraction(data, float(fraction))
-#print np.sum(data[1])
-#print np.sum(datafrac[1])
-#print mrl.calcHistRMS(datafrac)
-#print mrl.calcHistMean(datafrac)
+data = mrr.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
+datafrac = mdp.get_hist_fraction(data, float(fraction))
 
 # derivative
 dx = data[0][1:] - data[0][:-1]
 dy = data[1][1:] - data[1][:-1]
-
 deriv_x = data[0][0:-1]
 deriv_y = dy / dx
-
 
 #####################
 # output names
@@ -89,7 +84,7 @@ ax2 = plt.subplot(grid[1:, :], sharex=ax1)
 ax1.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.2)
 ax1.axvline(0, color='0.5')
 
-norm = np.max(data[1]); print norm
+norm = np.max(data[1])
 ax1.plot(data[0], data[1]/norm, 'k')
 
 # deriv
@@ -102,10 +97,6 @@ gauss_mu = data_analysis['gauss_mu'][runindex]
 gauss_si = data_analysis['gauss_si'][runindex]
 gauss_he = data_analysis['gauss_height'][runindex]
 gauss_c2 = data_analysis['gauss_chi2red'][runindex]
-print gauss_mu
-print gauss_si
-print gauss_he
-print gauss_c2
 
 x_fit = data[0]
 para = [gauss_mu, gauss_si, gauss_he/norm]
@@ -115,9 +106,9 @@ ax1.plot(x_fit, y_fit, ls='--', lw=2, alpha=0.8, color='red')
 
 # text box
 textbox = (
-	r'$\theta_{{\rm rms}_{100}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(data)) + ' mrad' + '\n' + 
-	r'$\theta_{{\rm rms}_{frac}} =$ ' + '{:.4f}'.format(mrl.calcHistRMS(datafrac)) + ' mrad' + '\n' + 
-	r'$\theta_{{\rm mean}_{frac}} =$ ' + '{:.4f}'.format(mrl.calcHistMean(datafrac)) + ' mrad' + '\n' + 
+	r'$\theta_{{\rm rms}_{100}} =$ ' + '{:.4f}'.format(mdp.calc_hist_RMS(data)) + ' mrad' + '\n' + 
+	r'$\theta_{{\rm rms}_{frac}} =$ ' + '{:.4f}'.format(mdp.calc_hist_RMS(datafrac)) + ' mrad' + '\n' + 
+	r'$\theta_{{\rm mean}_{frac}} =$ ' + '{:.4f}'.format(mdp.calc_hist_mean(datafrac)) + ' mrad' + '\n' + 
 	r'events$_{frac} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1]))  + '\n' +
         r'$\chi^2_{\rm red.} = $ ' + '{:.1f}'.format(gauss_c2)
   )
@@ -133,10 +124,6 @@ ax1.set_ylim(5e-7, 5)
 ax1.set_title(title_plot)
 ax1.set_xlabel(r'$\theta$ [mrad]')
 ax1.set_ylabel("events normalized")
-
-
-
-
 
 
 # save name in folder
