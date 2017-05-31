@@ -122,14 +122,50 @@ def loopRunAndSum(runlist, histname, path, suffix, rootfolder):
   return data
 
 ########################################
+def fitfunc_linear(xdata, *para):
+    slope  = para[0]
+    offset = para[1]
+    return slope * xdata + offset
+   
 def fitfunc_gauss(xdata, *para):
     # para = [mu, sigma, height]
-    return para[2] * np.exp(-0.5*(xdata-para[0])**2/para[1]**2)
+    mu      = para[0]
+    si      = para[1]
+    height  = para[2]
+    return height * np.exp(-0.5*(xdata-mu)**2/si**2)
+
+def fitfunc_gauss_normed(xdata, *para):
+    mu  = para[0]
+    si  = para[1]
+    return 1./(si*np.sqrt(2.*np.pi)) * np.exp(-0.5*(xdata-mu)**2/si**2)
 
 from scipy.stats import t
 def fitfunc_studentt(xdata, *para):
     # para = [mu, nu, height]
-    return para[2] * t.pdf(xdata, para[1], para[0])
+    mu      = para[0]
+    nu      = para[1]
+    height  = para[2]
+    return height * t.pdf(xdata, nu, loc=mu)
+
+from scipy.special import gamma
+def fitfunc_studentt_nonstand_normed(xdata, *para):
+    mu      = para[0]
+    nu_s    = para[1]
+    si_s    = para[2]
+    gamma_factor = gamma((nu_s+1.)/2.) / gamma(nu_s/2.)
+    return gamma_factor / (np.sqrt(nu_s*np.pi)*si_s) * (1. + ((xdata - mu)**2. / (nu_s * si_s**2.)))**(-(nu_s+1.)/2.)
+
+def fitfunc_combined_gauss_studentt(xdata, *para):
+    # para = [mu, si_g, nu_s, si_s, frac, height]
+    mu      = para[0]
+    si_g    = para[1]
+    nu_s    = para[2]
+    si_s    = para[3]
+    frac    = para[4]
+    height  = para[5]
+    return height * ( (1-frac)*fitfunc_gauss_normed(xdata, mu, si_g) + frac*fitfunc_studentt_nonstand_normed(xdata, mu, nu_s, si_s))
+
+
 
 def fitGaussHisto1d(data, mu0, sigma0, height0):
   xdata = data[0]
@@ -196,72 +232,4 @@ def calcHistRMS(data):
 
 #########
 
-def linfunc(xdata, slope, offset):
-    return slope * xdata + offset
-   
 
-########################################################## 
-
-def getFitRMS(runnr, rootfile, histoid):
-
-    draw = False
-    
-    if(runnr > 80000):
-        rebinning = 2
-    else:
-        rebinning = 1
-            
-    
-    hist = rootfile.Get("MyEUTelTriplets/" + histoid)
-    hist.Rebin(rebinning,"newHist")
-    hist2 = rootfile.Get("newHist")
-    
-    func = TF1("func", "gaus(0)",-10.,10.)
-    func.SetParameter(0,10000)
-    func.SetParameter(1,0)
-    func.SetParameter(2,0.1)
-
-    fitrange = hist2.GetRMS()*5.
-
-    if(fitrange > 10.):
-        print "Yep. That really happened! RMS=" + str(hist2.GetRMS())
-        hist2 = rootfile.Get("MyEUTelTriplets/kinkxduttotalx0l")
-    
-    if (draw):
-        c = TCanvas()
-        hist2.Draw("")
-        hist2.SetTitle("Run " + str(runnr))
-        hist2.Fit(func,"Wq","",-fitrange,fitrange)
-        #raw_input("Press Enter to continue...")
-        time.sleep(0.3)
-    else:
-        hist2.Fit(func,"Wnq","",-fitrange,fitrange)
-
-    return func.GetParameter(2)
-
-def calcRMS2(th, energy):
-    if(th > 0.):
-        #rms2 = math.pow(1.e3*0.0136/energy*math.sqrt(th/x0alu)*(1.+0.038*math.log(th/x0alu)),2)
-        rms2 = math.pow(highfunc(energy,th,0),2)
-        #rms2 = math.pow(1.e3*0.0136/energy*math.sqrt(th/x0alu),2)
-        #rms2 = math.pow(1.e3*0.0136/energy*math.pow(th/x0alu,0.555),2)
-    else:
-        rms2 = 0.
-    
-    return rms2
-
-def oneThicknessDataset(thickness, data):
-    dataset = np.zeros((5,2))
-
-    nRuns = np.size(data,0)
-    for i in range(0, nRuns):
-        if(data[i,2] == thickness):
-            dataset[int(data[i,1])-1,0] = math.sqrt(data[i,4])
-            dataset[int(data[i,1])-1,1] = data[i,1]
-    
-    for i in range(np.size(dataset,0)-1,0,-1):
-        if(dataset[i,1] == 0.):
-            print "yay, delete nr. " + str(i)
-            dataset = np.delete(dataset,i,0)
-
-    return dataset
