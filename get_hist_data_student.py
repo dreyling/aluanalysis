@@ -78,6 +78,7 @@ for index, value in enumerate(newlist):
     newlist['comb_frac'   ][index] = fitresult['frac'   ]
     newlist['comb_height' ][index] = fitresult['height' ]
     newlist['comb_chi2'   ][index] = fitresult['chi2'   ]
+    print fitresult['chi2red']
     newlist['comb_chi2red'][index] = fitresult['chi2red']
 
 # Normalize RMS values

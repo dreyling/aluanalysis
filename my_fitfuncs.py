@@ -93,7 +93,7 @@ def fit_combined(data, mu0, si0, nu_s0, si_s0, frac0, height0):
   dydata = np.sqrt(ydata); dydata = np.where(dydata > 0.0, dydata, 1) #; print dy 
   # start parameter
   para0 = [mu0, si0, nu_s0, si_s0, frac0, height0]
-  para_bounds=([-np.inf, 0.0, 1.0, 0.0, 0.0, 1.0], [+np.inf, np.inf, np.inf, np.inf, 1.0, np.inf])
+  para_bounds=([-np.inf, 0.0, 1.0, 0.0, 0.0, 1.0], [np.inf, np.inf, np.inf, np.inf, 1.0, np.inf])
   para, cov = curve_fit(fitfunc_combined_gauss_studentt, xdata, ydata, p0=para0, sigma=dydata, bounds=para_bounds)
   mu = para[0]
   si = abs(para[1])
@@ -102,7 +102,7 @@ def fit_combined(data, mu0, si0, nu_s0, si_s0, frac0, height0):
   frac = para[4]
   height = para[5]
   # chi**2
-  chi2 = np.sum(((ydata - fitfunc_gauss(xdata, *para)) / dydata)**2)
+  chi2 = np.sum(((ydata - fitfunc_combined_gauss_studentt(xdata, *para)) / dydata)**2)
   chi2red = chi2 / (len(ydata)-len(para))
   fit_results = {'mu':mu, 'si':si, 'nu_s':nu_s, 'si_s':si_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
   return fit_results
