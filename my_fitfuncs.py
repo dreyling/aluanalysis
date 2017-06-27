@@ -69,6 +69,23 @@ def fitfunc_combined_gauss_studentt(xdata, *para):
 ###############################################
 # methods 
 
+def fit_linear(data, slope0, offset0):
+  xdata = data[0]
+  ydata = data[1]
+  dydata = np.sqrt(ydata); dydata = np.where(dydata > 0.0, dydata, 1) #; print dy 
+  # start parameter
+  para0 = [slope0, offset0] # slope, offset
+  para, cov = curve_fit(fitfunc_linear, xdata, ydata, p0=para0, sigma=dydata)
+  slope = para[0]
+  offset = para[1]
+  dslope = np.sqrt(cov[0][0])
+  doffset = np.sqrt(cov[1][1])
+  # chi**2
+  chi2 = np.sum(((ydata - fitfunc_linear(xdata, *para)) / dydata)**2)
+  chi2red = chi2 / (len(ydata)-len(para))
+  fit_results = {'slope':slope, 'offset':offset, 'dslope':dslope, 'doffset':doffset, 'chi2':chi2, 'chi2red':chi2red}
+  return fit_results
+
 def fit_gauss(data, mu0, sigma0, height0):
   xdata = data[0]
   ydata = data[1]

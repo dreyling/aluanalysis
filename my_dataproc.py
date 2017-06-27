@@ -14,6 +14,27 @@ import numpy as np
 
 #################################################################
 
+def projections(counts, bincenters_x, bincenters_y, margin_x, margin_y):
+  # projection in x and y
+  projection_x = counts.sum(axis=1) # sum along the axis, thus it is this way!
+  projection_y = counts.sum(axis=0)
+  # x-cut zeroes plus safety margin of ~1%
+  index_x_non_zero = np.where(projection_x != 0.)
+  data_projection_x = projection_x[index_x_non_zero][margin_x+1:-margin_x-1]
+  pos_projection_x = bincenters_x[index_x_non_zero][margin_x+1:-margin_x-1]
+  # y-cut zeroes plus safety margin of ~1%
+  index_y_non_zero = np.where(projection_y != 0.)
+  data_projection_y = projection_y[index_y_non_zero][margin_y+1:-margin_y-1]
+  pos_projection_y = bincenters_y[index_y_non_zero][margin_y+1:-margin_y-1]
+  # normalize  
+  data_projection_x = data_projection_x/np.size(data_projection_x)
+  data_projection_y = data_projection_y/np.size(data_projection_y)
+  # stack data
+  data_x = np.vstack((pos_projection_x, data_projection_x))
+  data_y = np.vstack((pos_projection_y, data_projection_y))
+  return data_x, data_y
+
+
 def cut_data(data, cutbins):
   data0 = data[0][cutbins:-cutbins]
   data1 = data[1][cutbins:-cutbins]

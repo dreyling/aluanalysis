@@ -74,3 +74,21 @@ def loopRunAndSum(runlist, histname, path, suffix, rootfolder):
     data[0][index] = value
     data[1][index] = np.sum(getHist1Data(runlist, index, histname, path, suffix, rootfolder)[counts])
   return data
+
+def getHist2Data(runlist, runindex, histname, path, suffix, rootfolder):
+  rootfile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
+  print "opening...", rootfile
+  # open root file
+  histfile = TFile(rootfile)
+  # get hist data
+  histdata = histfile.Get(rootfolder + histname) #print histdata
+  # write as numpy array
+  counts, edges = hist2array(histdata, include_overflow=False, return_edges=True) #print counts, edge
+  # shift hist data by half of the binwidth, checked with access_th2.py
+  binwidth_x = abs(edges[0][1]-edges[0][0])
+  bincenters_x = np.array(edges[0][:-1]) + binwidth_x/2. 
+  binwidth_y = abs(edges[1][1]-edges[1][0])
+  bincenters_y = np.array(edges[1][:-1]) + binwidth_y/2. 
+  # return counts (x, y)-array, x_edges and y_edges data
+  return counts, bincenters_x, bincenters_y
+
