@@ -17,3 +17,4 @@ export KAPPA100KINK2FRAC090="data/kappa100_2kink_gblsumkx_0.90.npy"
 
 export KAPPA100KINK2FRAC0955="data/kappa100_2kink_gblsumkx_0.955.npy"
 
+export COMBKAPPA100KINK2FRAC098="data/comb_kappa100_2kink_gblsumkx_0.98.npy"

@@ -2,7 +2,7 @@
 
 # general comparison
 #python get_hist_data_student.py $KAPPA075KINK1 gblsumkx 0.98
-python get_hist_data_student.py $KAPPA075KINK2 gblsumkx 0.98
+#python get_hist_data_student.py $KAPPA075KINK2 gblsumkx 0.98
 #python get_hist_data_student.py $KAPPA100KINK1 gblsumkx 0.98
 python get_hist_data_student.py $KAPPA100KINK2 gblsumkx 0.98
 

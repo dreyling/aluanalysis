@@ -36,16 +36,16 @@ scattering_ydata = sys.argv[3]
 ####################
 # iterators
 # seven elements
-thicknesses = np.array([0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0])
-markers = ['^', 'd', 's', 'p', '*', 'h', 'o']
-markersizes = [6, 6, 6, 8, 10, 10, 10]
+thicknesses = np.array([0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0])[:-1]
+markers = ['^', 'd', 's', 'p', '*', 'h', 'o'][:-1]
+markersizes = [6, 6, 6, 8, 10, 10, 10][:-1]
 # five
 colors = ['0.0', '0.15', '0.3', '0.45', '0.6']
 energies = [1., 2., 3., 4., 5.]
 
 #####################
 # output names
-title_save = "kinkangle_" + input_file[5:-4] + "_" + scattering_xdata + "-vs-"+ scattering_ydata
+title_save = "kinkangle_" + input_file[5:-4] + "_" + scattering_ydata + "-vs-" + scattering_xdata 
 title_plot = title_save.replace("_", " ")
 
 

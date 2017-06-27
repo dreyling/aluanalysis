@@ -29,9 +29,9 @@ scattering_data = sys.argv[2]
 ####################
 # iterators
 # seven elements
-thicknesses = np.array([0.0, 0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0])[1:]
-markers = ['x', '^', 'd', 's', 'p', '*', 'h', 'o'][1:]
-markersizes = [6, 6, 6, 6, 8, 10, 10, 10][1:]
+thicknesses = np.array([0.0, 0.013, 0.025, 0.05, 0.1, 0.2, 1.0, 10.0])[1:-1]
+markers = ['x', '^', 'd', 's', 'p', '*', 'h', 'o'][1:-1]
+markersizes = [6, 6, 6, 6, 8, 10, 10, 10][1:-1]
 # five
 colors = ['0.0', '0.15', '0.3', '0.45', '0.6']
 energies = [1., 2., 3., 4., 5.]

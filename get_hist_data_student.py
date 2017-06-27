@@ -50,7 +50,8 @@ newlist = mrr.extendList(runlist,
         'comb_height',
         'comb_chi2',
         'comb_chi2red',
-        'comb_si_norm'
+        'comb_si_norm',
+        'comb_si_s_norm'
         )
 
 ########################################
@@ -90,7 +91,7 @@ data_zero_rmsfrac = newlist[cut_zero]['rmsfrac']
 for index, value in enumerate(newlist):
     newlist['rmsfrac_norm'][index] = math.sqrt(newlist['rmsfrac'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
 
-# Normalize Gauss values
+# Normalize Gauss sigma values
 # Getting Zero values
 cut_zero = (newlist['thickness'] == 0.0)
 data_zero_energy = newlist[cut_zero]['energy']
@@ -99,10 +100,17 @@ data_zero_rmsfrac = newlist[cut_zero]['comb_si']
 for index, value in enumerate(newlist):
     newlist['comb_si_norm'][index] = math.sqrt(newlist['comb_si'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
 
-
-
-
-
+# Normalize Student t sigma values
+# Getting Zero values
+cut_zero = (newlist['thickness'] == 0.0)
+data_zero_energy = newlist[cut_zero]['energy']
+data_zero_rmsfrac = newlist[cut_zero]['comb_si_s']
+# Calculate normalized value
+for index, value in enumerate(newlist):
+    if newlist['comb_si_s'][index] > data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]:
+        newlist['comb_si_s_norm'][index] = math.sqrt(newlist['comb_si_s'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
+    else:
+        newlist['comb_si_s_norm'][index] = 0.0
 
 
 print newlist.dtype.names
