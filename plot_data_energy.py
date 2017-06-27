@@ -25,6 +25,11 @@ if len(sys.argv) < 3:
   exit()
 scattering_data = sys.argv[2]
 
+# scattering angle, y-axis data
+if len(sys.argv) < 4:
+  print "please select a y scale: log or lin"
+  exit()
+yscale = sys.argv[3]
 
 ####################
 # iterators
@@ -67,7 +72,8 @@ for index, thickness in enumerate(thicknesses):
 			)#linestyle='None')
   
 # scaling and range
-ax1.set_yscale("log")
+if yscale == 'log':
+  ax1.set_yscale("log")
 ax1.set_xlim([0.5, 5.5])
 #ax1.set_ylim([0.02, 5.0])
 #ax2.set_ylim([-0.25, 0.19])
