@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 # root files
 export KAPPA075KINK1="/home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_1kink/"
 export KAPPA075KINK2="/home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/"

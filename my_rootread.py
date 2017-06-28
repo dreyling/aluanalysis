@@ -82,8 +82,8 @@ def getHist2Data(runlist, runindex, histname, path, suffix, rootfolder):
   histfile = TFile(rootfile)
   # get hist data
   histdata = histfile.Get(rootfolder + histname) #print histdata
-  # write as numpy array
-  counts, edges = hist2array(histdata, include_overflow=False, return_edges=True) #print counts, edge
+  # get dimensions, sum and x,y-positions
+  sums, edges = hist2array(histdata, include_overflow=False, return_edges=True) #print counts, edge
   # shift hist data by half of the binwidth, checked with access_th2.py
   binwidth_x = abs(edges[0][1]-edges[0][0])
   bincenters_x = np.array(edges[0][:-1]) + binwidth_x/2. 

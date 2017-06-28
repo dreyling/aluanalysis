@@ -101,9 +101,10 @@ for index, value in enumerate(fitfuncs):
         fitfunc = mff.fitfunc_combined_gauss_studentt
         print "parameters are [mu, si_g, nu_s, si_s, frac, height]"
         # mu, sigma, norm
-        para0 = [0.0, 0.3, 5., 0.5, 0.5, 50e3]
-        para_bounds=([-np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf],
-                        [+np.inf, np.inf, np.inf, np.inf, np.inf, np.inf])
+        para0 = [0.0, 0.3, 2., 0.5, 0.5, 50e3]
+        #para_bounds=([-np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf],
+        para_bounds=([-np.inf, 0.0, 1.0, 0.0, 0.0, 0.0],
+                        [+np.inf, np.inf, np.inf, np.inf, 1.0, np.inf])
 
     if value == 'combined_constrained':
         print "\nCombined (constraining 0<= frac <= 1) fit"
