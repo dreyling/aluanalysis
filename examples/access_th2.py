@@ -14,6 +14,8 @@ from root_numpy.testdata import get_filepath
 
 sys.path.insert(0, '../')
 import my_fitfuncs as mff
+import my_rootread as mrr
+import myparams as mpm
 
 script_name = inspect.getfile(inspect.currentframe()) 
 print "Starting script:", sys.argv[0]
@@ -116,7 +118,7 @@ if(True):
   print index_y, edges[1][index_y]
   print counts[index_x][index_y]
   
-  bin_x = 76
+  bin_x = 76 + 447
   bin_y = 51
 
   print "ROOT access to bin content" 
@@ -139,8 +141,32 @@ if(True):
   print contents
   print counts[bin_x-1][bin_y-1]/contents[bin_x-1][bin_y-1] # real counts
   counts_real = np.divide(counts, contents)
+  print type(counts_real)
   print counts_real[bin_x-1][bin_y-1]  # cross check
-  print counts_real
+  print counts_real[bin_x-1, bin_y-1]  # cross check
+
+
+  # submatrix
+  print counts_real[bin_x-1-1:bin_x-1+4, bin_y-1-1:bin_y-1+4]  # cross check
+  print contents[bin_x-1-1:bin_x-1+4, bin_y-1-1:bin_y-1+4]  # cross check
+  print edges[0][bin_x-1-1:bin_x-1+4]  # cross check
+  print edges[1][bin_y-1-1:bin_y-1+4]  # cross check
+
+  runlist = mrr.readRunlist("../" + mpm.name_runlist)
+
+  contents, counts, bincenters_x, bincenters_y, edges_x, edges_y = mrr.getProfile2Data(runlist, int(17), "gblsumkx2andsumky2_xyP", "/home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/", "-GBLKinkEstimator_kappa075_2kink", mpm.name_rootfolder)
+
+  print counts[bin_x-1-1:bin_x-1+4, bin_y-1-1:bin_y-1+4]  # cross check
+  print contents[bin_x-1-1:bin_x-1+4, bin_y-1-1:bin_y-1+4]  # cross check
+  print edges[0][bin_x-1-1:bin_x-1+4]  # cross check
+  print edges[1][bin_y-1-1:bin_y-1+4]  # cross check
+
+  print np.size(edges_x), np.size(edges_y)
+  print np.size(bincenters_x), np.size(bincenters_y)
+
+
+
+
 
 
 

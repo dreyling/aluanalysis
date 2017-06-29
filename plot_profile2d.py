@@ -2,6 +2,8 @@
 import inspect, os
 import sys
 import matplotlib.pyplot as plt
+from matplotlib.ticker import NullFormatter
+import matplotlib.cm as cm
 import numpy as np
 #from scipy.optimize import curve_fit
 #import math
@@ -24,24 +26,14 @@ name_kinks = name_path[-6:-1]
 name_suffix = "-GBLKinkEstimator_" + name_kappa + "_" + name_kinks
 
 # 2nd argument
-histname 	= sys.argv[2]
-print "histogram collection:", histname
+coll_name 	= sys.argv[2]
+print "collection:", coll_name
 
 # 3rd/4th argument
 energy 		= sys.argv[3]
 print "selected energy:", energy
 thickness = sys.argv[4]
 print "selected thickness:", thickness
-
-# 5th argument, npy results
-if len(sys.argv) < 2:
-  print "No data input. Run get_hist_data.py or select npy-file in data/..."
-  exit()
-input_file = sys.argv[5]
-data_analysis = np.load(input_file)
-#print data_analysis
-fraction = input_file[-8:-4]
-print "selected data fraction:", fraction
 
 #####################################
 # Start
@@ -55,23 +47,59 @@ runnr = runlist['runnr'][runindex]
 print "selected run:", runnr
 
 # Getting histogram data
-data = mrr.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
-datafrac = mdp.get_hist_fraction(data, float(fraction))
-#print np.sum(data[1])
-#print np.sum(datafrac[1])
-#print mdp.calc_hist_RMS(datafrac)
-#print mdp.calc_hist_mean(datafrac)
+contents, counts, bincenters_x, bincenters_y, edges_x, edges_y = mrr.getProfile2Data(runlist, runindex, coll_name, name_path, name_suffix, name_rootfolder)
 
 #####################
 # output names
-title_save = "run" + str(runnr)[:-2] + "_" + energy + "GeV" + "_" + thickness + "mm" + "_" + input_file[5:-4] 
+title_save = "run" + str(runnr)[:-2] + "_" + energy + "GeV" + "_" + thickness + "mm" + "_" + coll_name 
 title_plot = title_save.replace("_", " ")
 
 
 ##########################################
 # Plotting Data
-fig, ax = plt.subplots(figsize=(6, 4))#, dpi=100)
-fig.subplots_adjust(left=0.11, right=0.99, top=0.94, bottom=0.12)
+#fig, ax = plt.subplots(figsize=(6, 4))#, dpi=100)
+#fig.subplots_adjust(left=0.11, right=0.99, top=0.94, bottom=0.12)
+
+fig = plt.figure(1, figsize=(8, 8))
+
+
+# seperating: https://matplotlib.org/examples/pylab_examples/scatter_hist.html
+#nullfmt = NullFormatter()         # no labels
+# definitions for the axes
+#plane_left, plane_width = 0.1, 0.65
+#plane_bottom, plane_height = 0.1, 0.65
+#ax_plane = plt.axes([plane_left, plane_bottom, plane_width, plane_height])
+
+# plot
+
+
+#plt.pcolor(edges_x, edges_, f(data), cmap=cm, vmin=-4, vmax=4)
+
+
+plt.imshow(contents, extent=(edges_x.min(), edges_x.max(), edges_y.min(), edges_y.max()), interpolation="none")#, cmap=cm.gist_rainbow)
+plt.colorbar()
+
+plt.xlim(-0.5, 0.5), plt.ylim(-0.5, 0.5)
+
+
+
+
+
+
+
+
+
+
+
+# save name in folder
+name_save =  "output/" + title_save + str(".pdf") 
+fig.savefig(name_save)
+print "evince " + name_save + "&"
+
+exit()
+
+
+
 
 plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.2)
 plt.axvline(0, color='0.5')

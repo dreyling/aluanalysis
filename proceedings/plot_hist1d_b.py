@@ -87,7 +87,7 @@ fig, ax = plt.subplots(figsize=(5, 5))#, dpi=100)
 fig.subplots_adjust(left=0.14, bottom=0.12, right=0.97, top=0.97)
 
 # grids and lines
-plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.3, label='98\%')
+#plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.3, label='98\%')
 #plt.axvline(0, color='0.5')
 
 # normalization factor
@@ -102,7 +102,7 @@ norm = np.max(data[1]) #; print norm
 plt.bar(edges[:-1], data[1]/norm, width=data[0][1]-data[0][0], linewidth=0, color='0.5', label='data') # tested: , yerr=np.sqrt(data[1])/norm
 
 # plot fit
-x_fit = data[0]
+x_fit = datafrac[0]
 para = [gauss_mu, gauss_si, gauss_he/norm]
 y_fit = mff.fitfunc_gauss(x_fit, *para)
 plt.plot(x_fit, y_fit, ls='--', lw=3, color='k', label = 'fit')
@@ -121,7 +121,7 @@ plt.ylabel("entries (normalized)", fontsize=14, labelpad=16)
 # Legend
 handles, labels = ax.get_legend_handles_labels()
 # reverse order
-ax.legend(handles[::-1], labels[::-1], loc='upper left', prop={'size':12})
+ax.legend(handles[::-1], labels[::-1], loc='upper left', prop={'size':12}, frameon=False)
 
 # fit results
 textbox = (
@@ -130,15 +130,15 @@ textbox = (
         r'$\chi^2/{\rm ndf} = $ ' + '{:.1f}'.format(gauss_c2r)
   )
 props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
-ax.text(0.76, 0.96, textbox, transform=ax.transAxes, fontsize=10, #linespacing=1.5,
-        verticalalignment='top', horizontalalignment='center', bbox=props)
+ax.text(0.04, 0.84, textbox, transform=ax.transAxes, fontsize=10, #linespacing=1.5,
+        verticalalignment='top', horizontalalignment='left')#, bbox=props)
 
 textbox = '{0} GeV/c, {1} mm'.format(energy, thickness)
-ax.text(0.5, 0.1, textbox, transform=ax.transAxes, 
-        fontsize=14, fontweight='heavy', color='k', 
-        verticalalignment='top', horizontalalignment='center')#, bbox=props)
+ax.text(0.955, 0.97, textbox, transform=ax.transAxes, 
+        fontsize=12, fontweight='heavy', color='k', 
+        verticalalignment='top', horizontalalignment='right')#, bbox=props)
 
 # save name in folder
-name_save =  "output/" + title_save + str(".pdf") 
+name_save =  "output/" + title_save + str("_b.pdf") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"

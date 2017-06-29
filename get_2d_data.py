@@ -68,10 +68,10 @@ for index, value in enumerate(newlist):
     # 0. test
     #print index, value['energy']
     # 1. get 2d hist data
-    counts, bincenters_x, bincenters_y = mrr.getHist2Data(runlist, index, name_hist, name_path, name_suffix, name_rootfolder)
-    newlist['total_sum'][index] = np.sum(counts)
-    newlist['total_mean'][index] = np.mean(counts)
-    newlist['total_rms'][index] = np.std(counts)
+    contents, counts, bincenters_x, bincenters_y, edges_x, edges_y = mrr.getProfile2Data(runlist, index, name_hist, name_path, name_suffix, name_rootfolder)
+    newlist['total_sum'][index] = np.sum(contents)
+    newlist['total_mean'][index] = np.mean(contents)
+    newlist['total_rms'][index] = np.std(contents)
     # 2. calculate projections
     data_x, data_y = mdp.projections(counts, bincenters_x, bincenters_y, margin_x, margin_y)
     # fill x

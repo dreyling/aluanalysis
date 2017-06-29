@@ -92,10 +92,10 @@ for index, value in enumerate(newlist):
 # Getting Zero values
 cut_zero = (newlist['thickness'] == 0.0)
 data_zero_energy = newlist[cut_zero]['energy']
-data_zero_rmsfrac = newlist[cut_zero]['gauss_si']
+data_zero_gauss_si = newlist[cut_zero]['gauss_si']
 # Calculate normalized value
 for index, value in enumerate(newlist):
-    newlist['gauss_si_norm'][index] = math.sqrt(newlist['gauss_si'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
+    newlist['gauss_si_norm'][index] = math.sqrt(newlist['gauss_si'][index]**2 - data_zero_gauss_si[data_zero_energy == newlist['energy'][index]][0]**2)
 
 
 
