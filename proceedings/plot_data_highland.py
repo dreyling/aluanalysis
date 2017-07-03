@@ -60,60 +60,104 @@ title_plot = title_save.replace("_", " ")
 # Plotting
 plotname = "energy"
 # figure
-fig = plt.figure(figsize=(8, 8))#, dpi=100)
-fig.subplots_adjust(left=0.11, right=0.7, top=0.94, bottom=0.1)
+fig = plt.figure(figsize=(10, 5))#, dpi=100)
+fig.subplots_adjust(left=0.08, right=0.92, top=0.97, bottom=0.1)
 # subplots-grid: rows, columns
-grid = gridspec.GridSpec(10, 1, hspace=0.05)
+grid = gridspec.GridSpec(3, 5, hspace=0.06)
 # layout
-ax1 = plt.subplot(grid[:7, :])
-ax2 = plt.subplot(grid[7:, :], sharex=ax1) 
+ax1 = plt.subplot(grid[:2, :2])
+ax2 = plt.subplot(grid[2:, :2], sharex=ax1) 
+
+#ax3 = plt.subplot(grid[:, 2:3])
+
+ax4 = plt.subplot(grid[:2, 3:])
+ax5 = plt.subplot(grid[2:, 3:], sharex=ax4) 
 
 # highland x data
-highland_energy = np.linspace(0.5, 6, 50)
+highland_energy = np.linspace(0.5, 5.5, 50)
 for index, thickness in enumerate(thicknesses):
   # highland theory 
   highland_y = highland_multi_scatterer(highland_energy, thickness, x0alu)
   ax1.plot(highland_energy, highland_y, 
-			color='0.7',
-      markeredgecolor='0.7',
-			marker=markers[index], 
-			markersize=4, 
-			label=r'$\theta_{\rm High.}(\epsilon_{\rm Al} = $ ' + '{:.4f}'.format(thickness/x0alu) + ')')
-  # data
+			color='k',#0.7',
+			ls = ':',
+                        #markeredgecolor='0.7',
+			#marker=markers[index], 
+			#markersize=4, 
+			#label=r'$\theta_{\rm High.}(\epsilon_{\rm Al} = $ ' + '{:.4f}'.format(thickness/x0alu) + ')'
+			)
+
+  # data for legend
   cut = (data['thickness'] == thickness)
-  ax1.errorbar(data[cut]['energy'], data[cut][scattering_data], 
-                        yerr=0.05*data[cut][scattering_data],
+  ax1.errorbar(data[cut]['energy']+10, data[cut][scattering_data], 
+                        #yerr=0.05*data[cut][scattering_data],
 			color='k', 
-			label=r'$\theta_{\rm Al}(d_{\rm Al} = $' + str(thickness) + ' mm)' , 
+			label=r'$\theta_{\rm Al}$ (' + str(thickness) + ' mm)' , 
 			marker=markers[index], 
-			markersize=markersizes[index], 
+			#markersize=markersizes[index], 
 			linestyle='None')
-  # deviation: theory - measurement
-  highland_points = highland_multi_scatterer(data[cut]['energy'], thickness, x0alu)
-  deviation = (highland_points - data[cut][scattering_data]) / highland_points
-  ax2.plot(data[cut]['energy'], deviation,
-			color='0.5',
-      markeredgecolor='0.5',
+  # data points, greyscaled 
+  data_energy = data[cut]['energy']
+  data_scattering = data[cut][scattering_data] 
+  for index2, energy in enumerate(energies):
+  	ax1.errorbar(data_energy[index2], data_scattering[index2], 
+                        #yerr=0.05*data[cut][scattering_data],
+      			color=colors[int(data_energy[index2]-1)],
+			#label=r'$\theta_{\rm meas}$ (' + str(thickness) + ' mm)' , 
 			marker=markers[index], 
-			markersize=markersizes[index])
+			#markersize=markersizes[index], 
+			linestyle='None')
   
+
+  # deviation: measurement - theory
+  highland_points = highland_multi_scatterer(data[cut]['energy'], thickness, x0alu)
+  #deviation = (highland_points - data[cut][scattering_data]) / highland_points
+  deviation = (data[cut][scattering_data] - highland_points) / highland_points
+  # line
+  ax2.plot(data[cut]['energy'], deviation,
+    			color='k',
+			ls = ':'
+			)
+  for index2, energy in enumerate(energies):
+  	# points
+	ax2.plot(data_energy[index2], deviation[index2],
+      			color=colors[int(data_energy[index2]-1)],
+      			#markeredgecolor='k',#'0.5',
+			ls = 'None',
+			marker=markers[index]
+			#markersize=markersizes[index]
+			)
+
+
 # scaling and range
 ax1.set_yscale("log")
-ax1.set_xlim([0.5, 5.5])
-ax1.set_ylim([0.02, 5.0])
-ax2.set_ylim([-0.25, 0.19])
+ax1.set_xlim([0.2, 5.8])
+#ax1.set_ylim([0.02, 5.0])
+ax1.set_ylim([0.008, 10.0])
+ax2.set_ylim([-0.19, 0.25])
 
 # labeling
-ax1.set_title(title_plot)
-ax2.set_xlabel("beam energy [GeV]")
-ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm tot}^2 - \theta_{0}^2}$ [mrad]')
-ax2.set_ylabel(r'$\sigma_{\rm norm.} = \frac{{\rm Highland}-{\rm meas.}}{\rm Highland}$')
+#ax1.set_title(title_plot)
+ax2.set_xlabel("beam momentum [GeV/c]", fontsize=14)
+ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{{\rm meas}}^2 - \theta_{{\rm meas}, 0}^2}$ [mrad]')
+#ax2.set_ylabel(r'$\sigma_{\rm norm.} = $ measured / Highland - 1')
+ax2.set_ylabel('meas / High - 1')
 
 # grids
 ax1.grid(True)
 ax2.grid(True)
 ax2.axhline(0, color='k')
 ax2.axhspan(-0.11, 0.11, alpha=0.5, color='yellow')
+
+# for legend
+highland_y = highland_multi_scatterer(highland_energy, 10000., x0alu)
+ax1.plot(highland_energy, highland_y, 
+			color='k',#0.7',
+			ls = ':',
+                        #markeredgecolor='0.7',
+			#marker=markers[index], 
+			#markersize=4, 
+			label=r'$\theta_{\rm High}$')
 
 # legend
 ax1.legend()
@@ -124,36 +168,20 @@ ax1.legend(reversed(handles), reversed(labels),
 			bbox_to_anchor=(1, 0.5), 	
 			prop={'size':12})  
 
-name_save =  "output/" + title_save + "_" + plotname + str(".pdf") 
-fig.savefig(name_save)
-print "evince " + name_save + "&"
-
-#############################################################
-############################################################
-plotname = 'thickness'
-# figure
-fig = plt.figure(figsize=(8, 8))#, dpi=100)
-fig.subplots_adjust(left=0.11, right=0.7, top=0.94, bottom=0.1)
-# subplots-grid: rows, columns
-grid = gridspec.GridSpec(10, 1, hspace=0.05)
-# layout
-ax1 = plt.subplot(grid[:7, :])
-ax2 = plt.subplot(grid[7:, :], sharex=ax1) 
-
-
+#######################################################3
 # highland thickness data
 highland_thickness = np.logspace(-3, 2, 100)
 
 for index, energy in enumerate(energies):
   # highland theory 
   highland_y = highland_multi_scatterer(energy, highland_thickness, x0alu)
-  ax1.plot(highland_thickness, highland_y, 
+  ax4.plot(highland_thickness, highland_y, 
      color=colors[index],
      #markeredgecolor='0.7',
      #marker=markers[index], 
      #markersize=4, 
-     linestyle = '--',
-     linewidth = 2,
+     linestyle = ':',
+     #linewidth = 2,
      label=r'$\theta_{\rm High.}(p = $ ' + '{:.1f}'.format(energy) + ' GeV)')
   # 2nd loop
   thickness_order = np.array([])
@@ -162,55 +190,65 @@ for index, energy in enumerate(energies):
     cut  = (data['thickness'] == thickness)
     cut2 = (data[cut]['energy'] == energy)
     # data
-    ax1.errorbar(data[cut][cut2]['thickness'], data[cut][cut2][scattering_data], 
+    ax4.errorbar(data[cut][cut2]['thickness'], data[cut][cut2][scattering_data], 
       yerr=0.05*data[cut][cut2][scattering_data],
       color=colors[index],
       markeredgecolor=colors[index], 
       #label=r'$\theta_{\rm Al}(d_{\rm Al} = $ ' + str(thickness) + ' mm)' , 
       marker=markers[index2], 
-      markersize=markersizes[index2], 
+      #markersize=markersizes[index2], 
       linestyle='None')
     # deviation points
     highland_point = highland_multi_scatterer(energy, data[cut][cut2]['thickness'], x0alu)
-    deviation = (highland_point - data[cut][cut2][scattering_data]) / highland_point
+    #deviation = (highland_point - data[cut][cut2][scattering_data]) / highland_point
+    deviation = (data[cut][cut2][scattering_data] - highland_point) / highland_point
     deviations = np.append(deviations, deviation)
     thickness_order = np.append(thickness_order, data[cut][cut2]['thickness'])
-    ax2.plot(data[cut][cut2]['thickness'], deviation,
+    ax5.plot(data[cut][cut2]['thickness'], deviation,
       color=colors[index],
       markeredgecolor=colors[index], 
       marker=markers[index2], 
-			markersize=markersizes[index2],
-			linestyle='None')
+      #markersize=markersizes[index2],
+      linestyle='None')
   # deviation line per energy
-  ax2.plot(thickness_order, deviations,
-    color=colors[index])
+  ax5.plot(thickness_order, deviations,
+    color=colors[index],
+    ls=':')
   
    
 # scaling and range
-ax1.set_yscale("log")
-ax1.set_xscale("log")
-ax1.set_xlim([0.005, 15])
-ax1.set_ylim([0.02, 5.0])
-ax2.set_ylim([-0.25, 0.19])
+ax4.set_yscale("log")
+ax4.set_xscale("log")
+ax4.set_xlim([0.005, 50])
+ax4.set_ylim([0.008, 10.0])
+ax5.set_ylim([-0.19, 0.25])
 
 # labeling
-ax1.set_title(title_plot)
-ax2.set_xlabel("thickness [mm]")
-ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm tot}^2 - \theta_{0}^2}$ [mrad]')
-ax2.set_ylabel(r'$\sigma_{\rm norm.} = \frac{{\rm Highland}-{\rm meas.}}{\rm Highland}$')
+#ax4.set_title(title_plot)
+ax5.set_xlabel("thickness [mm]", fontsize=14)
+ax4.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm meas}^2 - \theta_{\rm meas, 0}^2}$ [mrad]')
+ax5.set_ylabel('meas / High - 1')
+
+
+ax4.yaxis.tick_right()
+ax4.yaxis.set_label_position("right")
+ax5.yaxis.tick_right()
+ax5.yaxis.set_label_position("right")
+
+
 
 # grids
-ax1.grid(True)
-ax2.grid(True)
-ax2.axhline(0, color='k')
-ax2.axhspan(-0.11, 0.11, alpha=0.5, color='yellow')
+ax4.grid(True)
+ax5.grid(True)
+ax5.axhline(0, color='k')
+ax5.axhspan(-0.11, 0.11, alpha=0.5, color='yellow')
 #ax.yaxis.set_major_formatter(matplotlib.ticker.LogFormatter())
 
 # legend
-ax1.legend(loc='center left', 
-			bbox_to_anchor=(1, 0.5), 	
-			prop={'size':12})  
+#ax4.legend(loc='center left', 
+#			bbox_to_anchor=(1, 0.5), 	
+#			prop={'size':12})  
 
-name_save = "output/" + title_save + "_" + plotname + str(".pdf") 
+name_save = "output/" + title_save + str(".pdf") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"
