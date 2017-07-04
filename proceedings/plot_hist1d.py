@@ -77,21 +77,28 @@ gauss_sin = data_analysis['gauss_si_norm'][runindex]
 
 #####################
 # output names
-title_save = "run" + str(runnr)[:-2] + "_" + energy + "GeV" + "_" + thickness + "mm" + "_" + input_file[5:-4] 
+title_save = "hist_example_run" + str(runnr)[:-2] + "_" + energy + "GeV" + "_" + thickness + "mm"
 title_plot = title_save.replace("_", " ")
 
 
 ##########################################
 # Plotting Data
-fig, ax = plt.subplots(figsize=(5, 5))#, dpi=100)
-fig.subplots_adjust(left=0.14, bottom=0.12, right=0.97, top=0.97)
-
-# grids and lines
-plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.3, label='98\%')
-#plt.axvline(0, color='0.5')
+fig, ax = plt.subplots(figsize=(4, 4))#, dpi=100)
+fig.subplots_adjust(left=0.11, bottom=0.11, right=0.99, top=0.99)
 
 # normalization factor
-norm = np.max(data[1]) #; print norm
+norm_factor = np.max(data[1]); print norm_factor
+norm = 1.
+
+# grids and lines
+#plt.axvspan(datafrac[0][0], datafrac[0][-1], color='yellow', alpha=0.3, label='98\%')
+#plt.axvline(datafrac[0][0], color='')
+ax.axvline(datafrac[0][0], ymax=1./1.35, color='k', lw='0.5', ls=':')
+ax.axvline(datafrac[0][-1], ymax=1./1.35, color='k', lw='0.5', ls=':')
+textbox = 'the centre 98\% of the data'
+ax.text(-0.86, 0.5*norm_factor, textbox, rotation=90, 
+        fontsize=8, color='k', 
+        verticalalignment='center', horizontalalignment='center')#, bbox=props)
 
 # plot data
 
@@ -99,21 +106,26 @@ norm = np.max(data[1]) #; print norm
 #plt.plot(data[0], data[1]/norm, 'k', label='k')
 
 # histogram, bar-style
-plt.bar(edges[:-1], data[1]/norm, width=data[0][1]-data[0][0], linewidth=0, color='0.5', label='data') # tested: , yerr=np.sqrt(data[1])/norm
+plt.plot(edges[1:], data[1]/norm, ls='steps', color='k', lw=1, label='data') 
+#plt.bar(edges[:-1], data[1]/norm, width=data[0][1]-data[0][0], linewidth=0, color='0.5', label='data') # tested: , yerr=np.sqrt(data[1])/norm
 
 # plot fit
-x_fit = data[0]
+x_fit = datafrac[0]
 para = [gauss_mu, gauss_si, gauss_he/norm]
 y_fit = mff.fitfunc_gauss(x_fit, *para)
-plt.plot(x_fit, y_fit, ls='--', lw=3, color='k', label = 'fit')
+plt.plot(x_fit, y_fit, ls='-', lw=1, color='r', label = 'fit')#, alpha=0.6)
 
 # limits and labels
 #plt.yscale("log"), plt.ylim(5e-5, 5)
-plt.xlim(-1.2, 1.2), plt.ylim(0, 1.3)
+plt.xlim(-1.2, 1.2), plt.ylim(0, 1.35*norm_factor)
 
 #plt.title(title_plot)
-plt.xlabel(r'kink angle $\alpha_{\rm eff}$ [mrad]', fontsize=14, labelpad=16)
-plt.ylabel("entries (normalized)", fontsize=14, labelpad=16)
+plt.xlabel(r'kink angle $\alpha_{\rm eff}$ [mrad]', fontsize=14)
+#plt.ylabel("entries (normalized)", fontsize=14)
+plt.ylabel(r'entries [$\times 10^5$]', fontsize=14)
+ax.yaxis.get_major_formatter().set_powerlimits((0, 1))
+
+
 
 ####################
 # legend and text
@@ -121,7 +133,8 @@ plt.ylabel("entries (normalized)", fontsize=14, labelpad=16)
 # Legend
 handles, labels = ax.get_legend_handles_labels()
 # reverse order
-ax.legend(handles[::-1], labels[::-1], loc='upper left', prop={'size':12})
+#ax.legend(handles[::-1], labels[::-1], loc='upper left', prop={'size':12}, frameon=False)
+ax.legend(handles[:], labels[:],bbox_to_anchor=(0.03, 1.0), loc='upper left', prop={'size':14}, frameon=False)
 
 # fit results
 textbox = (
@@ -130,13 +143,14 @@ textbox = (
         r'$\chi^2/{\rm ndf} = $ ' + '{:.1f}'.format(gauss_c2r)
   )
 props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
-ax.text(0.76, 0.96, textbox, transform=ax.transAxes, fontsize=10, #linespacing=1.5,
-        verticalalignment='top', horizontalalignment='center', bbox=props)
+# 0.04, 0.82
+ax.text(0.95, 0.85, textbox, transform=ax.transAxes, fontsize=10, #linespacing=1.5,
+        verticalalignment='top', horizontalalignment='right')#, bbox=props)
 
 textbox = '{0} GeV/c, {1} mm'.format(energy, thickness)
-ax.text(0.5, 0.1, textbox, transform=ax.transAxes, 
+ax.text(0.95, 0.947, textbox, transform=ax.transAxes, 
         fontsize=14, fontweight='heavy', color='k', 
-        verticalalignment='top', horizontalalignment='center')#, bbox=props)
+        verticalalignment='top', horizontalalignment='right')#, bbox=props)
 
 # save name in folder
 name_save =  "output/" + title_save + str(".pdf") 

@@ -14,6 +14,32 @@ import numpy as np
 
 #################################################################
 
+def get_projections(counts, bincenters_x, bincenters_y):
+  # projection in x and y
+  projection_x = counts.sum(axis=1) # sum along the axis, thus it is this way!
+  projection_y = counts.sum(axis=0)
+  #print np.size(projection_x), np.size(projection_y)
+  # x-cut zeroes
+  index_x_non_zero = np.where(projection_x != 0.)
+  index_x_min = index_x_non_zero[0][0]
+  index_x_max = index_x_non_zero[0][-1]
+  data_projection_x = projection_x[index_x_min:index_x_max+1]
+  pos_projection_x  = bincenters_x[index_x_min:index_x_max+1]
+  # y-cut zeroes
+  index_y_non_zero = np.where(projection_y != 0.)
+  index_y_min = index_y_non_zero[0][0]
+  index_y_max = index_y_non_zero[0][-1]
+  data_projection_y = projection_y[index_y_min:index_y_max+1]
+  pos_projection_y  = bincenters_y[index_y_min:index_y_max+1]
+  print np.size(pos_projection_x), np.size(pos_projection_y)
+  # normalize: here take the sum axis!!  
+  data_projection_x = data_projection_x/np.size(data_projection_y)
+  data_projection_y = data_projection_y/np.size(data_projection_x)
+  # stack data
+  data_x = np.vstack((pos_projection_x, data_projection_x))
+  data_y = np.vstack((pos_projection_y, data_projection_y))
+  return data_x, data_y
+
 def projections(counts, bincenters_x, bincenters_y, margin_x, margin_y):
   # projection in x and y
   projection_x = counts.sum(axis=1) # sum along the axis, thus it is this way!
@@ -27,8 +53,8 @@ def projections(counts, bincenters_x, bincenters_y, margin_x, margin_y):
   data_projection_y = projection_y[index_y_non_zero][margin_y+1:-margin_y-1]
   pos_projection_y = bincenters_y[index_y_non_zero][margin_y+1:-margin_y-1]
   # normalize  
-  data_projection_x = data_projection_x/np.size(data_projection_x)
-  data_projection_y = data_projection_y/np.size(data_projection_y)
+  data_projection_x = data_projection_x/np.size(data_projection_y)
+  data_projection_y = data_projection_y/np.size(data_projection_x)
   # stack data
   data_x = np.vstack((pos_projection_x, data_projection_x))
   data_y = np.vstack((pos_projection_y, data_projection_y))
