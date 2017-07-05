@@ -31,7 +31,7 @@ def get_projections(counts, bincenters_x, bincenters_y):
   index_y_max = index_y_non_zero[0][-1]
   data_projection_y = projection_y[index_y_min:index_y_max+1]
   pos_projection_y  = bincenters_y[index_y_min:index_y_max+1]
-  print np.size(pos_projection_x), np.size(pos_projection_y)
+  #print np.size(pos_projection_x), np.size(pos_projection_y)
   # normalize: here take the sum axis!!  
   data_projection_x = data_projection_x/np.size(data_projection_y)
   data_projection_y = data_projection_y/np.size(data_projection_x)

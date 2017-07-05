@@ -142,7 +142,7 @@ for index, thickness in enumerate(thicknesses):
 
   # thickness text
   thick_text = str(thickness) + ' mm' # print thick_text
-  props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=0.8)
+  props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=1.0)
   x_position = 3.5
   y_position = highland_multi_scatterer(x_position, thickness, x0alu)
   ax1.text(x_position, y_position, thick_text, rotation=-9, fontsize=6.5, #linespacing=1.5,
@@ -151,7 +151,7 @@ for index, thickness in enumerate(thicknesses):
 ##################
 # highland text
 highland_text = "Highland's\n11\% accuracy"
-props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=0.8)
+props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=1.0)
 x_position = 0.5
 y_position = 0.0
 ax2.text(x_position, y_position, highland_text, rotation=90, fontsize=6.5, #linespacing=1.5,
@@ -296,7 +296,7 @@ ax5.set_ylim([-0.19, 0.26])
 # labeling
 #ax4.set_title(title_plot)
 ax4.tick_params(labelbottom='off')    
-ax5.set_xlabel("Al thickness [mm]", fontsize=14)
+ax5.set_xlabel("SUT thickness [mm]", fontsize=14)
 ax4.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm meas}^2 - \theta_{\rm meas, air}^2}$ [mrad]')
 ax5.set_ylabel('meas / HL $-$ 1')
 
