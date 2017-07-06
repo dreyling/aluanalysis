@@ -7,7 +7,7 @@ python plot_data_highland.py $COMBKAPPA100KINK2FRAC098 rmsfrac_norm all
 python plot_data_highland.py $COMBKAPPA100KINK2FRAC098 comb_si_norm all
 python plot_data_highland.py $COMBKAPPA100KINK2FRAC098 comb_si_s_norm all
 
-exit()
+return
 
 
 python plot_data_highland.py $KAPPA100KINK2FRAC098 rmsfrac all

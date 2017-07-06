@@ -90,6 +90,11 @@ def getProfile2Data(runlist, runindex, coll_name, path, suffix, rootfolder):
   for y_index, y_value in enumerate(sums[0]):
     for x_index, x_value in enumerate(sums.T[0]):
       contents[x_index][y_index] = profile_data.GetBinContent(x_index+1, y_index+1)
+  # get errors
+  errors = np.zeros(shape=np.shape(sums))
+  for y_index, y_value in enumerate(sums[0]):
+    for x_index, x_value in enumerate(sums.T[0]):
+      errors[x_index][y_index] = profile_data.GetBinError(x_index+1, y_index+1)
   # calculate counts
   counts = np.divide(sums, contents)
   # shift hist data by half of the binwidth
@@ -98,5 +103,5 @@ def getProfile2Data(runlist, runindex, coll_name, path, suffix, rootfolder):
   binwidth_y = abs(edges[1][1]-edges[1][0])
   bincenters_y = np.array(edges[1][:-1]) + binwidth_y/2. 
   # return counts (x, y)-array, x_edges and y_edges data
-  return contents, counts, bincenters_x, bincenters_y, edges[0], edges[1]
+  return contents, counts, bincenters_x, bincenters_y, edges[0], edges[1], errors
 

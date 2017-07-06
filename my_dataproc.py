@@ -68,9 +68,10 @@ def cut_data(data, cutbins):
   return data
 
 def get_hist_fraction(data, fraction):
-  if fraction <= 0:
+  #print data, np.shape(data)
+  if fraction <= 0.:
     return 0
-  if fraction >= 1:
+  if fraction >= 1.:
     fraction = 1.
     index_start = 0
     index_end = np.size(data[0])-1

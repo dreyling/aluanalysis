@@ -55,7 +55,7 @@ runnr = runlist['runnr'][runindex]
 print "selected run:", runnr
 
 # Getting histogram data
-data = mrr.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
+data, edges = mrr.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
 datafrac = mdp.get_hist_fraction(data, float(fraction))
 #print np.sum(data[1])
 #print np.sum(datafrac[1])

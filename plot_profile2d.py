@@ -50,17 +50,10 @@ runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np
 runnr = runlist['runnr'][runindex]
 print "selected run:", runnr
 
-# Getting histogram data
+# Getting  data
 contents, counts, bincenters_x, bincenters_y, edges_x, edges_y = mrr.getProfile2Data(runlist, runindex, coll_name, name_path, name_suffix, name_rootfolder)
 
 
-#if coll_name == "gblsumkx2andsumky2_xybP":
-#    contents = np.sqrt(contents)
-
-data = mrr.getHist1Data(runlist, runindex, "gblsumkx2andsumky2", name_path, name_suffix, name_rootfolder)
-
-
-print "histo mean", mdp.calc_hist_mean(data)
 
 
 

@@ -48,7 +48,7 @@ runnr = runlist['runnr'][runindex]
 print "selected run:", runnr
 
 # Getting histogram data
-data = mrr.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
+data, edges = mrr.getHist1Data(runlist, runindex, histname, name_path, name_suffix, name_rootfolder)
 if fraction == '1':
     datafrac = data
 else:

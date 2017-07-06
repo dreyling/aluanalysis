@@ -28,7 +28,6 @@ def fitfunc_gauss(xdata, *para):
     si      = para[1]
     height  = para[2]
     return height / (si*np.sqrt(2.*np.pi)) * np.exp(-0.5*(xdata-mu)**2/si**2)
-    #return height * np.exp(-0.5*(xdata-mu)**2/si**2)
 
 def fitfunc_gauss_normed(xdata, *para):
     mu  = para[0]

@@ -64,7 +64,7 @@ for index, value in enumerate(newlist):
     #print specs['stddev']
     newlist['rmsROOT'][index] = specs['stddev']
     # 3. add rmsfrac
-    data = mrr.getHist1Data(runlist, index, name_hist, name_path, name_suffix, name_rootfolder)
+    data, edges = mrr.getHist1Data(runlist, index, name_hist, name_path, name_suffix, name_rootfolder)
     datafrac = mdp.get_hist_fraction(data, float(fraction))
     newlist['rmsfrac'][index] = mdp.calc_hist_RMS(datafrac)
     # 4. Gauss fit
