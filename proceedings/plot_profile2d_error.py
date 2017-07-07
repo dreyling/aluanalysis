@@ -8,8 +8,9 @@ from matplotlib.ticker import NullFormatter
 import matplotlib.cm as cm
 import numpy as np
 #from scipy.optimize import curve_fit
-#import math
+import math
 
+sys.path.insert(0, '../')
 import my_rootread as mrr
 import my_fitfuncs as mff
 import my_dataproc as mdp
@@ -37,13 +38,16 @@ print "selected energy:", energy
 thickness = sys.argv[4]
 print "selected thickness:", thickness
 
+
+data_type = 'error'
+
 #####################################
 # Start
 
 info = False
 
 # Getting runlist
-runlist = mrr.readRunlist(name_runlist)
+runlist = mrr.readRunlist("../" + name_runlist)
 
 # getting right runindex
 runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np.where(runlist['energy'] == float(energy)))[0]
@@ -53,6 +57,17 @@ print "selected run:", runnr
 # Getting  data
 contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2Data(runlist, runindex, coll_name, name_path, name_suffix, name_rootfolder)
 
+#########################################
+sigmas = np.multiply(np.sqrt(counts), errors)
+
+contents = sigmas
+print np.shape(sigmas)
+print np.isnan(sigmas)
+
+sigmas[np.isnan(sigmas)] = 0
+
+print np.shape(sigmas)
+print np.isnan(sigmas)
 
 
 
@@ -109,7 +124,7 @@ title_plot = title_save.replace("_", " ")
 #fig.subplots_adjust(left=0.11, right=0.99, top=0.94, bottom=0.12)
 
 fig = plt.figure(figsize=(5, 3))
-fig.subplots_adjust(left=0.11, right=0.99, top=0.99, bottom=0.17)
+fig.subplots_adjust(left=0.12, right=0.99, top=0.99, bottom=0.17)
 # subplots-grid: rows, columns
 grid = gridspec.GridSpec(3, 6, hspace=0.05, wspace=0.0)
 
@@ -135,20 +150,14 @@ if False:
 ax2 = plt.subplot(grid[:1, :4], sharex=ax1) 
 ax2.tick_params(labelbottom='off')    
 #ax2.set_xlim(edges_x.min(), edges_x.max())
-if coll_name == "gblsumkx2andsumky2_xybP":
-    ax2.set_ylabel(r'$\theta_{\rm meas}$ [mrad]', fontsize=8)
-if coll_name == "gblsumkxandsumky_xyP":
-    ax2.set_ylabel(r'$\alpha_{\rm eff}$ [mrad]', fontsize=8)
+ax2.set_ylabel(r'$\theta_{\rm meas}$ [mrad]', fontsize=8)
 
 # y-projection
 ax3 = plt.subplot(grid[1:, 5:], sharey=ax1) 
 #ax3.set_ylim(edges_y.min(), edges_y.max())
 ax3.tick_params(labelleft='off')    
 ax3.set_xlim(np.min(projection_y[1]), np.max(projection_y[1]))
-if coll_name == "gblsumkx2andsumky2_xybP":
-    ax3.set_xlabel(r'$\theta_{\rm meas}$ [mrad]', fontsize=8)
-if coll_name == "gblsumkxandsumky_xyP":
-    ax3.set_xlabel(r'$\alpha_{\rm eff}$ [mrad]', fontsize=8)
+ax3.set_xlabel(r'$\theta_{\rm meas}$ [mrad]', fontsize=8)
 #ax3.set_xticklabels(ax3.xaxis.get_majorticklabels(), rotation=90)
 
 
@@ -158,8 +167,15 @@ if coll_name == "gblsumkxandsumky_xyP":
 # - content Matrix has to be transposed
 # - and the y-edges has to be switched
 # proofed by comparing with root visualization
-vmin=content_mean - content_std 
-vmax=content_mean + content_std 
+factor = math.sqrt(0.5)
+vmin = content_mean - factor*content_std 
+vmax = content_mean + factor*content_std 
+
+# mask zero entries white
+contents = np.ma.masked_where(contents == 0., contents)
+cmap = cm.viridis_r
+cmap.set_bad(color='white')
+
 image = ax1.imshow(contents.T, 
         # nominal: extent = (left, right, bottom, top)
         # y edges switched
@@ -169,7 +185,7 @@ image = ax1.imshow(contents.T,
         vmin=vmin, 
         #vmin = 0.,
         vmax=vmax, 
-        cmap=cm.seismic
+        cmap=cmap
         )
 
 # for colorbar position, has to be after ax1 creation
@@ -181,12 +197,12 @@ divider = make_axes_locatable(plt.gca())
 cax = divider.append_axes("left", "30%", pad="10%")
 # shape colorbar
 cb = fig.colorbar(image, cax=cax)
-cb.set_ticks([round(vmin, 2), round(vmin, 2)/2, 0, round(vmax, 2)/2, round(vmax, 2)])
+cb.set_ticks([0.5, 0.7, 0.9, 1.1])#0, round(vmax, 1)/4., round(vmax, 1)/2., round(vmax, 1)*3./4., round(vmax, 1)])
 cax.tick_params(labelsize=8)
-textbox = r'$\alpha_{\rm eff}$ [mrad]'
-#cm.set_label(textbox, fontsize=8, labelpad=-1)
-ax4.text(-0.3, -0.15, textbox, transform=ax4.transAxes, fontsize=8,
-        verticalalignment='bottom', horizontalalignment='left')#, bbox=props)
+textbox = r'$\theta_{\rm meas}$ [mrad]'
+cb.set_label(textbox, fontsize=8, labelpad=5)
+#ax4.text(-0.3, -0.15, textbox, transform=ax4.transAxes, fontsize=8,
+#        verticalalignment='bottom', horizontalalignment='left')#, bbox=props)
 #tick_spacing_cm = 0.02 #round((np.max(projection_y[1]) - np.min(projection_y[1]))/3., 2)
 #cax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_cm))
 #cax.tick_params(labelsize=10)
@@ -206,9 +222,9 @@ number_merged_points = 50
 # x-projection, rebinned --> position, value/mean, value/std
 projection_x_means_pos_binned = projection_x[0].reshape(-1, number_merged_points).mean(axis=1)
 projection_x_means_val_binned = projection_x[1].reshape(-1, number_merged_points).mean(axis=1)
-projection_x_stds_val_binned = projection_x[1].reshape(-1, number_merged_points).std(axis=1)
-#print np.size(projection_x[0])
-#print np.size(projection_x_means_pos_binned)
+projection_x_n_binned = np.size(projection_x[1]) * number_merged_points
+projection_x_stds_val_binned = projection_x[1].reshape(-1, number_merged_points).std(axis=1)/math.sqrt(projection_x_n_binned)
+
 ax2.errorbar(projection_x_means_pos_binned, projection_x_means_val_binned, 
         xerr=(projection_x_means_pos_binned[1]-projection_x_means_pos_binned[0])/2.,
         yerr=projection_x_stds_val_binned,
@@ -218,10 +234,12 @@ ax2.errorbar(projection_x_means_pos_binned, projection_x_means_val_binned,
         color='k'
         )
 # scaling
-projection_x_min = (np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned)*1.5)
-projection_x_max = (np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned)*1.5)
-ax2.set_ylim(projection_x_min, projection_x_max)
-tick_spacing_x = round((projection_x_max - projection_x_min)/3., 2)
+projection_x_min = (np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned)*1.3)
+projection_x_max = (np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned)*1.7)
+#ax2.set_ylim(projection_x_min, projection_x_max)
+#tick_spacing_x = round((projection_x_max - projection_x_min)/3., 2)
+ax2.set_ylim(0.74, 0.87)
+tick_spacing_x = 0.05
 #round((np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned) - np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned))/3., 2)
 ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_x))
 ax2.tick_params(labelsize=8)
@@ -237,18 +255,19 @@ ax2.plot(projection_x_fit_x, projection_x_fit_y,
 #print projection_x_fit_results['chi2red']
 #props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
 textbox1 = (r'slope$_{\rm fit} = $ ' + 
-    '{:.1e}'.format(projection_x_fit_results['slope']) + 
-    r'$\frac{\rm mrad}{\rm mm}$' +
-    '$\pm$ {:.1f} \%'.format(abs(projection_x_fit_results['dslope']/projection_x_fit_results['slope']*100.)))
-textbox2 = r'$\chi^2$/ndf = ' + '{:.2f}'.format(projection_x_fit_results['chi2red'])
-ax2.text(0.95, 0.87, textbox1 + ', ' + textbox2, transform=ax2.transAxes, fontsize=6,
+    '({:.1f}'.format(projection_x_fit_results['slope']*1000) + 
+    ' $\pm$ {:.1f})'.format(projection_x_fit_results['dslope']*1000) +
+    r'$\frac{\mu{\rm rad}}{\rm mm}$')
+textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_x_fit_results['chi2red'])
+ax2.text(0.95, 0.87, textbox1 + '\n' + textbox2, transform=ax2.transAxes, fontsize=7,
         verticalalignment='top', horizontalalignment='right')#, bbox=props)
 
 ####################
 # y-projection, rebinned --> position, value/mean, value/std
 projection_y_means_pos_binned = projection_y[0].reshape(-1, number_merged_points).mean(axis=1)
 projection_y_means_val_binned = projection_y[1].reshape(-1, number_merged_points).mean(axis=1)
-projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points).std(axis=1)
+projection_y_n_binned = np.size(projection_y[1]) * number_merged_points
+projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points).std(axis=1)/math.sqrt(projection_y_n_binned)
 #print np.size(projection_x[0])
 #print np.size(projection_x_means_pos_binned)
 ax3.errorbar(projection_y_means_val_binned[::-1], projection_y_means_pos_binned, 
@@ -260,10 +279,12 @@ ax3.errorbar(projection_y_means_val_binned[::-1], projection_y_means_pos_binned,
         color='k'
         )
 # scaling
-projection_y_min = (np.min(projection_y_means_val_binned)-np.min(projection_y_stds_val_binned)*1.8)
-projection_y_max = (np.max(projection_y_means_val_binned)+np.max(projection_y_stds_val_binned)*1.8)
-ax3.set_xlim(projection_y_min, projection_y_max)
-tick_spacing_y = round((projection_y_max - projection_y_min)/3., 2)
+projection_y_min = (np.min(projection_y_means_val_binned)-np.min(projection_y_stds_val_binned)*1.2)
+projection_y_max = (np.max(projection_y_means_val_binned)+np.max(projection_y_stds_val_binned)*2.6)
+#ax3.set_xlim(projection_y_min, projection_y_max)
+#tick_spacing_y = round((projection_y_max - projection_y_min)/3., 2)
+ax3.set_xlim(0.75, 0.85)
+tick_spacing_y = 0.05
 #round((np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned) - np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned))/3., 2)
 ax3.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_y))
 ax3.tick_params(labelsize=8)
@@ -281,12 +302,12 @@ ax3.plot(projection_y_fit_y, projection_y_fit_x,
 #print projection_x_fit_results['chi2red']
 #props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
 textbox1 = (r'slope$_{\rm fit} = $ ' + 
-    '{:.1e}'.format(projection_y_fit_results['slope']) + 
-    r'$\frac{\rm mrad}{\rm mm}$' +
-    '$\pm$ {:.1f} \%'.format(abs(projection_y_fit_results['dslope']/projection_y_fit_results['slope']*100.)))
-textbox2 = r'$\chi^2$/ndf = ' + '{:.2f}'.format(projection_y_fit_results['chi2red'])
-ax3.text(0.95, 0.87, textbox1 + '\n' + textbox2, transform=ax3.transAxes, fontsize=6,
-        verticalalignment='top', horizontalalignment='right', rotation=-90)#, bbox=props)
+    '({:.1f}'.format(projection_y_fit_results['slope']*1000) + 
+    ' $\pm$ {:.1f})'.format(projection_y_fit_results['dslope']*1000) +
+    r'$\frac{\rm mrad}{\rm mm}$')
+textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_y_fit_results['chi2red'])
+ax3.text(0.86, 0.07, textbox1 + '\n' + textbox2, transform=ax3.transAxes, fontsize=7,
+        verticalalignment='bottom', horizontalalignment='right', rotation=-90)#, bbox=props)
 
 
 xmin, xmax = -9.8, 9.8
@@ -298,6 +319,6 @@ ax3.set_ylim(ymin, ymax)
 
 # save name in folder
 #plt.show()
-name_save =  "output/" + title_save + str(".pdf") 
+name_save =  "output/" + title_save + "_" + data_type + str(".pdf") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"

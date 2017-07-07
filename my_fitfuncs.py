@@ -68,10 +68,12 @@ def fitfunc_combined_gauss_studentt(xdata, *para):
 ###############################################
 # methods 
 
-def fit_linear(data, slope0, offset0):
+def fit_linear(data, dydata, slope0, offset0):
   xdata = data[0]
   ydata = data[1]
-  dydata = np.sqrt(ydata); dydata = np.where(dydata > 0.0, dydata, 1) #; print dy 
+  if np.mean(dydata) == 0.:
+      print "linear fit using sqrt(n) deviation"
+      dydata = np.sqrt(ydata); dydata = np.where(dydata > 0.0, dydata, 1) #; print dy 
   # start parameter
   para0 = [slope0, offset0] # slope, offset
   para, cov = curve_fit(fitfunc_linear, xdata, ydata, p0=para0, sigma=dydata)

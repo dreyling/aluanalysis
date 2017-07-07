@@ -4,7 +4,7 @@ export KAPPA075KINK2="/home/jande/Documents/fhl-wgs01/data/data_datura/161128_sc
 
 
 # for the mean
-python plot_profile2d_mean.py $KAPPA075KINK2 gblsumkxandsumky_xyP 1 0.1
+#python plot_profile2d_mean.py $KAPPA075KINK2 gblsumkxandsumky_xyP 1 0.1
 # for the sigma
 python plot_profile2d_error.py $KAPPA075KINK2 gblsumkxandsumky_xyP 1 0.1
 

@@ -108,17 +108,37 @@ print "mean error of 2d profile (entries, gblsumkxandsumky_xyP):\n", errors_mean
 
 # calculation of sigma
 sigmas = np.multiply(np.sqrt(counts), errors)
-sigmas_mean = np.nanmean(sigmas)
 #print np.size(sigmas), np.shape(sigmas), sigmas
-# alternative
-#print np.size(counts[~np.isnan(counts)])
-sigmas2 = np.multiply(np.sqrt(counts[~np.isnan(counts)]), errors[errors != 0.])
-sigmas_mean2 = np.mean(sigmas2)
+sigmas_mean = np.nanmean(sigmas)
 print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP):\n", sigmas_mean
+# alternative for check
+sigmas2 = np.multiply(np.sqrt(counts[~np.isnan(counts)]), errors[errors != 0.])
+#print np.size(counts[~np.isnan(counts)])
+sigmas_mean2 = np.mean(sigmas2)
 print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check:\n", sigmas_mean2
+# alternative for check
+sigmas3 = np.multiply(np.sqrt(counts[75:525, 50:250]), errors[75:525, 50:250])
+#print np.size(counts[~np.isnan(counts)])
+sigmas_mean3 = np.mean(sigmas3)
+print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check 2:\n", sigmas_mean3
+print np.average(sigmas3)
 
-print sigmas2
+# weigted mean
+counts_w = counts[75:525, 50:250]
+errors_w = errors[75:525, 50:250]
+sigmas_w = sigmas[75:525, 50:250]
+sigmas_sigmas_w = np.divide( np.multiply(np.sqrt(counts_w), errors_w), np.sqrt(2*counts_w-2) )
+sigmas_weighted_mean = np.average(sigmas_w, weights=sigmas_sigmas_w)
+print "weigthed mean sigma of 2d profile (entries, gblsumkxandsumky_xyP):\n", sigmas_weighted_mean
 
+
+
+exit()
+
+
+
+
+#####################################
 if True:
     #######################################33
     fig, ax = plt.subplots(figsize=(5, 3))
@@ -128,14 +148,66 @@ if True:
 
     plt.yscale('log')
     plt.xlim(0, 5)
-    plt.xlabel("bine x sqrt(binn)")
-    plt.ylabel("counts bine x sqrt(binn)")
+    plt.xlabel("sigmas = bine x sqrt(binn)")
+    plt.ylabel("counts")
 
     plt.text(0.4, 0.9, 'mean (bine x sqrt(binn)) = {:.6f}'.format(sigmas_mean2), transform=ax.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left')
 
 
     # save name in folder
-    name_save =  "output/" + title_save + str(".pdf") 
+    name_save =  "output/" + title_save + "_sigmas" + str(".pdf") 
+    fig.savefig(name_save)
+    print "evince " + name_save + "&"
+
+    #######################################33
+    fig, ax = plt.subplots(figsize=(5, 3))
+    fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.15)
+
+    plt.hist(counts[~np.isnan(counts)], 1000, histtype='step')
+
+    #plt.yscale('log')
+    #plt.xlim(0, 5)
+    plt.xlabel("binn")
+    plt.ylabel("counts")
+
+
+    # save name in folder
+    name_save =  "output/" + title_save + "_counts" + str(".pdf") 
+    fig.savefig(name_save)
+    print "evince " + name_save + "&"
+
+    #######################################33
+    fig, ax = plt.subplots(figsize=(5, 3))
+    fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.15)
+
+    plt.hist(contents[contents != 0.], 1000, histtype='step')
+
+    #plt.yscale('log')
+    plt.xlim(-1, 1)
+    plt.xlabel("mean (binc)")
+    plt.ylabel("counts")
+
+
+    # save name in folder
+    name_save =  "output/" + title_save + "_contents" + str(".pdf") 
+    fig.savefig(name_save)
+    print "evince " + name_save + "&"
+
+    #######################################33
+    fig, ax = plt.subplots(figsize=(5, 3))
+    fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.15)
+
+    plt.hist(errors[errors != 0.], 1000, histtype='step')
+
+    plt.yscale('log')
+    plt.xlim(0, 0.55)
+    plt.xlabel("bine")
+    plt.ylabel("counts")
+
+
+
+    # save name in folder
+    name_save =  "output/" + title_save + "_errors" + str(".pdf") 
     fig.savefig(name_save)
     print "evince " + name_save + "&"
 
