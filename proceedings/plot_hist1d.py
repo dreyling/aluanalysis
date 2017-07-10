@@ -4,7 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 #from scipy.optimize import curve_fit
-#import math
+import math
 
 sys.path.insert(0, '../')
 import my_rootread as mrr
@@ -84,7 +84,7 @@ title_plot = title_save.replace("_", " ")
 ##########################################
 # Plotting Data
 fig, ax = plt.subplots(figsize=(4, 4))#, dpi=100)
-fig.subplots_adjust(left=0.11, bottom=0.11, right=0.99, top=0.99)
+fig.subplots_adjust(left=0.14, bottom=0.11, right=0.99, top=0.99)
 
 # normalization factor
 norm_factor = np.max(data[1]); print norm_factor
@@ -96,7 +96,7 @@ norm = 1.
 ax.axvline(datafrac[0][0], ymax=1./1.35, color='k', lw='0.5', ls=':')
 ax.axvline(datafrac[0][-1], ymax=1./1.35, color='k', lw='0.5', ls=':')
 textbox = 'the centre 98\% of the data'
-ax.text(-0.86, 0.5*norm_factor, textbox, rotation=90, 
+ax.text(datafrac[0][0]+0.1, 0.5*norm_factor, textbox, rotation=90, 
         fontsize=8, color='k', 
         verticalalignment='center', horizontalalignment='center')#, bbox=props)
 
@@ -110,10 +110,23 @@ plt.plot(edges[1:], data[1]/norm, ls='steps', color='k', lw=1, label='data')
 #plt.bar(edges[:-1], data[1]/norm, width=data[0][1]-data[0][0], linewidth=0, color='0.5', label='data') # tested: , yerr=np.sqrt(data[1])/norm
 
 # plot fit
-x_fit = datafrac[0]
+x_fit = np.linspace(datafrac[0][0], datafrac[0][-1], 500)
 para = [gauss_mu, gauss_si, gauss_he/norm]
 y_fit = mff.fitfunc_gauss(x_fit, *para)
 plt.plot(x_fit, y_fit, ls='-', lw=1, color='r', label = 'fit')#, alpha=0.6)
+
+# width 
+x_width_from = -gauss_si
+x_width_till = gauss_si
+y_width = mff.fitfunc_gauss(gauss_si, *para)
+#print x_width_from, x_width_till, y_width/gauss_he
+plt.hlines(y=y_width, xmin=x_width_from, xmax=x_width_till, linestyles='solid', lw=3, color='r')
+ax.text(0.0, y_width-50000, r'$2\cdot\theta_{\rm meas}$', fontsize=8, 
+        verticalalignment='center', horizontalalignment='center')#, bbox=props)
+ 
+
+
+
 
 # limits and labels
 #plt.yscale("log"), plt.ylim(5e-5, 5)

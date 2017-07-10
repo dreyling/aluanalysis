@@ -228,7 +228,7 @@ projection_x_max = np.max(projection_x_means_val_binned)+np.max(projection_x_std
 projection_x_min = projection_x_means_val_binned[0] - projection_x_stds_val_binned[0]*5.
 projection_x_max = projection_x_means_val_binned[0] + projection_x_stds_val_binned[0]*5.
 ax2.set_ylim(projection_x_min, projection_x_max)
-ax2.set_ylim(-0.0035*1000, 0.005*1000)
+ax2.set_ylim(-0.0039*1000, 0.005*1000)
 tick_spacing_x = 0.002*1000 #round(abs(projection_x_max - projection_x_min)/3., 2)
 #round((np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned) - np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned))/3., 2)
 ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_x))

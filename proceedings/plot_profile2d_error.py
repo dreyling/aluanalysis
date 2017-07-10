@@ -238,8 +238,8 @@ projection_x_min = (np.min(projection_x_means_val_binned)-np.min(projection_x_st
 projection_x_max = (np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned)*1.7)
 #ax2.set_ylim(projection_x_min, projection_x_max)
 #tick_spacing_x = round((projection_x_max - projection_x_min)/3., 2)
-ax2.set_ylim(0.74, 0.87)
-tick_spacing_x = 0.05
+ax2.set_ylim(0.742, 0.81)
+tick_spacing_x = 0.02
 #round((np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned) - np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned))/3., 2)
 ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_x))
 ax2.tick_params(labelsize=8)
@@ -259,8 +259,8 @@ textbox1 = (r'slope$_{\rm fit} = $ ' +
     ' $\pm$ {:.1f})'.format(projection_x_fit_results['dslope']*1000) +
     r'$\frac{\mu{\rm rad}}{\rm mm}$')
 textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_x_fit_results['chi2red'])
-ax2.text(0.95, 0.87, textbox1 + '\n' + textbox2, transform=ax2.transAxes, fontsize=7,
-        verticalalignment='top', horizontalalignment='right')#, bbox=props)
+ax2.text(0.05, 0.87, textbox1 + '\n' + textbox2, transform=ax2.transAxes, fontsize=7,
+        verticalalignment='top', horizontalalignment='left')#, bbox=props)
 
 ####################
 # y-projection, rebinned --> position, value/mean, value/std

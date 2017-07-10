@@ -141,20 +141,23 @@ for index, thickness in enumerate(thicknesses):
 			)
 
   # thickness text
-  thick_text = str(thickness) + ' mm' # print thick_text
-  props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=1.0)
+  if thickness < 0.1:
+      thick_text = str(thickness*1000) + ' $\mu$m' # print thick_text
+  else:
+      thick_text = str(thickness) + ' mm' # print thick_text
+  props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none')#, alpha=1.0)
   x_position = 3.5
   y_position = highland_multi_scatterer(x_position, thickness, x0alu)
-  ax1.text(x_position, y_position, thick_text, rotation=-9, fontsize=6.5, #linespacing=1.5,
+  ax1.text(x_position, y_position, thick_text, rotation=-9, fontsize=8, #linespacing=1.5,
         verticalalignment='center', horizontalalignment='center', bbox=props)
 
 ##################
 # highland text
-highland_text = "Highland's\n11\% accuracy"
-props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=1.0)
+highland_text = "Highland's\n11\%\naccuracy"
+props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none')#, alpha=1.0)
 x_position = 0.5
 y_position = 0.0
-ax2.text(x_position, y_position, highland_text, rotation=90, fontsize=6.5, #linespacing=1.5,
+ax2.text(x_position, y_position, highland_text, rotation=90, fontsize=8, #linespacing=1.5,
       verticalalignment='center', horizontalalignment='center', bbox=props)
 
 
@@ -268,22 +271,24 @@ for index, energy in enumerate(energies):
   
   # energy text
   erg_text = str(energy) + ' GeV/c' # print thick_text
-  props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=0.8)
+  props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none')#, alpha=0.8)
   x_position = 3
   if energy == 5.0:
-      y_position = highland_multi_scatterer(energy, x_position, x0alu)*0.95
+      y_position = highland_multi_scatterer(energy, x_position, x0alu)*0.9
+  elif energy == 4.0:
+      y_position = highland_multi_scatterer(energy, x_position, x0alu)*0.98
   else:
       y_position = highland_multi_scatterer(energy, x_position, x0alu)
-  ax4.text(x_position, y_position, erg_text, rotation=29, fontsize=6.5, #linespacing=1.5,
+  ax4.text(x_position, y_position, erg_text, rotation=29, fontsize=8, #linespacing=1.5,
         verticalalignment='center', horizontalalignment='center', bbox=props)
 
 ##################
 # highland text
-highland_text = "Highland's\n11\% accuracy"
-props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none', alpha=0.8)
+highland_text = "Highland's\n11\%\naccuracy"
+props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none')#, alpha=0.8)
 x_position = 5e-3
 y_position = 0.0
-ax5.text(x_position, y_position, highland_text, rotation=90, fontsize=6.5, #linespacing=1.5,
+ax5.text(x_position, y_position, highland_text, rotation=90, fontsize=8, #linespacing=1.5,
       verticalalignment='center', horizontalalignment='center', bbox=props)
    
 # scaling and range
