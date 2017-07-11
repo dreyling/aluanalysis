@@ -84,7 +84,7 @@ title_plot = title_save.replace("_", " ")
 ##########################################
 # Plotting Data
 fig, ax = plt.subplots(figsize=(4, 4))#, dpi=100)
-fig.subplots_adjust(left=0.14, bottom=0.11, right=0.99, top=0.99)
+fig.subplots_adjust(left=0.15, bottom=0.11, right=0.99, top=0.95)
 
 # normalization factor
 norm_factor = np.max(data[1]); print norm_factor
@@ -116,17 +116,18 @@ y_fit = mff.fitfunc_gauss(x_fit, *para)
 plt.plot(x_fit, y_fit, ls='-', lw=1, color='r', label = 'fit')#, alpha=0.6)
 
 # width 
-x_width_from = -gauss_si
-x_width_till = gauss_si
-y_width = mff.fitfunc_gauss(gauss_si, *para)
-#print x_width_from, x_width_till, y_width/gauss_he
-plt.hlines(y=y_width, xmin=x_width_from, xmax=x_width_till, linestyles='solid', lw=3, color='r')
-ax.text(0.0, y_width-50000, r'$2\cdot\theta_{\rm meas}$', fontsize=8, 
-        verticalalignment='center', horizontalalignment='center')#, bbox=props)
- 
-
-
-
+if False:
+    x_width_from = -gauss_si
+    x_width_till = gauss_si
+    y_width = mff.fitfunc_gauss(gauss_si, *para)
+    #print x_width_from, x_width_till, y_width/gauss_he
+    plt.hlines(y=y_width, xmin=x_width_from, xmax=x_width_till, linestyles='solid', lw=2, color='r')
+    if float(thickness) == 0.0:
+        ax.text(0.0, y_width-50000, r'$2\cdot\theta_{\rm meas, air}$', fontsize=8, 
+            verticalalignment='center', horizontalalignment='center')#, bbox=props)
+    else:
+        ax.text(0.0, y_width-50000, r'$2\cdot\theta_{\rm meas}$', fontsize=8, 
+            verticalalignment='center', horizontalalignment='center')#, bbox=props)
 
 # limits and labels
 #plt.yscale("log"), plt.ylim(5e-5, 5)
@@ -135,7 +136,7 @@ plt.xlim(-1.2, 1.2), plt.ylim(0, 1.35*norm_factor)
 #plt.title(title_plot)
 plt.xlabel(r'kink angle $\alpha_{\rm eff}$ [mrad]', fontsize=14)
 #plt.ylabel("entries (normalized)", fontsize=14)
-plt.ylabel(r'entries [$\times 10^5$]', fontsize=14)
+plt.ylabel(r'entries', fontsize=14)
 ax.yaxis.get_major_formatter().set_powerlimits((0, 1))
 
 
@@ -150,11 +151,18 @@ handles, labels = ax.get_legend_handles_labels()
 ax.legend(handles[:], labels[:],bbox_to_anchor=(0.03, 1.0), loc='upper left', prop={'size':14}, frameon=False)
 
 # fit results
-textbox = (
-	r'$\theta_{\rm meas} =$ (' + '{:.3f}'.format(gauss_si) + r'$\pm$' + '{:.3f}'.format(gauss_dsi) + ') mrad' + '\n' + 
-#	r'entries$_{98\%} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1]))  + '\n' +
-        r'$\chi^2/{\rm ndf} = $ ' + '{:.1f}'.format(gauss_c2r)
-  )
+if float(thickness) == 0.0:
+    textbox = (
+            r'$\theta_{\rm meas, air} =$ (' + '{:.3f}'.format(gauss_si) + r'$\pm$' + '{:.3f}'.format(gauss_dsi) + ') mrad' + '\n' + 
+    #	r'entries$_{98\%} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1]))  + '\n' +
+            r'$\chi^2/{\rm ndf} = $ ' + '{:.1f}'.format(gauss_c2r)
+      )
+else:
+    textbox = (
+            r'$\theta_{\rm meas} =$ (' + '{:.3f}'.format(gauss_si) + r'$\pm$' + '{:.3f}'.format(gauss_dsi) + ') mrad' + '\n' + 
+    #	r'entries$_{98\%} = $ ' + '{:.2e}'.format(np.sum(datafrac[1])) + ' ({:.2f} \%)'.format(100*np.sum(datafrac[1])/np.sum(data[1]))  + '\n' +
+            r'$\chi^2/{\rm ndf} = $ ' + '{:.1f}'.format(gauss_c2r)
+      )
 props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
 # 0.04, 0.82
 ax.text(0.95, 0.85, textbox, transform=ax.transAxes, fontsize=10, #linespacing=1.5,
@@ -166,6 +174,6 @@ ax.text(0.95, 0.947, textbox, transform=ax.transAxes,
         verticalalignment='top', horizontalalignment='right')#, bbox=props)
 
 # save name in folder
-name_save =  "output/" + title_save + str(".pdf") 
+name_save =  "output/" + title_save + str(".eps") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"

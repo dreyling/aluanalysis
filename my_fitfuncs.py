@@ -82,6 +82,11 @@ def fit_linear(data, dydata, slope0, offset0):
   dslope = np.sqrt(cov[0][0])
   doffset = np.sqrt(cov[1][1])
   # chi**2
+  print "y data",  ydata
+  print "y fit", fitfunc_linear(xdata, *para)
+  print "d y data", dydata
+  print "data freedoms", len(ydata)
+  print "parameter freedoms", len(para)
   chi2 = np.sum(((ydata - fitfunc_linear(xdata, *para)) / dydata)**2)
   chi2red = chi2 / (len(ydata)-len(para))
   fit_results = {'slope':slope, 'offset':offset, 'dslope':dslope, 'doffset':doffset, 'chi2':chi2, 'chi2red':chi2red}

@@ -9,6 +9,9 @@ from matplotlib import rcParams
 rcParams['xtick.direction'] = 'in'
 rcParams['ytick.direction'] = 'in'
 
+params = {'text.latex.preamble' : [r'\usepackage{upgreek}']}
+plt.rcParams.update(params)
+
 sys.path.insert(0, '../')
 from myparams import * 
 
@@ -85,8 +88,9 @@ ax5.set_axisbelow(True)
 
 # grids
 ax1.grid(True, color='k', lw='0.2', ls='-')
-ax2.grid(True, color='k', lw='0.2', ls='-')
-ax2.yaxis.grid(False)
+ax1.xaxis.grid(False)
+#ax2.grid(True, color='k', lw='0.2', ls='-')
+#ax2.yaxis.grid(False)
 ax2.axhline(0, color='k', lw='0.5')
 #ax2.axhspan(-0.11, 0.11, alpha=0.5, color='yellow')
 ax2.axhline(-0.11, color='k', lw='0.5', ls=':')
@@ -104,7 +108,8 @@ for index, thickness in enumerate(thicknesses):
   highland_y = highland_multi_scatterer(highland_energy, thickness, x0alu)
   ax1.plot(highland_energy, highland_y, 
 			color='k', 
-                        ls=':'
+                        ls=':',
+                        lw='0.5'
 			)
 
   ######
@@ -112,13 +117,32 @@ for index, thickness in enumerate(thicknesses):
   cut = (data['thickness'] == thickness)
   # data, markers, greyscaled 
   data_energy = data[cut]['energy']
-  data_scattering = data[cut][scattering_data] 
+  data_scattering = data[cut][scattering_data]
+  data_d_scattering = data[cut]['d_'+scattering_data]
+  #print thickness
   for index2, energy in enumerate(energies):
-  	ax1.errorbar(data_energy[index2], data_scattering[index2], 
-                        #yerr=0.05*data[cut][scattering_data],
+        #print data_energy[index2], data_scattering[index2], data_d_scattering[index2]
+        if float(thickness) < 0.1:
+            ax1.plot(data_energy[index2], data_scattering[index2], 
       			color=colors[int(data_energy[index2]-1)],
       			markeredgecolor=colors[int(data_energy[index2]-1)],
 			marker=markers[index], 
+                        markersize=2,
+			linestyle='None')
+            print index
+            ax1.errorbar(data_energy[index2]-(3-index)*0.1, data_scattering[index2], 
+                        yerr=data_d_scattering[index2],
+                        capsize=0,
+      			color=colors[int(data_energy[index2]-1)],
+			linestyle='None')
+        else:
+            ax1.errorbar(data_energy[index2], data_scattering[index2], 
+                        yerr=data_d_scattering[index2],
+      			color=colors[int(data_energy[index2]-1)],
+      			markeredgecolor=colors[int(data_energy[index2]-1)],
+			marker=markers[index], 
+                        markersize=2,
+                        capsize=0,
 			linestyle='None')
   
   ########################
@@ -137,12 +161,12 @@ for index, thickness in enumerate(thicknesses):
       			markeredgecolor=colors[int(data_energy[index2]-1)],
 			ls = 'None',
 			marker=markers[index],
-                        markersize=5,
+                        markersize=2
 			)
 
   # thickness text
   if thickness < 0.1:
-      thick_text = str(thickness*1000) + ' $\mu$m' # print thick_text
+      thick_text = str(thickness*1000) + ' $\upmu$m' # print thick_text
   else:
       thick_text = str(thickness) + ' mm' # print thick_text
   props = dict(boxstyle='square', pad=0.1, facecolor='white', edgecolor='none')#, alpha=1.0)
@@ -175,24 +199,18 @@ ax1.plot(highland_energy, highland_y,
 			ls = ':', lw=1,
 			label=r'$\theta_{\rm HL}$')
 
-
 # scaling and range
 ax1.set_yscale("log")
-ax1.set_xlim([0.0, 5.75])
-#ax1.set_ylim([0.02, 5.0])
 ax1.set_ylim([0.01, 10.0])
+#ax1.set_ylim([0.02, 5.0])
+ax1.set_xlim([0.0, 5.75])
 ax2.set_ylim([-0.19, 0.26])
 
 # labeling
-#ax1.set_title(title_plot)
 ax1.tick_params(labelbottom='off')    
 ax2.set_xlabel("beam momentum [GeV/c]", fontsize=14)
-ax1.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{{\rm meas}}^2 - \theta_{\rm meas, air}^2}$ [mrad]')
-#ax2.set_ylabel(r'$\sigma_{\rm norm.} = $ measured / Highland - 1')
+ax1.set_ylabel(r'$\theta_{\rm Al}$ [mrad]')
 ax2.set_ylabel('meas / HL $-$ 1')
-
-
-
 
 # legend energy
 ax1.legend()
@@ -302,11 +320,11 @@ ax5.set_ylim([-0.19, 0.26])
 #ax4.set_title(title_plot)
 ax4.tick_params(labelbottom='off')    
 ax5.set_xlabel("SUT thickness [mm]", fontsize=14)
-ax4.set_ylabel(r'$\theta_{\rm Al} = \sqrt{\theta_{\rm meas}^2 - \theta_{\rm meas, air}^2}$ [mrad]')
+ax4.set_ylabel(r'$\theta_{\rm Al}$ [mrad]')
 ax5.set_ylabel('meas / HL $-$ 1')
 
 ########################
 #name_save = "output/" + title_save + str(".pdf") 
-name_save = "output/" + 'highland' + str(".pdf") 
+name_save = "output/" + 'highland' + str(".eps") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"

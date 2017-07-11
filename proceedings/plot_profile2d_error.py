@@ -10,6 +10,9 @@ import numpy as np
 #from scipy.optimize import curve_fit
 import math
 
+params = {'text.latex.preamble' : [r'\usepackage{upgreek}']}
+plt.rcParams.update(params)
+
 sys.path.insert(0, '../')
 import my_rootread as mrr
 import my_fitfuncs as mff
@@ -227,9 +230,9 @@ projection_x_stds_val_binned = projection_x[1].reshape(-1, number_merged_points)
 
 ax2.errorbar(projection_x_means_pos_binned, projection_x_means_val_binned, 
         xerr=(projection_x_means_pos_binned[1]-projection_x_means_pos_binned[0])/2.,
-        yerr=projection_x_stds_val_binned,
+        yerr=projection_x_stds_val_binned*10,
         capsize=0,
-        marker='+',
+        #marker='+',
         ls='None', 
         color='k'
         )
@@ -257,7 +260,7 @@ ax2.plot(projection_x_fit_x, projection_x_fit_y,
 textbox1 = (r'slope$_{\rm fit} = $ ' + 
     '({:.1f}'.format(projection_x_fit_results['slope']*1000) + 
     ' $\pm$ {:.1f})'.format(projection_x_fit_results['dslope']*1000) +
-    r'$\frac{\mu{\rm rad}}{\rm mm}$')
+    r'$\frac{\upmu{\rm rad}}{\rm mm}$')
 textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_x_fit_results['chi2red'])
 ax2.text(0.05, 0.87, textbox1 + '\n' + textbox2, transform=ax2.transAxes, fontsize=7,
         verticalalignment='top', horizontalalignment='left')#, bbox=props)
@@ -272,9 +275,9 @@ projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points)
 #print np.size(projection_x_means_pos_binned)
 ax3.errorbar(projection_y_means_val_binned[::-1], projection_y_means_pos_binned, 
         yerr=(projection_y_means_pos_binned[1]-projection_y_means_pos_binned[0])/2.,
-        xerr=projection_y_stds_val_binned,
+        xerr=projection_y_stds_val_binned*10,
         capsize=0,
-        marker='+',
+        #marker='+',
         ls='None', 
         color='k'
         )
@@ -319,6 +322,6 @@ ax3.set_ylim(ymin, ymax)
 
 # save name in folder
 #plt.show()
-name_save =  "output/" + title_save + "_" + data_type + str(".pdf") 
+name_save =  "output/" + title_save + "_" + data_type + str(".eps") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"

@@ -2,4 +2,5 @@
 *.pdf
 
 output/*
+proceedings/output/*
 ablage/*

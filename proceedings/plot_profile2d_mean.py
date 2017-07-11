@@ -10,6 +10,9 @@ import numpy as np
 #from scipy.optimize import curve_fit
 import math
 
+params = {'text.latex.preamble' : [r'\usepackage{upgreek}']}
+plt.rcParams.update(params)
+
 sys.path.insert(0, '../')
 import my_rootread as mrr
 import my_fitfuncs as mff
@@ -139,14 +142,14 @@ if False:
 ax2 = plt.subplot(grid[:1, :4], sharex=ax1) 
 ax2.tick_params(labelbottom='off')    
 #ax2.set_xlim(edges_x.min(), edges_x.max())
-ax2.set_ylabel(r'$\mu_{\alpha_{\rm eff}}$ [$\mu$rad]', fontsize=8)#, labelpad=0)
+ax2.set_ylabel(r'$\mu_{\alpha_{\rm eff}}$ [$\upmu$rad]', fontsize=8)#, labelpad=0)
 
 # y-projection
 ax3 = plt.subplot(grid[1:, 5:], sharey=ax1) 
 #ax3.set_ylim(edges_y.min(), edges_y.max())
 ax3.tick_params(labelleft='off')    
 ax3.set_xlim(np.min(projection_y[1]), np.max(projection_y[1]))
-ax3.set_xlabel(r'$\mu_{\alpha_{\rm eff}}$ [$\mu$rad]', fontsize=8)#, labelpad=0)
+ax3.set_xlabel(r'$\mu_{\alpha_{\rm eff}}$ [$\upmu$rad]', fontsize=8)#, labelpad=0)
 #ax3.set_xticklabels(ax3.xaxis.get_majorticklabels(), rotation=90)
 
 
@@ -216,9 +219,9 @@ projection_x_stds_val_binned = projection_x[1].reshape(-1, number_merged_points)
 
 ax2.errorbar(projection_x_means_pos_binned, projection_x_means_val_binned*1000, 
         xerr=(projection_x_means_pos_binned[1]-projection_x_means_pos_binned[0])/2.,
-        yerr=projection_x_stds_val_binned*1000,
+        yerr=projection_x_stds_val_binned*1000*10, #factor errorbars
         capsize=0,
-        marker='+',
+        #marker='+', markersize=1,
         ls='None', 
         color='k'
         )
@@ -234,6 +237,8 @@ tick_spacing_x = 0.002*1000 #round(abs(projection_x_max - projection_x_min)/3., 
 ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_x))
 ax2.tick_params(labelsize=8)
 # fit
+print "y data into fit", projection_x_means_val_binned
+print "d y data into fit", projection_x_stds_val_binned
 projection_x_fit_results = mff.fit_linear(np.vstack((projection_x_means_pos_binned, projection_x_means_val_binned)),
         projection_x_stds_val_binned, 0.0, 0.0)
 print projection_x_fit_results
@@ -247,7 +252,7 @@ ax2.plot(projection_x_fit_x, projection_x_fit_y*1000,
 textbox1 = (r'slope$_{\rm fit} = $ ' + 
     '({:.2f}'.format(projection_x_fit_results['slope']*1000) + 
     ' $\pm$ {:.2f})'.format(projection_x_fit_results['dslope']*1000) + 
-    r'$\frac{\mu{\rm rad}}{\rm mm}$')
+    r'$\frac{\upmu{\rm rad}}{\rm mm}$')
 textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_x_fit_results['chi2red'])
 ax2.text(0.92, 0.88, textbox1 + '\n' + textbox2, transform=ax2.transAxes, fontsize=7,
         verticalalignment='top', horizontalalignment='right')#, bbox=props)
@@ -261,9 +266,9 @@ projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points)
 
 ax3.errorbar(projection_y_means_val_binned[::-1]*1000, projection_y_means_pos_binned, 
         yerr=(projection_y_means_pos_binned[1]-projection_y_means_pos_binned[0])/2.,
-        xerr=projection_y_stds_val_binned*1000,
+        xerr=projection_y_stds_val_binned*1000*10, # factor errorbars
         capsize=0,
-        marker='+',
+        #marker='+',
         ls='None', 
         color='k'
         )
@@ -307,6 +312,6 @@ ax3.set_ylim(ymin, ymax)
 
 # save name in folder
 #plt.show()
-name_save =  "output/" + title_save + "_" + data_type + str(".pdf") 
+name_save =  "output/" + title_save + "_" + data_type + str(".eps") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"
