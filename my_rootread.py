@@ -75,14 +75,46 @@ def loopRunAndSum(runlist, histname, path, suffix, rootfolder):
     data[1][index] = np.sum(getHist1Data(runlist, index, histname, path, suffix, rootfolder)[counts])
   return data
 
-def getProfile2Data(runlist, runindex, coll_name, path, suffix, rootfolder):
+def getProfile2Data(runlist, runindex, coll_name, path, suffix, root_folder):
   # checked with examples/access_th2.py
   root_file = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
   print "opening...", root_file
   # open root file
   profile_file = TFile(root_file)
   # get data
-  profile_data = profile_file.Get(rootfolder + coll_name) #print histdata
+  profile_data = profile_file.Get(root_folder + coll_name) #print histdata
+  # get dimension, sums and x,y-positions. Note: using hist2array for Th2profile data
+  sums, edges = hist2array(profile_data, include_overflow=False, return_edges=True) #print counts, edge
+  # get contents
+  contents = np.zeros(shape=np.shape(sums))
+  for y_index, y_value in enumerate(sums[0]):
+    for x_index, x_value in enumerate(sums.T[0]):
+      contents[x_index][y_index] = profile_data.GetBinContent(x_index+1, y_index+1)
+  # get errors
+  errors = np.zeros(shape=np.shape(sums))
+  for y_index, y_value in enumerate(sums[0]):
+    for x_index, x_value in enumerate(sums.T[0]):
+      errors[x_index][y_index] = profile_data.GetBinError(x_index+1, y_index+1)
+  # calculate counts
+  counts = np.divide(sums, contents)
+  # shift hist data by half of the binwidth
+  binwidth_x = abs(edges[0][1]-edges[0][0])
+  bincenters_x = np.array(edges[0][:-1]) + binwidth_x/2. 
+  binwidth_y = abs(edges[1][1]-edges[1][0])
+  bincenters_y = np.array(edges[1][:-1]) + binwidth_y/2. 
+  # return counts (x, y)-array, x_edges and y_edges data
+  return contents, counts, bincenters_x, bincenters_y, edges[0], edges[1], errors
+
+
+
+
+
+def getProfile2DataRaw(root_file, root_folder, coll_name):
+  print "opening...", root_file
+  # open root file
+  profile_file = TFile(root_file)
+  # get data
+  profile_data = profile_file.Get(root_folder + coll_name) #print histdata
   # get dimension, sums and x,y-positions. Note: using hist2array for Th2profile data
   sums, edges = hist2array(profile_data, include_overflow=False, return_edges=True) #print counts, edge
   # get contents

@@ -24,41 +24,18 @@ from myparams import *
 # setting which data
 print "Starting script:", sys.argv[0]
 
-# 1st argument, data
-name_path = sys.argv[1]
-print "path:", name_path
-name_kappa = name_path[-15:-7]
-name_kinks = name_path[-6:-1]
-name_suffix = "-GBLKinkEstimator_" + name_kappa + "_" + name_kinks
-
-# 2nd argument
-coll_name 	= sys.argv[2]
-print "collection:", coll_name
-
-# 3rd/4th argument
-energy 		= sys.argv[3]
-print "selected energy:", energy
-thickness = sys.argv[4]
-print "selected thickness:", thickness
-
-
-data_type = 'error'
-
-#####################################
-# Start
-
-info = False
-
-# Getting runlist
-runlist = mrr.readRunlist("../" + name_runlist)
-
-# getting right runindex
-runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np.where(runlist['energy'] == float(energy)))[0]
-runnr = runlist['runnr'][runindex]
-print "selected run:", runnr
+name_path = "/home/jande/Documents/fhl-wgs01/afs/desy.de/user/h/hjansen/public/JDE/"
+name_file = "run001017-GBLKinkEstimator_kappa100_highres_fixedalign.root"
+root_file = name_path + name_file
+root_folder = "Fitter06/GBL/"
+coll_name = "gblsumkxandsumky_xyP"
 
 # Getting  data
-contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2Data(runlist, runindex, coll_name, name_path, name_suffix, name_rootfolder)
+contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2DataRaw(
+        root_file, root_folder, coll_name)
+
+info = False
+data_type = 'error'
 
 #########################################
 sigmas = np.multiply(np.sqrt(counts), errors)
@@ -117,7 +94,7 @@ if info:
 
 #####################
 # output names
-title_save = "run" + str(runnr)[:-2] + "_" + energy + "GeV" + "_" + thickness + "mm" + "_" + coll_name 
+title_save = "tomography_example_run001017"
 title_plot = title_save.replace("_", " ")
 
 
