@@ -111,17 +111,26 @@ sigmas = np.multiply(np.sqrt(counts), errors)
 #print np.size(sigmas), np.shape(sigmas), sigmas
 sigmas_mean = np.nanmean(sigmas)
 print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP):\n", sigmas_mean
+#sigmas[np.isnan(sigmas)] = 0.0
+#print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check:\n", np.mean(sigmas[sigmas != 0.0])
+
 # alternative for check
-sigmas2 = np.multiply(np.sqrt(counts[~np.isnan(counts)]), errors[errors != 0.])
+sigmas_2 = np.multiply(np.sqrt(counts[~np.isnan(counts)]), errors[errors != 0.])
 #print np.size(counts[~np.isnan(counts)])
-sigmas_mean2 = np.mean(sigmas2)
-print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check:\n", sigmas_mean2
+sigmas_mean_2 = np.mean(sigmas_2)
+sigmas_std_2 = np.std(sigmas_2)
+sigmas_rms_2 = np.sqrt(np.mean(np.square(sigmas_2)))
+print "sigmas:", np.size(sigmas_2), len(sigmas_2)
+print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check:\n", sigmas_mean_2
+print "std sigma of 2d profile (entries, gblsumkxandsumky_xyP), check:\n", sigmas_std_2
+print np.sqrt(np.mean((sigmas_2 - sigmas_mean_2)**2))
+print "rms sigma of 2d profile (entries, gblsumkxandsumky_xyP), check:\n",  sigmas_rms_2
 # alternative for check
-sigmas3 = np.multiply(np.sqrt(counts[75:525, 50:250]), errors[75:525, 50:250])
+sigmas_3 = np.multiply(np.sqrt(counts[75:525, 50:250]), errors[75:525, 50:250])
 #print np.size(counts[~np.isnan(counts)])
-sigmas_mean3 = np.mean(sigmas3)
-print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check 2:\n", sigmas_mean3
-print np.average(sigmas3)
+sigmas_mean_3 = np.mean(sigmas_3)
+print "mean sigma of 2d profile (entries, gblsumkxandsumky_xyP), check 2:\n", sigmas_mean_3
+print np.average(sigmas_3)
 
 # weigted mean
 counts_w = counts[75:525, 50:250]
@@ -132,30 +141,26 @@ sigmas_weighted_mean = np.average(sigmas_w, weights=sigmas_sigmas_w)
 print "weigthed mean sigma of 2d profile (entries, gblsumkxandsumky_xyP):\n", sigmas_weighted_mean
 
 
-
-exit()
-
-
-
-
 #####################################
 if True:
     #######################################33
     fig, ax = plt.subplots(figsize=(5, 3))
     fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.15)
 
-    plt.hist(sigmas2, 1000, histtype='step')
+    plt.hist(sigmas_2, 1000, histtype='step')
 
     plt.yscale('log')
     plt.xlim(0, 5)
-    plt.xlabel("sigmas = bine x sqrt(binn)")
+    plt.xlabel("$\sigma_i$ = bine x sqrt(binn) from 2DProfile")
     plt.ylabel("counts")
 
-    plt.text(0.4, 0.9, 'mean (bine x sqrt(binn)) = {:.6f}'.format(sigmas_mean2), transform=ax.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left')
+    plt.text(0.4, 0.9, 'mean($\sigma_i$) = {:.6f}'.format(sigmas_mean_2), transform=ax.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left')
+    plt.text(0.4, 0.8, 'std($\sigma_i$) = {:.6f}'.format(sigmas_std_2), transform=ax.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left')
+    plt.text(0.4, 0.7, 'rms($\sigma_i$) = {:.6f}'.format(sigmas_rms_2), transform=ax.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left')
 
 
     # save name in folder
-    name_save =  "output/" + title_save + "_sigmas" + str(".pdf") 
+    name_save =  "output/" + title_save + "_sigmas_sumkxandsumky" + str(".pdf") 
     fig.savefig(name_save)
     print "evince " + name_save + "&"
 
@@ -168,11 +173,11 @@ if True:
     #plt.yscale('log')
     #plt.xlim(0, 5)
     plt.xlabel("binn")
-    plt.ylabel("counts")
+    plt.ylabel("counts (=binn)")
 
 
     # save name in folder
-    name_save =  "output/" + title_save + "_counts" + str(".pdf") 
+    name_save =  "output/" + title_save + "_counts_sumkxandsumky" + str(".pdf") 
     fig.savefig(name_save)
     print "evince " + name_save + "&"
 
@@ -184,12 +189,12 @@ if True:
 
     #plt.yscale('log')
     plt.xlim(-1, 1)
-    plt.xlabel("mean (binc)")
+    plt.xlabel("contents (=binc)")
     plt.ylabel("counts")
 
 
     # save name in folder
-    name_save =  "output/" + title_save + "_contents" + str(".pdf") 
+    name_save =  "output/" + title_save + "_contents_sumkxandsumky" + str(".pdf") 
     fig.savefig(name_save)
     print "evince " + name_save + "&"
 
@@ -201,13 +206,13 @@ if True:
 
     plt.yscale('log')
     plt.xlim(0, 0.55)
-    plt.xlabel("bine")
+    plt.xlabel("errors (=bine)")
     plt.ylabel("counts")
 
 
 
     # save name in folder
-    name_save =  "output/" + title_save + "_errors" + str(".pdf") 
+    name_save =  "output/" + title_save + "_errors_sumkxandsumky" + str(".pdf") 
     fig.savefig(name_save)
     print "evince " + name_save + "&"
 

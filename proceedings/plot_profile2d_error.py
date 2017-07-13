@@ -229,11 +229,12 @@ projection_x_n_binned = np.size(projection_x[1]) * number_merged_points
 projection_x_stds_val_binned = projection_x[1].reshape(-1, number_merged_points).std(axis=1)/math.sqrt(projection_x_n_binned)
 
 ax2.errorbar(projection_x_means_pos_binned, projection_x_means_val_binned, 
-#        xerr=(projection_x_means_pos_binned[1]-projection_x_means_pos_binned[0])/2.,
+        xerr=(projection_x_means_pos_binned[1]-projection_x_means_pos_binned[0])/2.,
 #        yerr=projection_x_stds_val_binned*10,
-#        capsize=0,
+        capsize=0,
+        elinewidth=0.5,
         marker='o',
-        markersize=3,
+        markersize=2,
         ls='None', 
         color='k'
         )
@@ -275,11 +276,12 @@ projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points)
 #print np.size(projection_x[0])
 #print np.size(projection_x_means_pos_binned)
 ax3.errorbar(projection_y_means_val_binned[::-1], projection_y_means_pos_binned, 
-#        yerr=(projection_y_means_pos_binned[1]-projection_y_means_pos_binned[0])/2.,
+        yerr=(projection_y_means_pos_binned[1]-projection_y_means_pos_binned[0])/2.,
 #        xerr=projection_y_stds_val_binned*10,
-#        capsize=0,
+        capsize=0,
+        elinewidth=0.5,
         marker='o',
-        markersize=3,
+        markersize=2,
         ls='None', 
         color='k'
         )

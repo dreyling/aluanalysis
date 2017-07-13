@@ -95,6 +95,7 @@ def getProfile2Data(runlist, runindex, coll_name, path, suffix, root_folder):
   for y_index, y_value in enumerate(sums[0]):
     for x_index, x_value in enumerate(sums.T[0]):
       errors[x_index][y_index] = profile_data.GetBinError(x_index+1, y_index+1)
+  print "\nINFO: errors (7th return object) corresponds to the 'bine' of the ROOT 2Dprofile; to get the sigmas calculate: errors*np.sqrt(counts); counts (2nd return object) corresponds to the 'binn'\n"
   # calculate counts
   counts = np.divide(sums, contents)
   # shift hist data by half of the binwidth
@@ -104,10 +105,6 @@ def getProfile2Data(runlist, runindex, coll_name, path, suffix, root_folder):
   bincenters_y = np.array(edges[1][:-1]) + binwidth_y/2. 
   # return counts (x, y)-array, x_edges and y_edges data
   return contents, counts, bincenters_x, bincenters_y, edges[0], edges[1], errors
-
-
-
-
 
 def getProfile2DataRaw(root_file, root_folder, coll_name):
   print "opening...", root_file

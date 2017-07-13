@@ -34,45 +34,39 @@ coll_name = "gblsumkxandsumky_xyP"
 contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2DataRaw(
         root_file, root_folder, coll_name)
 
-info = False
-data_type = 'error'
 
 #########################################
+# calculate sigmas from ROOT content
 sigmas = np.multiply(np.sqrt(counts), errors)
+#print np.shape(sigmas)
+#print np.isnan(sigmas)
 
+# setting nan to 0
+#sigmas[np.isnan(sigmas)] = 0.0
+#print np.shape(sigmas)
+#print np.isnan(sigmas)
+
+# cut window 
+if True:
+    window_xmin = np.where(bincenters_x < -9.0)[0][-1]+1
+    window_xmax = np.where(bincenters_x > 9.0)[0][0]
+    window_ymin = np.where(bincenters_y < -4.0)[0][-1]+1
+    window_ymax = np.where(bincenters_y > 4.0)[0][0]
+    #print window_xmin, window_xmax
+    #print window_ymin, window_ymax
+    #print np.shape(sigmas[window_xmin:window_xmax, window_ymin:window_ymax])
+    sigmas[:window_xmin, :] = 0.0
+    sigmas[:, :window_ymin] = 0.0
+    sigmas[window_xmax:, :] = 0.0
+    sigmas[:, window_ymax:] = 0.0
+
+# define as content to keep names
 contents = sigmas
-print np.shape(sigmas)
-print np.isnan(sigmas)
-
-sigmas[np.isnan(sigmas)] = 0
-
-print np.shape(sigmas)
-print np.isnan(sigmas)
-
-
-
-
-# data test
-if info:
-    print np.size(bincenters_x), np.size(bincenters_y)
-    print np.size(edges_x), np.size(edges_y)
-    print np.shape(contents), np.size(contents)
-    print np.shape(contents[0]), np.size(contents[0])
-
-    x_index = np.where(bincenters_x > -9.)[0][0:5]
-    print x_index
-    y_index = np.where(bincenters_y > -4.)[0][0:5]
-    print y_index
-
-    print bincenters_x[x_index] 
-    print bincenters_y[y_index]
-    print edges_x.min(), edges_x.max(), edges_y.min(), edges_y.max()
-    print contents[x_index[0]:x_index[-1], y_index[0]:y_index[-1]]
 
 # data analysis
 content_mean = np.mean(contents[contents != 0.])
 content_std = np.std(contents[contents != 0.])
-if info:
+if True:
     print "content not zero"
     print contents[contents != 0.]
     print np.shape(contents[contents != 0.])
@@ -82,80 +76,47 @@ if info:
     print "max", np.max(contents[contents != 0.])
 
 
-# projections
-projection_x, projection_y = mdp.get_projections(contents, bincenters_x, bincenters_y)
-
-if info:
-    #print projection_x, projection_y
-    print np.shape(projection_x), projection_x
-    print np.shape(projection_y), projection_y
-
-
-
 #####################
 # output names
+data_type = 'error'
 title_save = "tomography_example_run001017"
 title_plot = title_save.replace("_", " ")
 
 
 ##########################################
 # Plotting Data
-#fig = plt.subplots(figsize=(6, 4))#, dpi=100)
-#fig.subplots_adjust(left=0.11, right=0.99, top=0.94, bottom=0.12)
-
 fig = plt.figure(figsize=(5, 3))
-fig.subplots_adjust(left=0.12, right=0.99, top=0.99, bottom=0.17)
-# subplots-grid: rows, columns
-grid = gridspec.GridSpec(3, 6, hspace=0.05, wspace=0.0)
+fig.subplots_adjust(left=0.11, right=0.91, bottom=0.2)
+
+# subplot
+grid = gridspec.GridSpec(1, 1)
 
 # settings
-# image
-ax1 = plt.subplot(grid[1:, :4])
-# image
-#ax1.set_xlim(edges_x.min(), edges_x.max())
-#ax1.set_ylim(edges_y.min(), edges_y.max())
+ax1 = plt.subplot(grid[:, :])
+xmin, xmax = -9.5, 9.5
+ax1.set_xlim(xmin=xmin, xmax=xmax)
+ymin, ymax = -5.05, 5.05
+ax1.set_ylim(ymin=ymin, ymax=ymax)
 ax1.set_xlabel(r'$x_{\rm triplet}$ [mm]')
 ax1.set_ylabel(r'$y_{\rm triplet}$ [mm]')
 tick_spacing_2d = 2.
 ax1.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_2d))
 ax1.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_2d))
-# test views
-if False:
-    # bottom left corner
-    ax1.set_xlim(edges_x.min()+2.9, edges_x.min()+3.5), ax1.set_ylim(edges_y.min()+1.9, edges_y.min()+2.5)
-    # top right corner
-    ax1.set_xlim(edges_x.min()+2.5+18, edges_x.min()+3+18), ax1.set_ylim(edges_y.min()+1.5+8, edges_y.min()+2.3+8)
 
-# x-projection
-ax2 = plt.subplot(grid[:1, :4], sharex=ax1) 
-ax2.tick_params(labelbottom='off')    
-#ax2.set_xlim(edges_x.min(), edges_x.max())
-ax2.set_ylabel(r'$\theta_{\rm meas}$ [mrad]', fontsize=8)
-
-# y-projection
-ax3 = plt.subplot(grid[1:, 5:], sharey=ax1) 
-#ax3.set_ylim(edges_y.min(), edges_y.max())
-ax3.tick_params(labelleft='off')    
-ax3.set_xlim(np.min(projection_y[1]), np.max(projection_y[1]))
-ax3.set_xlabel(r'$\theta_{\rm meas}$ [mrad]', fontsize=8)
-#ax3.set_xticklabels(ax3.xaxis.get_majorticklabels(), rotation=90)
-
-
-#################################################################3
 # image
 # for the right view 
 # - content Matrix has to be transposed
 # - and the y-edges has to be switched
 # proofed by comparing with root visualization
-factor = math.sqrt(0.5)
-vmin = content_mean - factor*content_std 
-vmax = content_mean + factor*content_std 
+vmin = content_mean - 1.*content_std 
+vmax = content_mean + 2.0*content_std 
 
 # mask zero entries white
 contents = np.ma.masked_where(contents == 0., contents)
 cmap = cm.viridis_r
 cmap.set_bad(color='white')
 
+# imshow
 image = ax1.imshow(contents.T, 
         # nominal: extent = (left, right, bottom, top)
         # y edges switched
@@ -167,140 +128,22 @@ image = ax1.imshow(contents.T,
         vmax=vmax, 
         cmap=cmap
         )
+#ax1.autoscale(True)
 
 # for colorbar position, has to be after ax1 creation
-ax4 = plt.subplot(grid[1:, 4:5]) 
-ax4.set_axis_off()
 # make axis beside, in order to scale colorbar
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 divider = make_axes_locatable(plt.gca())
-cax = divider.append_axes("left", "30%", pad="10%")
+cax = divider.append_axes("right", size="5%", pad="0%")
 # shape colorbar
 cb = fig.colorbar(image, cax=cax)
-cb.set_ticks([0.5, 0.7, 0.9, 1.1])#0, round(vmax, 1)/4., round(vmax, 1)/2., round(vmax, 1)*3./4., round(vmax, 1)])
+#cb.set_ticks([0.5, 0.7, 0.9, 1.1])
 cax.tick_params(labelsize=8)
 textbox = r'$\theta_{\rm meas}$ [mrad]'
 cb.set_label(textbox, fontsize=8, labelpad=5)
-#ax4.text(-0.3, -0.15, textbox, transform=ax4.transAxes, fontsize=8,
-#        verticalalignment='bottom', horizontalalignment='left')#, bbox=props)
-#tick_spacing_cm = 0.02 #round((np.max(projection_y[1]) - np.min(projection_y[1]))/3., 2)
-#cax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_cm))
-#cax.tick_params(labelsize=10)
 
-# x-projection
-#ax2.plot(projection_x[0], projection_x[1], color='k', lw=1, alpha=0.25)
-
-# y-projection
-# reverse here also the order of "y" values
-#ax3.plot(projection_y[1][::-1], projection_y[0], color='k', lw=1, alpha=0.25)
-
-###############
-# binned representation
-number_merged_points = 50  
-
-#########################################
-# x-projection, rebinned --> position, value/mean, value/std
-projection_x_means_pos_binned = projection_x[0].reshape(-1, number_merged_points).mean(axis=1)
-projection_x_means_val_binned = projection_x[1].reshape(-1, number_merged_points).mean(axis=1)
-projection_x_n_binned = np.size(projection_x[1]) * number_merged_points
-projection_x_stds_val_binned = projection_x[1].reshape(-1, number_merged_points).std(axis=1)/math.sqrt(projection_x_n_binned)
-
-ax2.errorbar(projection_x_means_pos_binned, projection_x_means_val_binned, 
-#        xerr=(projection_x_means_pos_binned[1]-projection_x_means_pos_binned[0])/2.,
-#        yerr=projection_x_stds_val_binned*10,
-#        capsize=0,
-        marker='o',
-        markersize=3,
-        ls='None', 
-        color='k'
-        )
-# scaling
-projection_x_min = (np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned)*1.3)
-projection_x_max = (np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned)*1.7)
-#ax2.set_ylim(projection_x_min, projection_x_max)
-#tick_spacing_x = round((projection_x_max - projection_x_min)/3., 2)
-ax2.set_ylim(0.745, 0.805)
-tick_spacing_x = 0.02
-#round((np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned) - np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned))/3., 2)
-ax2.yaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_x))
-ax2.tick_params(labelsize=8)
-# fit
-projection_x_fit_results = mff.fit_linear(np.vstack((projection_x_means_pos_binned, projection_x_means_val_binned)),
-        projection_x_stds_val_binned, 0.0, 0.0)
-print projection_x_fit_results
-projection_x_fit_x = projection_x[0]
-projection_x_fit_y = mff.fitfunc_linear(projection_x_fit_x, projection_x_fit_results['slope'], projection_x_fit_results['offset'])
-ax2.plot(projection_x_fit_x, projection_x_fit_y,
-    color='r', lw=1, ls='-')
-#print round(projection_x_fit_results['slope'], 5), round(projection_x_fit_results['dslope'], 5)
-#print projection_x_fit_results['chi2red']
-#props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
-textbox1 = (r'slope$_{\rm fit} = $ ' + 
-    '({:.1f}'.format(projection_x_fit_results['slope']*1000) + 
-    ' $\pm$ {:.1f})'.format(projection_x_fit_results['dslope']*1000) +
-    r'$\frac{\upmu{\rm rad}}{\rm mm}$')
-textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_x_fit_results['chi2red'])
-ax2.text(0.05, 0.87, textbox1, transform=ax2.transAxes, fontsize=7,
-        verticalalignment='top', horizontalalignment='left')#, bbox=props)
-
-####################
-# y-projection, rebinned --> position, value/mean, value/std
-projection_y_means_pos_binned = projection_y[0].reshape(-1, number_merged_points).mean(axis=1)
-projection_y_means_val_binned = projection_y[1].reshape(-1, number_merged_points).mean(axis=1)
-projection_y_n_binned = np.size(projection_y[1]) * number_merged_points
-projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points).std(axis=1)/math.sqrt(projection_y_n_binned)
-#print np.size(projection_x[0])
-#print np.size(projection_x_means_pos_binned)
-ax3.errorbar(projection_y_means_val_binned[::-1], projection_y_means_pos_binned, 
-#        yerr=(projection_y_means_pos_binned[1]-projection_y_means_pos_binned[0])/2.,
-#        xerr=projection_y_stds_val_binned*10,
-#        capsize=0,
-        marker='o',
-        markersize=3,
-        ls='None', 
-        color='k'
-        )
-# scaling
-projection_y_min = (np.min(projection_y_means_val_binned)-np.min(projection_y_stds_val_binned)*1.2)
-projection_y_max = (np.max(projection_y_means_val_binned)+np.max(projection_y_stds_val_binned)*2.6)
-#ax3.set_xlim(projection_y_min, projection_y_max)
-#tick_spacing_y = round((projection_y_max - projection_y_min)/3., 2)
-ax3.set_xlim(0.755, 0.805)
-tick_spacing_y = 0.02
-#round((np.max(projection_x_means_val_binned)+np.max(projection_x_stds_val_binned) - np.min(projection_x_means_val_binned)-np.min(projection_x_stds_val_binned))/3., 2)
-ax3.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing_y))
-ax3.tick_params(labelsize=8)
-for label in ax3.get_xmajorticklabels():
-        label.set_rotation(-90)
-# fit
-projection_y_fit_results = mff.fit_linear(np.vstack((projection_y_means_pos_binned, projection_y_means_val_binned)),
-        projection_y_stds_val_binned, 0.0, 0.0)
-print projection_y_fit_results
-projection_y_fit_x = projection_y[0]
-projection_y_fit_y = mff.fitfunc_linear(projection_y_fit_x, projection_y_fit_results['slope'], projection_y_fit_results['offset'])
-ax3.plot(projection_y_fit_y, projection_y_fit_x,
-    color='r', lw=1, ls='-')
-#print round(projection_x_fit_results['slope'], 5), round(projection_x_fit_results['dslope'], 5)
-#print projection_x_fit_results['chi2red']
-#props = dict(boxstyle='square,pad=0.6', facecolor='white', alpha=1.0)
-textbox1 = (r'slope$_{\rm fit} = $ ' + 
-    '({:.1f}'.format(projection_y_fit_results['slope']*1000) + 
-    ' $\pm$ {:.1f})'.format(projection_y_fit_results['dslope']*1000) +
-    r'$\frac{\upmu{\rm rad}}{\rm mm}$')
-textbox2 = r'$\chi^2$/ndf = ' + '{:.1f}'.format(projection_y_fit_results['chi2red'])
-ax3.text(0.86, 0.07, textbox1, transform=ax3.transAxes, fontsize=7,
-        verticalalignment='bottom', horizontalalignment='right', rotation=-90)#, bbox=props)
-
-
-xmin, xmax = -9.8, 9.8
-ymin, ymax = -4., 4.
-ax1.set_xlim(xmin, xmax)
-ax1.set_ylim(ymin, ymax)
-ax2.set_xlim(xmin, xmax)
-ax3.set_ylim(ymin, ymax)
-
+################################
 # save name in folder
-#plt.show()
 name_save =  "output/" + title_save + "_" + data_type + str(".eps") 
 fig.savefig(name_save)
 print "evince " + name_save + "&"
