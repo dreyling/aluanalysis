@@ -19,7 +19,7 @@ from root_numpy import hist2array #, root2array, tree2array
 #################################################################
 # reading csv file and extend
 
-def readRunlist(filename):
+def read_csv_runlist(filename):
   print "opening...", filename
   return np.genfromtxt(filename, delimiter='\t', names=True)
 

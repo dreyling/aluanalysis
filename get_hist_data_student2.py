@@ -6,17 +6,11 @@ import numpy as np
 import my_rootread as mrr
 import my_fitfuncs as mff
 import my_dataproc as mdp
-#from myparams import * 
-#import yaml
+from myparams import * 
 
 ############################################
 # setting which data
-# TODO: change the configuration in a yaml-file measurement
-# TODO: loading yaml file
 print "Starting script:", sys.argv[0]
-
-name_runlist = "runlistX0meas.csv"
-name_rootfolder = "Fitter06/GBL/"
 
 # 1st argument
 name_path = sys.argv[1]
@@ -34,10 +28,7 @@ fraction = sys.argv[3]
 print "fraction:", fraction
 
 # save name in folder
-# TODO: take the yaml file name: measurement.yaml
-outfile = "data/" + "measurement" #print outfile
-
-
+outfile = "data/comb_" + name_kappa + "_" + name_kinks + "_" + name_hist + "_" + fraction #print outfile
 
 #####################################
 # Start getting data from histograms
@@ -46,19 +37,19 @@ outfile = "data/" + "measurement" #print outfile
 runlist = mrr.readRunlist(name_runlist)
 
 # Adding new columns
-newlist = mrr.extendList(runlist,
-        'proc_events',
-        'rmsROOT',
-        'rmsfrac',
+newlist = mrr.extendList(runlist, 
+        'proc_events', 
+        'rmsROOT', 
+        'rmsfrac', 
         'rmsfrac_norm',
-        'gauss_mu',
-        'gauss_si',
-        'gauss_height',
-        'gauss_dmu',
-        'gauss_dsi',
-        'gauss_chi2',
-        'gauss_chi2red',
-        'gauss_si_norm'
+        'comb_mu',
+        'comb_si',
+        'comb_nu_s',
+        'comb_frac',
+        'comb_height',
+        'comb_chi2',
+        'comb_chi2red',
+        'comb_si_norm'
         )
 
 ########################################
@@ -77,15 +68,16 @@ for index, value in enumerate(newlist):
     datafrac = mdp.get_hist_fraction(data, float(fraction))
     newlist['rmsfrac'][index] = mdp.calc_hist_RMS(datafrac)
     # 4. Gauss fit
-    fitresult = mff.fit_gauss(datafrac, mu0=0.0, sigma0=0.3, height0=50e3)
+    fitresult = mff.fit_combined2(data, mu0=0.0, si0=0.3, nu_s0=5.0, frac0=0.4, height0=50e3)
     #print fitresult['mu']
-    newlist['gauss_mu'     ][index] = fitresult['mu'     ]
-    newlist['gauss_si'     ][index] = fitresult['si'     ]
-    newlist['gauss_height' ][index] = fitresult['height' ]
-    newlist['gauss_dmu'    ][index] = fitresult['dmu'    ]
-    newlist['gauss_dsi'    ][index] = fitresult['dsi'    ]
-    newlist['gauss_chi2'   ][index] = fitresult['chi2'   ]
-    newlist['gauss_chi2red'][index] = fitresult['chi2red']
+    newlist['comb_mu'     ][index] = fitresult['mu'     ]
+    newlist['comb_si'     ][index] = fitresult['si'     ]
+    newlist['comb_nu_s'   ][index] = fitresult['nu_s'   ]
+    newlist['comb_frac'   ][index] = fitresult['frac'   ]
+    newlist['comb_height' ][index] = fitresult['height' ]
+    newlist['comb_chi2'   ][index] = fitresult['chi2'   ]
+    print fitresult['chi2red']
+    newlist['comb_chi2red'][index] = fitresult['chi2red']
 
 # Normalize RMS values
 # Getting Zero values
@@ -96,18 +88,14 @@ data_zero_rmsfrac = newlist[cut_zero]['rmsfrac']
 for index, value in enumerate(newlist):
     newlist['rmsfrac_norm'][index] = math.sqrt(newlist['rmsfrac'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
 
-# Normalize Gauss values
+# Normalize Gauss sigma values
 # Getting Zero values
 cut_zero = (newlist['thickness'] == 0.0)
 data_zero_energy = newlist[cut_zero]['energy']
-data_zero_rmsfrac = newlist[cut_zero]['gauss_si']
+data_zero_rmsfrac = newlist[cut_zero]['comb_si']
 # Calculate normalized value
 for index, value in enumerate(newlist):
-    newlist['gauss_si_norm'][index] = math.sqrt(newlist['gauss_si'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
-
-
-
-
+    newlist['comb_si_norm'][index] = math.sqrt(newlist['comb_si'][index]**2 - data_zero_rmsfrac[data_zero_energy == newlist['energy'][index]][0]**2)
 
 
 
@@ -116,5 +104,5 @@ print newlist
 
 ############################################
 # Save in npy format
-print "saving npy-data in:", outfile
+print "saving npy-data in:", outfile 
 np.save(outfile, newlist)

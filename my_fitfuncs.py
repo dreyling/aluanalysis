@@ -21,7 +21,7 @@ def fitfunc_linear(xdata, *para):
     slope  = para[0]
     offset = para[1]
     return slope * xdata + offset
-   
+
 def fitfunc_gauss(xdata, *para):
     # para = [mu, sigma, height]
     mu      = para[0]
@@ -35,7 +35,6 @@ def fitfunc_gauss_normed(xdata, *para):
     return 1./(si*np.sqrt(2.*np.pi)) * np.exp(-0.5*(xdata-mu)**2/si**2)
 
 def fitfunc_studentt(xdata, *para):
-    # para = [mu, nu, height]
     mu      = para[0]
     nu      = para[1]
     height  = para[2]
@@ -64,6 +63,15 @@ def fitfunc_combined_gauss_studentt(xdata, *para):
     frac    = para[4]
     height  = para[5]
     return height * ( (1-frac)*fitfunc_gauss_normed(xdata, mu, si_g) + frac*fitfunc_studentt_nonstand_normed(xdata, mu, nu_s, si_s))
+
+def fitfunc_combined_gauss_studentt_one_sigma(xdata, *para):
+    # para = [mu, si, nu_s, frac, height]
+    mu      = para[0]
+    si    = para[1]
+    nu_s    = para[2]
+    frac    = para[3]
+    height  = para[4]
+    return height * ( (1-frac)*fitfunc_gauss_normed(xdata, mu, si) + frac*fitfunc_studentt_nonstand_normed(xdata, mu, nu_s, si))
 
 ###############################################
 # methods 
@@ -128,5 +136,24 @@ def fit_combined(data, mu0, si0, nu_s0, si_s0, frac0, height0):
   chi2 = np.sum(((ydata - fitfunc_combined_gauss_studentt(xdata, *para)) / dydata)**2)
   chi2red = chi2 / (len(ydata)-len(para))
   fit_results = {'mu':mu, 'si':si, 'nu_s':nu_s, 'si_s':si_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
+  return fit_results
+
+def fit_combined_one_sigma(data, mu0, si0, nu_s0, frac0, height0):
+  xdata = data[0]
+  ydata = data[1]
+  dydata = np.sqrt(ydata); dydata = np.where(dydata > 0.0, dydata, 1) #; print dy 
+  # start parameter
+  para0 = [mu0, si0, nu_s0, frac0, height0]
+  para_bounds=([-np.inf, 0.0, 1.0, 0.0, 1.0], [np.inf, np.inf, np.inf, 1.0, np.inf])
+  para, cov = curve_fit(fitfunc_combined_gauss_studentt_one_sigma, xdata, ydata, p0=para0, sigma=dydata, bounds=para_bounds)
+  mu = para[0]
+  si = abs(para[1])
+  nu_s = para[2]
+  frac = para[3]
+  height = para[4]
+  # chi**2
+  chi2 = np.sum(((ydata - fitfunc_combined_gauss_studentt_one_sigma(xdata, *para)) / dydata)**2)
+  chi2red = chi2 / (len(ydata)-len(para))
+  fit_results = {'mu':mu, 'si':si, 'nu_s':nu_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
   return fit_results
 

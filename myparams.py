@@ -25,7 +25,7 @@ thickness_air    = 4 * 20 + 15 	# mm
 # Highland standard
 def highland(momentum, thickness, x0):
     epsilon = thickness/x0
-    if epsilon < 1e-3: 
+    if epsilon < 1e-3:
       print "Warning! epsilon < 0.001 for thickness", thickness
     if epsilon > 100.:
       print "Warning! epsilon > 100 for thickness", thickness
