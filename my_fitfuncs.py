@@ -128,14 +128,16 @@ def fit_combined(data, mu0, si0, nu_s0, si_s0, frac0, height0):
   para, cov = curve_fit(fitfunc_combined_gauss_studentt, xdata, ydata, p0=para0, sigma=dydata, bounds=para_bounds)
   mu = para[0]
   si = abs(para[1])
+  dsi = np.sqrt(cov[1][1])
   nu_s = para[2]
   si_s = para[3]
+  dsi_s = np.sqrt(cov[3][3])
   frac = para[4]
   height = para[5]
   # chi**2
   chi2 = np.sum(((ydata - fitfunc_combined_gauss_studentt(xdata, *para)) / dydata)**2)
   chi2red = chi2 / (len(ydata)-len(para))
-  fit_results = {'mu':mu, 'si':si, 'nu_s':nu_s, 'si_s':si_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
+  fit_results = {'mu':mu, 'si':si, 'dsi':dsi, 'nu_s':nu_s, 'si_s':si_s, 'dsi_s':dsi_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
   return fit_results
 
 def fit_combined_one_sigma(data, mu0, si0, nu_s0, frac0, height0):
@@ -148,12 +150,13 @@ def fit_combined_one_sigma(data, mu0, si0, nu_s0, frac0, height0):
   para, cov = curve_fit(fitfunc_combined_gauss_studentt_one_sigma, xdata, ydata, p0=para0, sigma=dydata, bounds=para_bounds)
   mu = para[0]
   si = abs(para[1])
+  dsi = np.sqrt(cov[1][1])
   nu_s = para[2]
   frac = para[3]
   height = para[4]
   # chi**2
   chi2 = np.sum(((ydata - fitfunc_combined_gauss_studentt_one_sigma(xdata, *para)) / dydata)**2)
   chi2red = chi2 / (len(ydata)-len(para))
-  fit_results = {'mu':mu, 'si':si, 'nu_s':nu_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
+  fit_results = {'mu':mu, 'si':si, 'dsi':dsi, 'nu_s':nu_s, 'frac':frac, 'height':height, 'chi2':chi2, 'chi2red':chi2red}
   return fit_results
 

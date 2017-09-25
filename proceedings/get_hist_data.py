@@ -101,7 +101,7 @@ for index, value in enumerate(newlist):
     theta_meas = newlist['gauss_si'][index]
     theta_air0 = data_zero_gauss_si[data_zero_energy == newlist['energy'][index]][0]
     newlist['gauss_si_norm'][index] = math.sqrt(theta_meas**2 - theta_air0**2)
-    # propgated error, here for each measurement 3% uncertainty
+    # propagated error, here for each measurement 3% uncertainty
     d_theta_meas = rel_error * theta_meas
     d_theta_air0 = rel_error * theta_air0
     newlist['d_gauss_si_norm'][index] = math.sqrt(
