@@ -109,7 +109,7 @@ if fitfunction != 'none':
         print "\nCombined (constraining 0<= frac <= 1) fit"
         fitfunc = mff.fitfunc_combined_gauss_studentt
         parameters = [r'$\mu$', r'$\sigma_G$', r'$\nu_s$', r'$\sigma_S$', r'$a$', r'$N$']
-        para0 = [0.0, 0.3, 100., 0.3, 0.3, 50e3]
+        para0 = [0.0, 0.3, 5., 0.3, 0.3, 50e3]
         para_bounds=([-np.inf, 0.0, 1.0, 0.0, 0.0, 1.0],
                         [+np.inf, np.inf, np.inf, np.inf, 1.0, np.inf])
 

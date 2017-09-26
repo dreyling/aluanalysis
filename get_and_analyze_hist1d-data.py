@@ -21,6 +21,8 @@ import my_rootread as mrr
 import my_fitfuncs as mff
 import my_dataproc as mdp
 
+import highland
+
 ############################################
 # arguments
 
@@ -79,7 +81,9 @@ newlist = mrr.extendList(runlist,
         'combined_one_height',
         'combined_one_chi2red',
         'combined_one_si_norm',
-        'combined_one_si_norm_error'
+        'combined_one_si_norm_error',
+        'opacity_highland_standard',
+        'opacity_highland_electron'
         )
 
 ########################################
@@ -116,19 +120,19 @@ for index, value in enumerate(newlist):
     newlist['gauss_chi2red'][index] = fitresult['chi2red']
 
     # 4. combined fit (with two sigmas)
-    fitresult = mff.fit_combined(data, mu0=0.0, si0=0.3, nu_s0=5.0, si_s0= 0.3, frac0=0.4, height0=50e3)
+    fitresult = mff.fit_combined(data, mu0=0.0, si0=0.3, nu_s0=5.0, si_s0= 0.3, frac0=0.3, height0=50e3)
     newlist['combined_mu'     ][index] = fitresult['mu'     ]
     newlist['combined_si_g'   ][index] = fitresult['si'     ]
     newlist['combined_si_g_dev'][index] = fitresult['dsi'    ]
     newlist['combined_nu_s'   ][index] = fitresult['nu_s'   ]
-    newlist['combined_si_s'   ][index] = fitresult['dsi_s'   ]
-    newlist['combined_si_s_dev'][index] = fitresult['si_s'  ]
+    newlist['combined_si_s'   ][index] = fitresult['si_s'   ]
+    newlist['combined_si_s_dev'][index] = fitresult['dsi_s'  ]
     newlist['combined_frac'   ][index] = fitresult['frac'   ]
     newlist['combined_height' ][index] = fitresult['height' ]
     newlist['combined_chi2red'][index] = fitresult['chi2red']
 
     # 5. combined fit with one sigma
-    fitresult = mff.fit_combined_one_sigma(data, mu0=0.0, si0=0.3, nu_s0=5.0, frac0=0.4, height0=50e3)
+    fitresult = mff.fit_combined_one_sigma(data, mu0=0.0, si0=0.3, nu_s0=5.0, frac0=0.3, height0=50e3)
     newlist['combined_one_mu'     ][index] = fitresult['mu'     ]
     newlist['combined_one_si'     ][index] = fitresult['si'     ]
     newlist['combined_one_si_dev' ][index] = fitresult['dsi'    ]
@@ -184,9 +188,18 @@ normalize_by_air_measurement('combined_si_s', relative_error=False)
 # combined fit with one sigma
 normalize_by_air_measurement('combined_one_si', relative_error=False)
 
+#########################################################
+# opacity
+for index, value in enumerate(newlist):
+    newlist['opacity_highland_standard'][index] = (
+            newlist['thickness'][index]/highland.x0alu)**(0.5) / newlist['energy'][index]
+    newlist['opacity_highland_electron'][index] = (
+            newlist['thickness'][index]/highland.x0alu)**(0.555) / newlist['energy'][index]
+
 
 ############################################
 # Save in npy format
 print "saving npy-data in:", outfile
 print "including these values:", newlist.dtype.names
+np.savetxt(outfile+'.csv', newlist, delimiter=',', header=str(newlist.dtype.names[:]))
 np.save(outfile, newlist)
