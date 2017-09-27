@@ -52,11 +52,11 @@ ax1 = plt.subplot(grid[:, :])
 
 # highland x data
 highland_x = np.linspace(0.5, 6, 50)
-highland_y = highland.highland_multi_scatterer(highland_x, thickness, highland.x0alu)
+highland_y = highland.highland_multi_scatterer_extended(highland_x, thickness, highland.x0alu)
 ax1.plot(highland_x, highland_y,
             lw=3, label='Highland \n(multi-scattering,\nkink effective)')
-highland_y_raw = highland.highland_multi_scatterer_raw(highland_x, thickness, highland.x0alu)
-ax1.plot(highland_x, highland_y_raw,
+highland_y = highland.highland_multi_scatterer(highland_x, thickness, highland.x0alu)
+ax1.plot(highland_x, highland_y,
             lw=1, label='Highland \n(multi-scattering)')
 highland_y_el = highland.highland_electrons(highland_x, thickness, highland.x0alu)
 ax1.plot(highland_x, highland_y_el,

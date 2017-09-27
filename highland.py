@@ -29,7 +29,7 @@ def highland(momentum, thickness, x0):
     return 13.6/momentum*np.sqrt(epsilon)*(1.+0.038*np.log(epsilon))
 
 # Highland GBL multi scatterer plus sut_meas which includes material to the next scatteres
-def highland_multi_scatterer(momentum, thickness_sut, x0_sut):
+def highland_multi_scatterer_extended(momentum, thickness_sut, x0_sut):
     epsilon_kink = (thickness_sut/x0_sut +
             thickness_mimosa_kink/x0sil +
             thickness_kapton_kink/x0kap +
@@ -48,7 +48,7 @@ def highland_multi_scatterer(momentum, thickness_sut, x0_sut):
     return 13.6/momentum*np.sqrt(epsilon_kink)*(1.+0.038*np.log(epsilon_total))
 
 # Highland GBL multi scatterer only SUT material
-def highland_multi_scatterer_raw(momentum, thickness_sut, x0_sut):
+def highland_multi_scatterer(momentum, thickness_sut, x0_sut):
     epsilon_kink = thickness_sut/x0_sut
     epsilon_total = (epsilon_kink +
             thickness_mimosa_total/x0sil +
