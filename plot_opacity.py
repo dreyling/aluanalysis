@@ -15,10 +15,6 @@ from docopt import docopt
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-import my_rootread as mrr
-import my_fitfuncs as mff
-import my_dataproc as mdp
-
 import highland
 
 ############################################
@@ -44,33 +40,43 @@ width = data['combined_one_si_norm'][data['thickness']>0.0]
 opac_standard = data['opacity_highland_standard'][data['thickness']>0.0]
 opac_electron =  data['opacity_highland_electron'][data['thickness']>0.0]
 thickness = data['thickness'][data['thickness']>0.0]
+energy = data['energy'][data['thickness']>0.0]
 
 # highland x data
-opacity = np.linspace(0.0, 0.32, 100)
+opacity = np.linspace(0.0, 0.5, 100)
 #highland_standard = highland.highland_opacity_multi_scatterer_raw(opacity, thickness, highland.x0alu)
 highland_electron = highland.highland_opacity_electrons(opacity)
 
 #ax1.plot(opacity, highland_standard,
 #            lw=1, label='Highland (multi-scattering)')
 ax1.plot(opacity, highland_electron,
-            lw=1, label='Highland (electron appr.)')
+            lw=1, label='Highland (electron)')
 # data
 ax1.plot(opac_electron, width, 'kx')
 
+# label
+for index, value in enumerate(thickness):
+    label = '    ' + str(thickness[index]) + 'mm / ' + str(energy[index]) + 'GeV'
+    ax1.text(opac_electron[index], width[index], label,
+            verticalalignment='bottom', horizontalalignment='center',
+            rotation=90,
+            fontsize=6)
 
+# legend
+ax1.legend(loc='lower right')
 
 # scales
-#ax1.set_xlim(-0.5, 0.5)
-#ax1.set_yscale("log")
-#ax1.set_ylim(1, 8e5)
-#ax2.set_yscale("log")
+ax1.set_xscale("log")
+ax1.set_xlim(0.0011, 0.45)
+ax1.set_yscale("log")
+ax1.set_ylim(0.015, 15)
 
 ax1.set_title(title_plot)
-ax1.set_xlabel(r'Expected opacity $\epsilon^{0.555}/p$ [1/GeV]')
-ax1.set_ylabel("Measured scattering angle [mrad]")
+ax1.set_xlabel(r'opacity $\epsilon^{0.555}/p$ [1/GeV]')
+ax1.set_ylabel(r'scattering angle $\theta$ [mrad]')
 
 ################################################
 # save name in folder
-name_save =  "output/" + title_save + str(".pdf") 
+name_save =  "output/" + title_save + str(".pdf")
 fig.savefig(name_save)
 print "evince " + name_save + "&"
