@@ -22,6 +22,10 @@ def fitfunc_linear(xdata, *para):
     offset = para[1]
     return slope * xdata + offset
 
+def fitfunc_linear_zero(xdata, *para):
+    slope  = para[0]
+    return slope * xdata
+
 def fitfunc_gauss(xdata, *para):
     # para = [mu, sigma, height]
     mu      = para[0]
