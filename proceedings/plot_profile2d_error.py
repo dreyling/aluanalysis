@@ -50,7 +50,7 @@ data_type = 'error'
 info = False
 
 # Getting runlist
-runlist = mrr.readRunlist("../" + name_runlist)
+runlist = mrr.read_csv_runlist("../" + name_runlist)
 
 # getting right runindex
 runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np.where(runlist['energy'] == float(energy)))[0]

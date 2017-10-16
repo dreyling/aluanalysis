@@ -7,4 +7,4 @@ root_suffix: "-GBLKinkEstimator_kappa075_2kink"
 root_folder: "Fitter06/GBL/"
 
 histogram_collection: "gblsumkxandsumky"
-
+profile_collection: "gblsumkxandsumky_xyP"

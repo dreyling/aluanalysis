@@ -1,4 +1,16 @@
-#! /usr/bin/python
+'''get and analyse 2d profile data
+
+Usage:
+    get_and_analyze_profile2d-data.py (--configuration=<configuration>) [--fraction=<fraction> --rel_error=<rel_error>]
+
+Options:
+    --configuration=<configuration> yaml file [required]
+    --fraction=<fraction>       central fraction of histogram data [default: 1.0]
+    --rel_error=<rel_error>     relative error for error propagation [default: 0.03]
+    -h --help                   show usage of this script
+    -v --version                show the version of this script
+'''
+
 import sys
 import math
 import numpy as np
@@ -6,7 +18,6 @@ import numpy as np
 import my_rootread as mrr
 import my_fitfuncs as mff
 import my_dataproc as mdp
-from myparams import * 
 
 ############################################
 # setting which data
@@ -31,7 +42,7 @@ print outfile
 # Start getting data from histograms
 
 # Getting runlist using genfromtxt
-runlist = mrr.readRunlist(name_runlist)
+runlist = mrr.read_csv_runlist(name_runlist)
 
 # hard-coded margins for projections
 margin_x = 6
@@ -68,7 +79,13 @@ for index, value in enumerate(newlist):
     # 0. test
     #print index, value['energy']
     # 1. get 2d hist data
-    contents, counts, bincenters_x, bincenters_y, edges_x, edges_y = mrr.getProfile2Data(runlist, index, name_hist, name_path, name_suffix, name_rootfolder)
+    contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2Data(runlist, index, name_hist, name_path, name_suffix, name_rootfolder)
+    # getting sigma from profile
+    sigmas = np.multiply(np.sqrt(counts), errors)
+    contents = sigmas
+
+
+
     newlist['total_sum'][index] = np.sum(contents)
     newlist['total_mean'][index] = np.mean(contents)
     newlist['total_rms'][index] = np.std(contents)
