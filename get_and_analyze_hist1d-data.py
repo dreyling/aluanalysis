@@ -15,7 +15,6 @@ import numpy as np
 import math
 import yaml
 from docopt import docopt
-#import sys
 
 import my_rootread as mrr
 import my_fitfuncs as mff
@@ -45,7 +44,7 @@ outfile = "data/stats_and_fits_" + arguments['--configuration'][:-5] + "_" + fra
 runlist = mrr.read_csv_runlist(configuration['runlist'])
 
 # defining result table by adding new columns
-newlist = mrr.extendList(runlist,
+newlist = mrr.extend_list(runlist,
         'proc_events',
         'rmsROOT',          # ROOT results: rms of full data-range
         'rmsROOT_norm',

@@ -60,19 +60,17 @@ print "selected run:", runnr
 # Getting  data
 contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2Data(runlist, runindex, coll_name, name_path, name_suffix, name_rootfolder)
 
+
 #########################################
 sigmas = np.multiply(np.sqrt(counts), errors)
-
-contents = sigmas
-print np.shape(sigmas)
-print np.isnan(sigmas)
-
 sigmas[np.isnan(sigmas)] = 0
+contents = sigmas
 
+print contents
 print np.shape(sigmas)
 print np.isnan(sigmas)
-
-
+print np.shape(sigmas)
+print np.isnan(sigmas)
 
 
 # data test
@@ -95,6 +93,7 @@ if info:
 # data analysis
 content_mean = np.mean(contents[contents != 0.])
 content_std = np.std(contents[contents != 0.])
+
 if info:
     print "content not zero"
     print contents[contents != 0.]
@@ -104,7 +103,6 @@ if info:
     print "min", np.min(contents[contents != 0.])
     print "max", np.max(contents[contents != 0.])
 
-
 # projections
 projection_x, projection_y = mdp.get_projections(contents, bincenters_x, bincenters_y)
 
@@ -112,7 +110,6 @@ if info:
     #print projection_x, projection_y
     print np.shape(projection_x), projection_x
     print np.shape(projection_y), projection_y
-
 
 
 #####################

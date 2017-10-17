@@ -38,10 +38,10 @@ outfile = "data/" + name_kappa + "_" + name_kinks + "_" + name_hist + "_" + frac
 runlist = mrr.readRunlist("../" + name_runlist)
 
 # Adding new columns
-newlist = mrr.extendList(runlist, 
-        'proc_events', 
-        'rmsROOT', 
-        'rmsfrac', 
+newlist = mrr.extend_list(runlist,
+        'proc_events',
+        'rmsROOT',
+        'rmsfrac',
         'rmsfrac_norm',
         'gauss_mu',
         'gauss_si',

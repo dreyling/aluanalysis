@@ -23,7 +23,7 @@ def read_csv_runlist(filename):
   print "opening...", filename
   return np.genfromtxt(filename, delimiter='\t', names=True)
 
-def extendList(runlist, *newcol_name):
+def extend_list(runlist, *newcol_name):
     newlist = runlist
     for index, value in enumerate(newcol_name):
         newcol = np.zeros(np.size(runlist), dtype = {'names': [value], 'formats': ['f8']} )
@@ -100,9 +100,9 @@ def getProfile2Data(runlist, runindex, coll_name, path, suffix, root_folder):
   counts = np.divide(sums, contents)
   # shift hist data by half of the binwidth
   binwidth_x = abs(edges[0][1]-edges[0][0])
-  bincenters_x = np.array(edges[0][:-1]) + binwidth_x/2. 
+  bincenters_x = np.array(edges[0][:-1]) + binwidth_x/2.
   binwidth_y = abs(edges[1][1]-edges[1][0])
-  bincenters_y = np.array(edges[1][:-1]) + binwidth_y/2. 
+  bincenters_y = np.array(edges[1][:-1]) + binwidth_y/2.
   # return counts (x, y)-array, x_edges and y_edges data
   return contents, counts, bincenters_x, bincenters_y, edges[0], edges[1], errors
 
