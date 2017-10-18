@@ -50,7 +50,7 @@ data_type = 'mean'
 info = False
 
 # Getting runlist
-runlist = mrr.readRunlist("../" + name_runlist)
+runlist = mrr.read_csv_runlist("../" + name_runlist)
 
 # getting right runindex
 runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np.where(runlist['energy'] == float(energy)))[0]
@@ -264,7 +264,7 @@ projection_y_means_val_binned = projection_y[1].reshape(-1, number_merged_points
 projection_y_n_binned = np.size(projection_y[1]) * number_merged_points
 projection_y_stds_val_binned = projection_y[1].reshape(-1, number_merged_points).std(axis=1)/math.sqrt(projection_y_n_binned)
 
-ax3.errorbar(projection_y_means_val_binned[::-1]*1000, projection_y_means_pos_binned, 
+ax3.errorbar(projection_y_means_val_binned[::-1]*1000, -1. * projection_y_means_pos_binned, 
         yerr=(projection_y_means_pos_binned[1]-projection_y_means_pos_binned[0])/2.,
         xerr=projection_y_stds_val_binned*1000*10, # factor errorbars
         capsize=0,
