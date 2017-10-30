@@ -4,3 +4,4 @@
 output/*
 proceedings/output/*
 ablage/*
+data/*.csv

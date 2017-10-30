@@ -30,7 +30,7 @@ data = np.load(arguments['--results'])
 
 ############################################
 # output names
-title_save = "mean_distribution_" + arguments['--thickness']
+title_save = "compare_fits_2d_distribution_" + arguments['--results'][31:-4] + '_' + arguments['--thickness']
 title_plot = title_save.replace("_", " ")
 
 ##############################################
@@ -40,33 +40,20 @@ sample = (data['thickness']==float(arguments['--thickness']))
 # xdata
 thickness = data['thickness'][sample]
 energy = data['energy'][sample]
-opacity =  (thickness/highland.x0alu)**(0.555) / energy
-
 
 ############################################
 # Plotting Data
 fig, ax = plt.subplots(figsize=(6, 6))#, dpi=100)
 fig.subplots_adjust(left=0.15, right=0.98, top=0.98, bottom=0.15)
 grid = gridspec.GridSpec(2, 2, hspace=0.02, wspace=0.02)
-'''
-ax1 = plt.subplot(grid[:1, :1])
-ax2 = plt.subplot(grid[1:, :1], sharex=ax1)
-ax3 = plt.subplot(grid[:1, 1:], sharey=ax1)
-ax4 = plt.subplot(grid[1:, 1:], sharex=ax3, sharey=ax2)
-'''
+
 ax3 = plt.subplot(grid[:1, 1:])
 ax4 = plt.subplot(grid[1:, 1:], sharex=ax3)
 ax1 = plt.subplot(grid[:1, :1], sharey=ax3)
 ax2 = plt.subplot(grid[1:, :1], sharex=ax1, sharey=ax4)
 
 # ax1
-#ax1.errorbar(energy, data['projection_x_mean'][sample],
-#        yerr=data['projection_x_rms'][sample],
-#        ls='None', marker='x', markersize=5, color='k')
-#ax1.errorbar(energy, data['projection_x_fit_offset'][sample],
-#        yerr=data['projection_x_fit_doffset'][sample],
-#        ls='None', marker='x', markersize=5, color='k')
-ax1.errorbar(energy, -1.*data['projection_x_fit_offset'][sample]/data['projection_x_fit_slope'][sample],
+ax1.errorbar(energy, data['projection_x_fit_offset'][sample],
         yerr=data['projection_x_fit_doffset'][sample],
         ls='None', marker='x', markersize=5, color='k')
 # ax2 
@@ -74,13 +61,7 @@ ax2.errorbar(energy, data['projection_x_fit_slope'][sample],
         yerr=data['projection_x_fit_dslope'][sample],
         ls='None', marker='x', markersize=5, color='k')
 # ax3
-#ax3.errorbar(energy, data['projection_y_mean'][sample],
-#        yerr=data['projection_y_rms'][sample],
-#        ls='None', marker='x', markersize=5, color='k')
-#ax3.errorbar(energy, data['projection_y_fit_offset'][sample],
-#        yerr=data['projection_y_fit_doffset'][sample],
-#        ls='None', marker='x', markersize=5, color='k')
-ax3.errorbar(energy, -1.*data['projection_y_fit_offset'][sample]/data['projection_y_fit_slope'][sample],
+ax3.errorbar(energy, data['projection_y_fit_offset'][sample],
         yerr=data['projection_y_fit_doffset'][sample],
         ls='None', marker='x', markersize=5, color='k')
 # ax4 
@@ -89,7 +70,7 @@ ax4.errorbar(energy, data['projection_y_fit_slope'][sample],
         ls='None', marker='x', markersize=5, color='k')
 
 # axis labels
-ax1.set_ylabel(r'offset/zero-point at axis [mm]')
+ax1.set_ylabel(r'offset/zero-point at axis [mrad]')
 ax2.set_xlabel(r'x-projection, energy [GeV]')
 ax2.set_ylabel(r'slope along axis [mrad/mm]')
 ax4.set_xlabel(r'y-projection, energy [GeV]')
@@ -111,7 +92,8 @@ ax4.axhline(0.0, lw=0.5, color='k')
 
 # scales
 #ax1.set_xscale("log")
-#ax1.set_xlim(0.0011, 0.45)
+ax1.set_xlim(0.5, 5.5)
+ax3.set_xlim(0.5, 5.5)
 #ax1.set_yscale("log")
 #ax1.set_ylim(0.015, 15)
 
