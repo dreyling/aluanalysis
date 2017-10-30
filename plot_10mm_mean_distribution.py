@@ -60,16 +60,28 @@ ax1 = plt.subplot(grid[:1, :1], sharey=ax3)
 ax2 = plt.subplot(grid[1:, :1], sharex=ax1, sharey=ax4)
 
 # ax1
-ax1.errorbar(energy, data['projection_x_mean'][sample],
-        yerr=data['projection_x_rms'][sample],
+#ax1.errorbar(energy, data['projection_x_mean'][sample],
+#        yerr=data['projection_x_rms'][sample],
+#        ls='None', marker='x', markersize=5, color='k')
+#ax1.errorbar(energy, data['projection_x_fit_offset'][sample],
+#        yerr=data['projection_x_fit_doffset'][sample],
+#        ls='None', marker='x', markersize=5, color='k')
+ax1.errorbar(energy, -1.*data['projection_x_fit_offset'][sample]/data['projection_x_fit_slope'][sample],
+        yerr=data['projection_x_fit_doffset'][sample],
         ls='None', marker='x', markersize=5, color='k')
 # ax2 
 ax2.errorbar(energy, data['projection_x_fit_slope'][sample],
         yerr=data['projection_x_fit_dslope'][sample],
         ls='None', marker='x', markersize=5, color='k')
 # ax3
-ax3.errorbar(energy, data['projection_y_mean'][sample],
-        yerr=data['projection_y_rms'][sample],
+#ax3.errorbar(energy, data['projection_y_mean'][sample],
+#        yerr=data['projection_y_rms'][sample],
+#        ls='None', marker='x', markersize=5, color='k')
+#ax3.errorbar(energy, data['projection_y_fit_offset'][sample],
+#        yerr=data['projection_y_fit_doffset'][sample],
+#        ls='None', marker='x', markersize=5, color='k')
+ax3.errorbar(energy, -1.*data['projection_y_fit_offset'][sample]/data['projection_y_fit_slope'][sample],
+        yerr=data['projection_y_fit_doffset'][sample],
         ls='None', marker='x', markersize=5, color='k')
 # ax4 
 ax4.errorbar(energy, data['projection_y_fit_slope'][sample],
@@ -77,7 +89,7 @@ ax4.errorbar(energy, data['projection_y_fit_slope'][sample],
         ls='None', marker='x', markersize=5, color='k')
 
 # axis labels
-ax1.set_ylabel(r'total mean [mrad]')
+ax1.set_ylabel(r'offset/zero-point at axis [mm]')
 ax2.set_xlabel(r'x-projection, energy [GeV]')
 ax2.set_ylabel(r'slope along axis [mrad/mm]')
 ax4.set_xlabel(r'y-projection, energy [GeV]')

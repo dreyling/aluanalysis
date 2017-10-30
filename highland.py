@@ -26,6 +26,7 @@ def highland(momentum, thickness, x0):
       print "Warning! epsilon < 0.001 for thickness", thickness
     if epsilon > 100.:
       print "Warning! epsilon > 100 for thickness", thickness
+    # 13.6 MeV / 1 GeV = 10-3 --> mrad
     return 13.6/momentum*np.sqrt(epsilon)*(1.+0.038*np.log(epsilon))
 
 # Highland GBL multi scatterer plus sut_meas which includes material to the next scatteres
