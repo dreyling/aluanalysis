@@ -50,36 +50,36 @@ arguments = docopt(__doc__, version='simulate 1d distribution')
 # Plots
 fig, ax = plt.subplots(1, 1)
 
-distribution = 'gauss'
-distribution = 'combined'
+distribution = np.array(['gauss', 'combined'])
 
-sigmas = np.array([0.005, 0.001]) # rad
-#sigmas = np.array([0.995, 1.23, 1.62, 2.37, 4.01]) # mrad from 10mm measurements
-
+sigma = np.array([0.005, 0.001]) # rad
 nu = np.array([2.83, 1.45])
 frac = np.array([0.53, 0.42])
 
 
 x_data = np.linspace(-10, 10, 1000)
-x_fit = np.linspace(-10, 10, 500)
-for index, value in enumerate(sigmas):
-    if distribution == 'gauss':
-        y_data = distribution1d(x_data, distribution, 0.15, value, 1.0)
-    elif distribution == 'combined':
-        y_data = distribution1d(x_data, distribution, 0.15, value, nu[0], frac[0], 1.0)
-    plt.plot(x_data, y_data, label='sigma {}'.format(value))
-    #fitresults = mff.fit_linear(np.vstack((x_data, y_data)), 0.0, 1.0, 0.0)
-    #y_fit = mff.fitfunc_linear(x_fit, fitresults['slope'], fitresults['offset'])
-    #plt.plot(x_fit, y_fit, label='slope {} offset {}'.format(fitresults['slope'], fitresults['offset']))
+x_fit = np.linspace(-9, 9, 500)
+for index, value in enumerate(distribution):
+    if value == 'gauss':
+        y_data = distribution1d(x_data, value, 0.0, sigma[0], 1.0)
+        plt.plot(x_data, y_data*1000, label='Gauss, sigma {} mrad'.format(sigma[0]*1000))
+    elif value == 'combined':
+        y_data = distribution1d(x_data, value, 0.0, sigma[0], nu[0], frac[0], 1.0)
+        plt.plot(x_data, y_data*1000, label='Combined, sigma {} mrad\nnu {} \na {}'.format(sigma[0]*1000, nu[0], frac[0]))
+        # fit
+        y_fit = distribution1d(x_fit, value, 0.0, sigma[0], nu[0], frac[0], 1.0)
+        fitresults = mff.fit_linear(np.vstack((x_fit, y_fit)), 0.0, 1.0, 0.0)
+        y_fit = mff.fitfunc_linear(x_fit, fitresults['slope'], fitresults['offset'])
+        plt.plot(x_fit, y_fit*1000, label='slope {:.2e} mrad/mm \noffset {:.2e} mrad'.format(fitresults['slope']*1000, fitresults['offset']*1000))
 
 
 plt.legend()
 plt.xlabel('x-position at SUT [mm]')
-plt.ylabel('mean of distribution [rad]')
+plt.ylabel('mean of distribution [mrad]')
 #plt.xlim(-9., 9.)
-#plt.ylim(-0.001, 0.001)
+plt.ylim(-0.1, 0.1)
 
 ############################################
 # output names
-title_save = 'simulate_distribution1d_' + distribution
+title_save = 'simulate_distribution1d_both'
 plt.savefig(title_save + '.pdf')
