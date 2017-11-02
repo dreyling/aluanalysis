@@ -58,8 +58,10 @@ contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.get
         configuration['root_folder'])
 
 # output names
+
 title_save = ("profile2d_" + data_type + "_run" + str(runnr)[:-2] + "_" +
-        energy + "GeV" + "_" + thickness + "mm")
+        energy + "GeV" + "_" + thickness + "mm_" +
+        "rebin" + arguments['--rebin'] + "_" + arguments['--configuration'][:-5])
 title_plot = title_save.replace("_", " ")
 
 #########################################
@@ -144,13 +146,13 @@ cb.set_label(textbox, fontsize=8, labelpad=5)
 
 ###############
 # binned representation
-number_merged_points = 1
-if int(arguments['--rebin']) > 1.:
-    number_merged_points = int(arguments['--rebin'])
-    title_save = ("profile2d_" + data_type + "_run" + str(runnr)[:-2] + "_" +
-            energy + "GeV" + "_" + thickness + "mm_" +
-            "rebin" + arguments['--rebin'])
-    title_plot = title_save.replace("_", " ")
+#number_merged_points = 1
+number_merged_points = int(arguments['--rebin'])
+#if int(arguments['--rebin']) > 1.:
+#    title_save = ("profile2d_" + data_type + "_run" + str(runnr)[:-2] + "_" +
+#            energy + "GeV" + "_" + thickness + "mm_" +
+#            "rebin" + arguments['--rebin'])
+#    title_plot = title_save.replace("_", " ")
 
 
 #########################################

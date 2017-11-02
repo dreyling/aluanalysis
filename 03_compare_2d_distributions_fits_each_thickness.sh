@@ -1,3 +1,12 @@
+python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_10mm_realign_mean_rebin10.npy --thickness=10.0
+python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_mean_rebin10.npy --thickness=10.0
+
+python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_10mm_realign_mean_rebin1.npy --thickness=10.0
+python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_mean_rebin1.npy --thickness=10.0
+python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_simulation_mean_rebin1.npy --thickness=10.0
+
+return
+
 python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_mean.npy --thickness=10.0
 python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_mean.npy --thickness=1.0
 python plot_and_compare_2d_distribution_fits.py --results=data/stats_and_fits_2d-profile_measurement_mean.npy --thickness=0.2

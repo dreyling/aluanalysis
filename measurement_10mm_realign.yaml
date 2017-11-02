@@ -1,0 +1,10 @@
+# Defining root-file parameters of measurement
+
+runlist: "runlistX0meas_10mm_realign.csv"
+
+root_path: "/home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink/"
+root_suffix: "-GBLKinkEstimator_kappa075_2kink_ALIGN10mm5GeV"
+root_folder: "Fitter06/GBL/"
+
+histogram_collection: "gblsumkxandsumky"
+profile_collection: "gblsumkxandsumky_xyP"

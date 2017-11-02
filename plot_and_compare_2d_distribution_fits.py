@@ -1,7 +1,7 @@
-'''10mm mean distribution
+'''plot_and_compare_2d_distribution_fits
 
 Usage:
-    plot_10mm_mean_distribution.py (--results=<results>) [--width=<width> --thickness=<thickness>]
+    plot_and_compare_2d_distribution_fits.py (--results=<results>) [--width=<width> --thickness=<thickness>]
 
 Options:
     --results=<results>         npy file [required]

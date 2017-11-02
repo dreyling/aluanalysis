@@ -60,6 +60,12 @@ def projections(counts, bincenters_x, bincenters_y, margin_x, margin_y):
   data_y = np.vstack((pos_projection_y, data_projection_y))
   return data_x, data_y
 
+def rebin_data(data, number_merged_points):
+    if len(data) % number_merged_points == 0:
+        return data.reshape(-1, number_merged_points).mean(axis=1)
+    else:
+        print "Please choose a proper divider for {}-entries array".format(len(data))
+        exit()
 
 def cut_data(data, cutbins):
   data0 = data[0][cutbins:-cutbins]

@@ -1,11 +1,12 @@
 '''get and analyse 2d profile data
 
 Usage:
-    get_and_analyze_profile2d-data.py (--configuration=<configuration> --data_type=<data_type>)
+    get_and_analyze_profile2d-data.py (--configuration=<configuration> --data_type=<data_type>) [--rebin=<rebin>]
 
 Options:
     --configuration=<configuration> yaml file [required]
     --data_type=<data_type>     'mean' or 'sigma' [required]
+    --rebin=<rebin>             rebinning [default: 1]
     -h --help                   show usage of this script
     -v --version                show the version of this script
 '''
@@ -28,29 +29,12 @@ arguments = docopt(__doc__, version='get and analyse 2d profile data')
 # open yaml configuration file
 configuration = yaml.load(open(arguments['--configuration']))
 data_type = arguments['--data_type']
-
-############################################
-# setting which data
-#print "Starting script:", sys.argv[0]
-
-# 1st argument
-#name_path = sys.argv[1]
-#print "path:", name_path
-#name_kappa = name_path[-15:-7]
-#name_kinks = name_path[-6:-1]
-#name_suffix = "-GBLKinkEstimator_" + name_kappa + "_" + name_kinks
-
-# 2nd argument
-#name_hist = sys.argv[2]
-#print "histogram collection:", name_hist
-
-# save name in folder
-#outfile = "data/" + name_kappa + "_" + name_kinks + "_" + name_hist
-#print outfile
+number_merged_points = int(arguments['--rebin'])
 
 ##############################################
 # output names
-outfile = "data/stats_and_fits_2d-profile_" + arguments['--configuration'][:-5] + "_" + data_type
+outfile = ("data/stats_and_fits_2d-profile_" + arguments['--configuration'][:-5] + "_" + 
+        data_type + "_" + "rebin" + arguments['--rebin'])
 
 #####################################
 # Start getting data from histograms
@@ -121,7 +105,7 @@ for index, value in enumerate(newlist):
     newlist['total_mean'][index] = np.mean(contents[contents != 0.]) #np.mean(contents)
     newlist['total_rms'][index] = np.std(contents[contents != 0.]) #np.std(contents)
 
-    # 2. calculate projections
+    # 2a. calculate projections
     data_x, data_y = mdp.get_projections(contents, bincenters_x, bincenters_y)
     # fill x
     newlist['projection_x_sum'][index] = np.sum(data_x[1])   # sum
@@ -132,15 +116,25 @@ for index, value in enumerate(newlist):
     newlist['projection_y_mean'][index] = np.mean(data_y[1])  # mean
     newlist['projection_y_rms'][index] = np.std(data_y[1])   # std
 
+    # 2b. rebinning
+    # rebinning x-projection
+    data_x0_rebinned = mdp.rebin_data(data_x[0], number_merged_points)
+    data_x1_rebinned = mdp.rebin_data(data_x[1], number_merged_points)
+    data_x_rebinned = np.vstack((data_x0_rebinned, data_x1_rebinned))
+    # rebinning y-projection
+    data_y0_rebinned = mdp.rebin_data(data_y[0], number_merged_points)
+    data_y1_rebinned = mdp.rebin_data(data_y[1], number_merged_points)
+    data_y_rebinned = np.vstack((data_y0_rebinned, data_y1_rebinned))
+
     # 3. fit projections
-    fitresults_x = mff.fit_linear(data_x, 0, 0.0, 5000)
+    fitresults_x = mff.fit_linear(data_x_rebinned, 0, 0.0, 0.0)
     newlist['projection_x_fit_slope'  ][index] = fitresults_x['slope'  ]
     newlist['projection_x_fit_offset' ][index] = fitresults_x['offset' ]
     newlist['projection_x_fit_dslope' ][index] = fitresults_x['dslope' ]
     newlist['projection_x_fit_doffset'][index] = fitresults_x['doffset']
     newlist['projection_x_fit_chi2'   ][index] = fitresults_x['chi2'   ]
     newlist['projection_x_fit_chi2red'][index] = fitresults_x['chi2red']
-    fitresults_y = mff.fit_linear(data_y, 0, 0.0, 5000)
+    fitresults_y = mff.fit_linear(data_y_rebinned, 0, 0.0, 0.0)
     newlist['projection_y_fit_slope'  ][index] = fitresults_y['slope'  ]
     newlist['projection_y_fit_offset' ][index] = fitresults_y['offset' ]
     newlist['projection_y_fit_dslope' ][index] = fitresults_y['dslope' ]
