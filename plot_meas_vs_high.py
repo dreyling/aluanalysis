@@ -48,8 +48,8 @@ width_high = highland.highland_multi_scatterer(energy, thickness, highland.x0alu
 
 ############################################
 # Plotting Data
-fig, ax = plt.subplots(figsize=(6, 6))#, dpi=100)
-fig.subplots_adjust(left=0.11, right=0.95, top=0.94, bottom=0.10)
+fig, ax = plt.subplots(figsize=(4, 4))#, dpi=100)
+fig.subplots_adjust(left=0.17, right=0.99, top=0.99, bottom=0.12)
 grid = gridspec.GridSpec(3, 1, hspace=0.0)
 ax1 = plt.subplot(grid[:, :])
 
@@ -63,23 +63,24 @@ width_pred = np.linspace(0.8 * np.min(width_high), 1.2 * np.max(width_high), 100
 ax1.plot(width_pred, width_pred,
         label='prediction', ls='--')
 
-# fit 
-fitfunc = mff.fitfunc_linear
-para0 = [1.0, 0.0]
-xdata = width_high
-ydata = width_meas
-para, cov = curve_fit(fitfunc, xdata, ydata, p0=para0)
-highland_fit = fitfunc(width_pred, *para)
-ax1.plot(width_pred, highland_fit,
-        lw=1, label='Fit slope = {:.3f}\noffset = {:.3f}mrad'.format(para[0], para[1]))
+# fit
+if False:
+    fitfunc = mff.fitfunc_linear
+    para0 = [1.0, 0.0]
+    xdata = width_high
+    ydata = width_meas
+    para, cov = curve_fit(fitfunc, xdata, ydata, p0=para0)
+    highland_fit = fitfunc(width_pred, *para)
+    ax1.plot(width_pred, highland_fit,
+            lw=1, label='Fit slope = {:.3f}\noffset = {:.3f}mrad'.format(para[0], para[1]))
 
 
 # label
 for index, value in enumerate(thickness):
-    label = '   ' + str(thickness[index]) + 'mm / ' + str(energy[index]) + 'GeV'
+    label = '   ' + str(thickness[index]) + 'mm / ' + str(energy[index]) + 'GeV' + '        '
     ax1.text(width_high[index], width_meas[index], label,
-            verticalalignment='center', horizontalalignment='left',
-            rotation=0,
+            verticalalignment='center', horizontalalignment='right',
+            rotation=-30,
             fontsize=6)
 
 # legend
