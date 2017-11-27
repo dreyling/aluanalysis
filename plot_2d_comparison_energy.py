@@ -53,15 +53,15 @@ ax2.axhline(y=0.0, color='0.25')
 ax4.axhline(y=0.0, color='0.25')
 
 # xdata: vs. thickness
-thickness = data['thickness']#[data['thickness']>0.0]
+thickness = data['thickness']#[data['thickness']<1.0]
 # xdata: vs. energy
-energy = data['energy']#[data['thickness']>0.0]
+energy = data['energy']#[data['thickness']<1.0]
 
 xdata = energy
 
 # xshift
 xshift = np.copy(thickness)
-xshift[xshift == 0.0] = 0.0065
+xshift[xshift == 0.0] = 0.01
 xshift = np.log10(xshift)/5.
 
 
@@ -73,8 +73,8 @@ ax1.errorbar(xdata, data['projection_x_mean'],#[data['thickness']>0.0],
         yerr=data['projection_x_rms'],#[data['thickness']>0.0],
         ls='None', marker='o', markersize=2, color='k')
 # ax2 
-ax2.errorbar(xdata + xshift, data['projection_x_fit_slope'],#[data['thickness']>0.0],
-        yerr=data['projection_x_fit_dslope'],#[data['thickness']>0.0],
+ax2.errorbar(xdata + xshift, data['projection_x_fit_slope'],#[data['thickness']<1.0],
+        yerr=data['projection_x_fit_dslope'],#[data['thickness']<1.0],
         ls='None', marker='o', markersize=2, color='k')
 # ax3
 ax3.errorbar(xdata, data['projection_y_mean'],#[data['thickness']>0.0],
@@ -103,9 +103,9 @@ for index, value in enumerate(thickness):
     ax1.text(xdata[index], data['projection_x_mean'][index],#[data['thickness']>0.0][index]*1.07,
             label, verticalalignment='bottom', horizontalalignment='left',
             rotation=0, fontsize=4, color='0.2')
-    ax2.text(xdata[index] + xshift[index], data['projection_x_fit_slope'][index],#[data['thickness']>0.0][index]*1.07,
+    ax2.text(xdata[index] + xshift[index], data['projection_x_fit_slope'][index]+data['projection_x_fit_dslope'][index],#[data['thickness']>0.0][index]*1.07,
             label, verticalalignment='bottom', horizontalalignment='left',
-            rotation=0, fontsize=4, color='0.2')
+            rotation=-90, fontsize=4, color='0.2')
     ax3.text(xdata[index], data['projection_y_mean'][index],#[data['thickness']>0.0][index]*1.07,
             label, verticalalignment='bottom', horizontalalignment='left',
             rotation=0, fontsize=4, color='0.2')

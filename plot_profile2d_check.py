@@ -52,14 +52,14 @@ runnr = runlist['runnr'][runindex]
 
 # Getting  data
 contents, counts, bincenters_x, bincenters_y, edges_x, edges_y, errors = mrr.getProfile2Data(runlist, runindex,
-        configuration['profile_collection'],
+        configuration['profile_collection_check'],
         configuration['root_path'],
         configuration['root_suffix'],
         configuration['root_folder'])
 
 # output names
 
-title_save = ("profile2d_" + data_type + "_run" + str(runnr)[:-2] + "_" +
+title_save = ("profile2d-check_" + data_type + "_run" + str(runnr)[:-2] + "_" +
         energy + "GeV" + "_" + thickness + "mm_" +
         "rebin" + arguments['--rebin'] + "_" + arguments['--configuration'][:-5])
 title_plot = title_save.replace("_", " ")
@@ -67,10 +67,15 @@ title_plot = title_save.replace("_", " ")
 #########################################
 # Data 
 
-if data_type == 'sigma':
-    sigmas = np.multiply(np.sqrt(counts), errors)
-    sigmas[np.isnan(sigmas)] = 0
-    contents = sigmas
+#if data_type == 'sigma':
+#    sigmas = np.multiply(np.sqrt(counts), errors)
+#    sigmas[np.isnan(sigmas)] = 0
+#    contents = sigmas
+
+if data_type == 'mean':
+    print "That is not for the mean values!!!"
+    exit()
+
 
 content_mean = np.mean(contents[contents != 0.])
 content_std = np.std(contents[contents != 0.])
