@@ -77,6 +77,11 @@ if data_type == 'mean':
     exit()
 
 
+#print contents[100][100:110]
+# taking the square root to match the dimensions, discussed with HJ 29/11/17
+contents = np.sqrt(contents)
+#print contents[100][100:110]
+
 content_mean = np.mean(contents[contents != 0.])
 content_std = np.std(contents[contents != 0.])
 

@@ -8,3 +8,4 @@ root_folder: "Fitter06/GBL/"
 
 histogram_collection: "gblsumkxandsumky"
 profile_collection: "gblsumkxandsumky_xyP"
+profile_collection_check: "gblsumkx2andsumky2_xyP"
