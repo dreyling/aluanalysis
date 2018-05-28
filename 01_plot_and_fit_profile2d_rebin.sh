@@ -1,3 +1,25 @@
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.0 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.013 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.025 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.05 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.1 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.2 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=1.0 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=10.0 --data_type=sigma 
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.0 --data_type=sigma
+
+return
+
+#python plot_profile2d_check.py --configuration=measurement.yaml --energy=3 --thickness=0.0 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.013 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.025 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.05 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.1 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=0.2 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=1.0 --data_type=sigma --rebin=50
+python plot_profile2d.py --configuration=measurement.yaml --energy=3 --thickness=10.0 --data_type=sigma --rebin=50
+
+return
 
 python plot_profile2d_check.py --configuration=measurement_10mm_realign.yaml --energy=1 --thickness=10.0 --data_type=sigma --rebin=50
 python plot_profile2d_check.py --configuration=measurement_10mm_realign.yaml --energy=2 --thickness=10.0 --data_type=sigma --rebin=50

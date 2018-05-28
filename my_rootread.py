@@ -60,10 +60,11 @@ def getHist1Data(runlist, runindex, histname, path, suffix, rootfolder):
 
 def getHistSpecs(runlist, runindex, histname, path, suffix, rootfolder):
   rootfile = path + "run0"+'{:05d}'.format(int(runlist['runnr'][runindex])) + suffix + ".root"
-  print "opening...", rootfile
+  #print "opening...", rootfile
   # open root file
   histfile = TFile(rootfile)
   # get hist data
+  #print "opening...", rootfolder + histname
   histdata = histfile.Get(rootfolder + histname) #print histdata
   return {'mean':histdata.GetMean(1), 'stddev':histdata.GetStdDev(1), 'integral':histdata.Integral(), 'entries':histdata.GetEntries()}
 

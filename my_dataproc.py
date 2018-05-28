@@ -93,6 +93,29 @@ def get_hist_fraction(data, fraction):
   data = np.vstack((data0, data1))
   return data
 
+def calc_aad(data, fraction):
+    #print data
+    # create original hist data
+    # create empty array with right length
+    entries_total = calc_entries(data[1])
+    hist_origin_abs_values = np.zeros(int(entries_total))
+    #print entries_total, len(hist_origin_abs_values)
+    # loop over bins and fill array with bin entries * bin x value
+    start_index = 0
+    for bin_index, bin_entries in enumerate(data[1]):
+        if bin_entries != 0.0:
+            #print data[0][bin_index], bin_entries
+            for index in range(int(bin_entries)):
+                fill_index = int(start_index +  index)
+                # fill in the absolute value
+                hist_origin_abs_values[fill_index] = abs(data[0][bin_index])
+            start_index += bin_entries #print start_index
+    #print hist_origin_values
+    #print np.sort(hist_origin_abs_values)
+    # calculate the mean from fraction
+    end_fraction_index = int(fraction * entries_total)
+    return np.mean(np.sort(hist_origin_abs_values)[:end_fraction_index])
+
 def calc_entries(data):
   return np.sum(data)
 
@@ -113,6 +136,7 @@ def calc_hist_mean(data):
 def calc_hist_RMS(data):
   weights = np.multiply(np.square(data[0]-calc_hist_mean(data)), data[1])
   return np.sqrt(np.sum(weights)/np.sum(data[1]))
+
 
 def print_data(data):
   print "xdata:", data[0]
