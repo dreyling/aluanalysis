@@ -59,19 +59,37 @@ for bin_index in range(configuration['bins']):
         'aad_frac' + binned_histo,
         'aad_frac_norm' + binned_histo,
         'aad_frac_norm_error' + binned_histo,
+        'gauss_mu' + binned_histo,         # gauss fit of central data fraction
+        'gauss_si' + binned_histo,
+        'gauss_si_dev' + binned_histo,
+        'gauss_height' + binned_histo,
+        'gauss_chi2red' + binned_histo,
+        'gauss_si_norm' + binned_histo,
+        'gauss_si_norm_error' + binned_histo,
+        'combined_one_mu' + binned_histo,     # combined fit, gauss and studentt, one sigma
+        'combined_one_si' + binned_histo,
+        'combined_one_si_dev' + binned_histo,
+        'combined_one_nu_s' + binned_histo,
+        'combined_one_frac' + binned_histo,
+        'combined_one_height' + binned_histo,
+        'combined_one_chi2red' + binned_histo,
+        'combined_one_si_norm' + binned_histo,
+        'combined_one_si_norm_error' + binned_histo,
+        'slopes',
+        'dslopes',
         # for the fit
-        'ROOT_rms_slope',
-        'ROOT_rms_dslope',
-        'ROOT_rms_norm_slope',
-        'ROOT_rms_norm_dslope',
-        'rms_frac_slope',
-        'rms_frac_dslope',
-        'rms_frac_norm_slope',
-        'rms_frac_norm_dslope',
-        'aad_frac_slope',
-        'aad_frac_dslope',
-        'aad_frac_norm_slope',
-        'aad_frac_norm_dslope',
+        #'ROOT_rms_slope',
+        #'ROOT_rms_dslope',
+        #'ROOT_rms_norm_slope',
+        #'ROOT_rms_norm_dslope',
+        #'rms_frac_slope',
+        #'rms_frac_dslope',
+        #'rms_frac_norm_slope',
+        #'rms_frac_norm_dslope',
+        #'aad_frac_slope',
+        #'aad_frac_dslope',
+        #'aad_frac_norm_slope',
+        #'aad_frac_norm_dslope',
         )
 #print newlist
 
@@ -104,13 +122,14 @@ for index, value in enumerate(newlist):
         newlist['rms_frac' + binned_histo][index] = mdp.calc_hist_RMS(datafrac)
         newlist['aad_frac' + binned_histo][index] = mdp.calc_aad(data, float(fraction))
 
-        # 3. gauss fit
-        #fitresult = mff.fit_gauss(datafrac, mu0=0.0, sigma0=0.3, height0=50e3)
-        #newlist['gauss_mu'     ][index] = fitresult['mu'     ]
-        #newlist['gauss_si'     ][index] = fitresult['si'     ]
-        #newlist['gauss_si_dev' ][index] = fitresult['dsi'    ]
-        #newlist['gauss_height' ][index] = fitresult['height' ]
-        #newlist['gauss_chi2red'][index] = fitresult['chi2red']
+        # 3. gauss98 fit
+        datafrac = mdp.get_hist_fraction(data, 0.98)
+        fitresult = mff.fit_gauss(datafrac, mu0=0.0, sigma0=0.3, height0=50e3)
+        newlist['gauss_mu'      + binned_histo][index] = fitresult['mu'     ]
+        newlist['gauss_si'      + binned_histo][index] = fitresult['si'     ]
+        newlist['gauss_si_dev'  + binned_histo][index] = fitresult['dsi'    ]
+        newlist['gauss_height'  + binned_histo][index] = fitresult['height' ]
+        newlist['gauss_chi2red' + binned_histo][index] = fitresult['chi2red']
 
         # 4. combined fit (with two sigmas)
         #fitresult = mff.fit_combined(data, mu0=0.0, si0=0.3, nu_s0=5.0, si_s0= 0.3, frac0=0.3, height0=50e3)
@@ -125,14 +144,14 @@ for index, value in enumerate(newlist):
         #newlist['combined_chi2red'][index] = fitresult['chi2red']
 
         # 5. combined fit with one sigma
-        #fitresult = mff.fit_combined_one_sigma(data, mu0=0.0, si0=0.3, nu_s0=5.0, frac0=0.3, height0=50e3)
-        #newlist['combined_one_mu'     ][index] = fitresult['mu'     ]
-        #newlist['combined_one_si'     ][index] = fitresult['si'     ]
-        #newlist['combined_one_si_dev' ][index] = fitresult['dsi'    ]
-        #newlist['combined_one_nu_s'   ][index] = fitresult['nu_s'   ]
-        #newlist['combined_one_frac'   ][index] = fitresult['frac'   ]
-        #newlist['combined_one_height' ][index] = fitresult['height' ]
-        #newlist['combined_one_chi2red'][index] = fitresult['chi2red']
+        fitresult = mff.fit_combined_one_sigma(data, mu0=0.0, si0=0.3, nu_s0=5.0, frac0=0.3, height0=50e3)
+        newlist['combined_one_mu'      + binned_histo][index] = fitresult['mu'     ]
+        newlist['combined_one_si'      + binned_histo][index] = fitresult['si'     ]
+        newlist['combined_one_si_dev'  + binned_histo][index] = fitresult['dsi'    ]
+        newlist['combined_one_nu_s'    + binned_histo][index] = fitresult['nu_s'   ]
+        newlist['combined_one_frac'    + binned_histo][index] = fitresult['frac'   ]
+        newlist['combined_one_height'  + binned_histo][index] = fitresult['height' ]
+        newlist['combined_one_chi2red' + binned_histo][index] = fitresult['chi2red']
 
 if True:
     ##########################################
@@ -176,6 +195,11 @@ if True:
     normalize_by_air_measurement('rms_frac', relative_error=True)
     # aad frac
     normalize_by_air_measurement('aad_frac', relative_error=True)
+    # gauss98
+    normalize_by_air_measurement('gauss_si', relative_error=False)
+    # combined one
+    normalize_by_air_measurement('combined_one_si', relative_error=False)
+
 
 ############################################
 # Save in npy format

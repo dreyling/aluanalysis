@@ -114,7 +114,7 @@ def calc_aad(data, fraction):
     #print np.sort(hist_origin_abs_values)
     # calculate the mean from fraction
     end_fraction_index = int(fraction * entries_total)
-    return np.mean(np.sort(hist_origin_abs_values)[:end_fraction_index])
+    return np.mean(np.sort(hist_origin_abs_values)[:end_fraction_index]) 
 
 def calc_entries(data):
   return np.sum(data)
