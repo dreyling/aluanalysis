@@ -48,11 +48,30 @@ for bin_index in range(configuration['bins']):
     binned_histo = '%02d'%(bin_index)
     #print 'proc_events'+binned_histo
     newlist = mrr.extend_list(newlist,
-        'ROOT_entries'+binned_histo,
-        'ROOT_mean'+binned_histo,
-        'ROOT_rms'+binned_histo,
-        'rms_frac'+binned_histo,
-        'aad_frac'+binned_histo,
+        'ROOT_entries' + binned_histo,
+        'ROOT_mean' + binned_histo,
+        'ROOT_rms' + binned_histo,
+        'ROOT_rms_norm' + binned_histo,
+        'ROOT_rms_norm_error' + binned_histo,
+        'rms_frac' + binned_histo,
+        'rms_frac_norm' + binned_histo,
+        'rms_frac_norm_error' + binned_histo,
+        'aad_frac' + binned_histo,
+        'aad_frac_norm' + binned_histo,
+        'aad_frac_norm_error' + binned_histo,
+        # for the fit
+        'ROOT_rms_slope',
+        'ROOT_rms_dslope',
+        'ROOT_rms_norm_slope',
+        'ROOT_rms_norm_dslope',
+        'rms_frac_slope',
+        'rms_frac_dslope',
+        'rms_frac_norm_slope',
+        'rms_frac_norm_dslope',
+        'aad_frac_slope',
+        'aad_frac_dslope',
+        'aad_frac_norm_slope',
+        'aad_frac_norm_dslope',
         )
 #print newlist
 
@@ -115,47 +134,48 @@ for index, value in enumerate(newlist):
         #newlist['combined_one_height' ][index] = fitresult['height' ]
         #newlist['combined_one_chi2red'][index] = fitresult['chi2red']
 
-if False:
+if True:
     ##########################################
     # Normalizing width values
     # TODO: normalizing
-    #for bin_index in range(configuration['bins']):
-    #    binned_histo = '%02d'%(bin_index)
 
     def normalize_by_air_measurement(keyword, relative_error=True):
         # getting zero values
         cut_zero = (newlist['thickness'] == 0.0)
-        data_zero_energy = newlist[cut_zero]['energy']
-        data_zero_keyword = newlist[cut_zero][keyword]
-        for index, value in enumerate(newlist):
-            # normalized value
-            theta_meas = newlist[keyword][index]
-            theta_air0 = data_zero_keyword[data_zero_energy == newlist['energy'][index]][0]
-            if theta_meas <= theta_air0:
-                newlist[keyword+'_norm'][index] = 0.0
-            else:
-                newlist[keyword+'_norm'][index] = math.sqrt(theta_meas**2 - theta_air0**2)
-            # propagated error
-            if relative_error == True:
-                theta_meas_error = rel_error * theta_meas
-                theta_air0_error = rel_error * theta_air0
-            else:
-                theta_meas_error = newlist[keyword+'_dev'][index]
-                theta_air0_error = newlist[cut_zero][keyword+'_dev'][data_zero_energy == newlist['energy'][index]][0]
-            # result/return
-            if newlist[keyword+'_norm'][index] == 0.0:
-                newlist[keyword+'_norm_error'][index] = 0.0
-            else:
-                newlist[keyword+'_norm_error'][index] = math.sqrt(
-                        (theta_meas/newlist[keyword+'_norm'][index] * theta_meas_error)**2 +
-                        (theta_air0/newlist[keyword+'_norm'][index] * theta_air0_error)**2 )
+        for bin_index in range(configuration['bins']):
+            binned_histo = '%02d'%(bin_index)
+            data_zero_energy = newlist[cut_zero]['energy']
+            data_zero_keyword = newlist[cut_zero][keyword + binned_histo]
+            #print keyword + binned_histo, data_zero_keyword
+            for index, value in enumerate(newlist):
+                # normalized value
+                theta_meas = newlist[keyword + binned_histo][index]
+                theta_air0 = data_zero_keyword[data_zero_energy == newlist['energy'][index]][0]
+                if theta_meas <= theta_air0:
+                    newlist[keyword + '_norm' + binned_histo][index] = 0.0
+                else:
+                    newlist[keyword + '_norm' + binned_histo][index] = math.sqrt(theta_meas**2 - theta_air0**2)
+                # propagated error
+                if relative_error == True:
+                    theta_meas_error = rel_error * theta_meas
+                    theta_air0_error = rel_error * theta_air0
+                else:
+                    theta_meas_error = newlist[keyword + '_dev' + binned_histo][index]
+                    theta_air0_error = newlist[cut_zero][keyword + '_dev' + binned_histo][data_zero_energy == newlist['energy'][index]][0]
+                # result/return
+                if newlist[keyword + '_norm' + binned_histo][index] == 0.0:
+                    newlist[keyword + '_norm_error' + binned_histo][index] = 0.0
+                else:
+                    newlist[keyword + '_norm_error' + binned_histo][index] = math.sqrt(
+                            (theta_meas/newlist[keyword + '_norm' + binned_histo][index] * theta_meas_error)**2 +
+                            (theta_air0/newlist[keyword + '_norm' + binned_histo][index] * theta_air0_error)**2 )
 
     # rms ROOT
     normalize_by_air_measurement('ROOT_rms', relative_error=True)
     # rms frac
     normalize_by_air_measurement('rms_frac', relative_error=True)
     # aad frac
-    normalize_by_air_measurement('rms_frac', relative_error=True)
+    normalize_by_air_measurement('aad_frac', relative_error=True)
 
 ############################################
 # Save in npy format

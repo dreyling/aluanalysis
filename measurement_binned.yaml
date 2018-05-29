@@ -1,5 +1,6 @@
 # Defining root-file parameters of measurement
 
+#runlist: "runlistX0meas_binned.csv"
 runlist: "runlistX0meas.csv"
 
 root_path: "/home/jande/Documents/fhl-wgs01/data/data_datura/161128_scatalu/EUTelescope_root_files/kappa075_2kink_20180528/"

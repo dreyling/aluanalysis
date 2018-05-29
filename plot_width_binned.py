@@ -37,44 +37,24 @@ import highland
 ############################################
 # arguments
 arguments = docopt(__doc__, version='plot width of projections')
-# open yaml configuration file
-configuration = yaml.load(open(arguments['--configuration']))
+# options
 energy = arguments['--energy']
 thickness = arguments['--thickness']
 width = arguments['--width']
-#widths = np.array(['ROOT_rms_norm', 'rms_frac_norm', 'aad_frac_norm'])
-#markers = ['s', 'o', 'x']
-
+plot = arguments['--plot']
+# open yaml configuration file
+configuration = yaml.load(open(arguments['--configuration']))
 # Getting  data
-data = np.load(arguments['--results']) #print data.dtype.names
-#print data['ROOT_rms00'][runindex]
+data = np.load(arguments['--results']) #print data.dtype.names, data['ROOT_rms00'][runindex]
 
-#####################################
-# Getting runlist
-runlist = mrr.read_csv_runlist(configuration['runlist'])
+######################################################3
 
-# Getting runindex and runnr
-runindex = np.intersect1d(np.where(runlist['thickness'] == float(thickness)), np.where(runlist['energy'] == float(energy)))[0]
-runnr = runlist['runnr'][runindex]
-
-
-
-#########################################
-# Data 
-
-# output names
-title_save = ("x-dependence_width_" + "run" + str(runnr)[:-2] + "_" +
-        energy + "GeV" + "_" + thickness + "mm_" + width
-        )
-title_plot = title_save.replace("_", " ")
-
-# xdata
-xstart = -4.5
-xstop = 4.5
-xstep = abs(xstop-xstart)/configuration['bins']
-xdata = np.arange(xstart, xstop, xstep)
-
-def process_and_plot_width(width):
+def process_and_plot_width(width, runindex):
+    # xdata
+    xstart = -9.
+    xstop = 9.
+    xstep = abs(xstop-xstart)/configuration['bins']
+    xdata = np.arange(xstart, xstop, xstep)
     # getting data from npy-data
     ydata = np.zeros(configuration['bins'])
     ydata_error = np.zeros(configuration['bins'])
@@ -87,18 +67,17 @@ def process_and_plot_width(width):
         else:
             ydata_error[index] = data[width + binned_histo][runindex] * 0.01
 
-
-
     # fit
     fit_results = mff.fit_linear(np.vstack((xdata, ydata)), ydata_error, 0.0, 0.0)
-    print fit_results
     ydata_fit = mff.fitfunc_linear(xdata, fit_results['slope'], fit_results['offset'])
 
-    # in momentum
-    #x_data = highland_multi_scatterer_extended_momentum(theta, thickness_sut, x0_sut)
-
     # plot
-    if plot == True:
+    if bool(plot) == True:
+        # output names
+        title_save = ("x-dependence_width_" + "run" + str(data['runnr'][runindex])[:-2] + "_" +
+                energy + "GeV" + "_" + thickness + "mm_" + width
+                )
+        title_plot = title_save.replace("_", " ")
         ##########################################
         # Plot settings
         fig = plt.figure(figsize=(4, 3))
@@ -134,8 +113,8 @@ def process_and_plot_width(width):
         #plt.ylim(ystart*rate_factor_rel, yend*rate_factor_rel/rate_factor_abs)
         plt.ylabel(r'momentum [GeV/c]')
         #plt.yticks(np.arange(5))
-        ystart_momentum = highland.highland_multi_scatterer_momentum(ystart, runlist['thickness'][runindex], highland.x0alu)
-        yend_momentum =   highland.highland_multi_scatterer_momentum(yend, runlist['thickness'][runindex], highland.x0alu)
+        ystart_momentum = highland.highland_multi_scatterer_momentum(ystart, data['thickness'][runindex], highland.x0alu)
+        yend_momentum =   highland.highland_multi_scatterer_momentum(yend, data['thickness'][runindex], highland.x0alu)
         plt.ylim(ystart_momentum, yend_momentum)
 
         # save name in folder
@@ -143,9 +122,21 @@ def process_and_plot_width(width):
         fig.savefig(name_save)
         print "evince " + name_save + "&"
 
-#process_and_plot_width(widths[0])
-#process_and_plot_width(widths[1])
-process_and_plot_width(width)
+    return fit_results
 
+##################################################3
 
-#np.save(outfile, newlist)
+# loop over all
+if energy == 'all' and thickness == 'all':
+
+    for runindex, value in enumerate(data['runnr']):
+        print runindex, value
+
+        #np.save(outfile, newlist)
+
+# single plot
+else:
+    # Getting runindex and runnr
+    runindex = np.intersect1d(np.where(data['thickness'] == float(thickness)), np.where(data['energy'] == float(energy)))[0]
+    # process and plot
+    print process_and_plot_width(width, runindex)
