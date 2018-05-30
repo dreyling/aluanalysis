@@ -73,7 +73,7 @@ def process_and_plot_width(width, runindex):
         ydata_error = ydata_error * aad_correction_factor
 
     # fit
-    fit_selection = 2
+    fit_selection = 3
     fit_results = mff.fit_linear(np.vstack((xdata[fit_selection:-(1+fit_selection)], ydata[fit_selection:-(1+fit_selection)])), ydata_error[fit_selection:-(1+fit_selection)], 0.0, 0.0)
     ydata_fit = mff.fitfunc_linear(xdata, fit_results['slope'], fit_results['offset'])
 
