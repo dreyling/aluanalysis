@@ -65,8 +65,6 @@ def process_and_plot_width(width, runindex):
         ydata[index] = data[width + binned_histo][runindex]
         if width[-4:] == 'norm':
             ydata_error[index] = data[width + '_error' + binned_histo][runindex]
-        elif width == 'gauss_si_norm' or width == 'combined_one_si_norm':
-            ydata_error[index] = data[width + '_dev' + binned_histo][runindex] * 0.01
         else:
             ydata_error[index] = data[width + binned_histo][runindex] * 0.01
     # correction for aad values
@@ -75,7 +73,8 @@ def process_and_plot_width(width, runindex):
         ydata_error = ydata_error * aad_correction_factor
 
     # fit
-    fit_results = mff.fit_linear(np.vstack((xdata, ydata)), ydata_error, 0.0, 0.0)
+    fit_selection = 2
+    fit_results = mff.fit_linear(np.vstack((xdata[fit_selection:-(1+fit_selection)], ydata[fit_selection:-(1+fit_selection)])), ydata_error[fit_selection:-(1+fit_selection)], 0.0, 0.0)
     ydata_fit = mff.fitfunc_linear(xdata, fit_results['slope'], fit_results['offset'])
 
     # plot
@@ -111,38 +110,81 @@ def process_and_plot_width(width, runindex):
         plt.title(title_plot, fontsize=10)
         plt.xlabel("x-direction [mm]")
         plt.ylabel("width [mrad]")
-        margin_percent = 0.025
+        margin_percent = 0.05
         ystart = np.min(ydata * (1. - margin_percent**2))
         yend   = np.max(ydata * (1. + margin_percent))
         plt.ylim(ystart, yend)
-        # momentum
+
+        # 2nd y-axis: momentum axis
         ax2 = plt.twinx()
-        #plt.ylabel(r'particle rate [kHz]')
-        #plt.ylim(ystart*rate_factor_rel, yend*rate_factor_rel/rate_factor_abs)
         ax2.set_ylabel(r'momentum [GeV/c]')
-        #plt.yticks(np.arange(5))
         # Highland assumption
         if False:
             ystart_momentum = highland.highland_multi_scatterer_momentum(ystart, data['thickness'][runindex], highland.x0alu)
             yend_momentum = highland.highland_multi_scatterer_momentum(yend, data['thickness'][runindex], highland.x0alu)
             plt.ylim(ystart_momentum, yend_momentum)
-        #TODO: correction to nominal energy
+        # correction to nominal energy and 1/p dependency
         else:
-            ymiddle = ydata[np.where(xdata == 0.0)[0]]
-            #ymiddle_momentum = highland.highland_multi_scatterer_momentum(ymiddle, data['thickness'][runindex], highland.x0alu)
-
-            momentum_tick_locations = np.array([ydata[0], ydata[9], ydata[18]]) # mrad
-            momentum_tick_values = highland.highland_multi_scatterer_momentum(momentum_tick_locations, data['thickness'][runindex], highland.x0alu)
-
+            ymiddle = ydata_fit[9] #ydata[np.where(xdata == 0.0)[0]]
+            # calculate dep. factor
+            depend_factor = data['energy'][runindex] * ymiddle # GeV mm
+            # start, middle, end point
+            momentum_tick_locations = np.array([ydata_fit[0], ymiddle, ydata_fit[18]]) # mrad
+            momentum_tick_values = depend_factor / momentum_tick_locations
+            #print momentum_tick_locations, momentum_tick_values
             ax2.set_yticks(momentum_tick_locations)
-
-            ax2.set_yticklabels(('high', '3.0', 'low'))
-            ax2.set_yticklabels((momentum_tick_values))
+            ax2.set_yticklabels((np.round(momentum_tick_values, 2)))
             ax2.set_ylim(ystart, yend)
-            ax2.axhline(momentum_tick_locations[1], color='k')
+            ax2.axhline(momentum_tick_locations[1], color='k', ls='--')
 
         # save name in folder
         name_save =  "output/xspread/" + title_save + str(".pdf")
+        fig.savefig(name_save)
+        print "evince " + name_save + "&"
+
+        # 2nd plot
+        fig = plt.figure(figsize=(4, 3))
+        fig.subplots_adjust(left=0.2, right=0.8, top=0.9, bottom=0.15)
+
+        # calculate assumption
+        ymiddle = ydata_fit[9] #ydata[np.where(xdata == 0.0)[0]]
+        # calculate dep. factor
+        depend_factor = data['energy'][runindex] * ymiddle # GeV mm
+        # ydata 
+        ydata_momentum = depend_factor / ydata
+        ydata_error_momentum = depend_factor / ydata_error
+        ydata_fit_momentum = depend_factor / ydata_fit
+
+        # data
+        plt.errorbar(xdata, ydata_momentum,
+                yerr = ydata_error,
+                label = width.replace("_", " "),
+                linestyle = 'None',
+                color = 'k',
+                #marker = markers[np.where(widths == width)[0][0]])
+                marker = 'x')
+        # fit
+        #label_text = (r'slope$_{\rm fit} = $ ' +
+        label_text = (r'slope = ' +
+                '{:.1f}'.format((ydata_fit_momentum[-1] - ydata_fit_momentum[0]) / (xdata[-1] - xdata[0]) * 1000) +
+                #' $\pm$ {:.2f})'.format(depend_factor / (fit_results['dslope']*1000)) +
+                r'$\frac{{\rm MeV/c}}{\rm mm}$')
+        plt.plot(xdata, ydata_fit_momentum,
+                label = label_text,
+                color = 'k', lw = 1, ls = '-')
+        # option
+        plt.legend(loc='lower right', fontsize=10)
+        plt.title(title_plot, fontsize=10)
+        plt.xlabel("x-direction [mm]")
+        plt.ylabel("momentum [GeV/c]")
+        plt.axhline(ydata_fit_momentum[9], color='k', ls='--')
+        margin_percent = 0.05
+        #ystart = np.min(ydata * (1. - margin_percent**2))
+        #yend   = np.max(ydata * (1. + margin_percent))
+        #plt.ylim(ystart, yend)
+
+        # save name in folder
+        name_save =  "output/xspread/" + title_save + '_momentum' + str(".pdf")
         fig.savefig(name_save)
         print "evince " + name_save + "&"
 

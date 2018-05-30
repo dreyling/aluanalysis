@@ -1,6 +1,13 @@
 #python get_and_analyze_binned_hist1d-data.py --configuration=measurement_binned.yaml --fraction=0.9
 
-python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=1.0 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy --width=gauss_si_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=1.0 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy  --width=gauss_si_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=10.0 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy --width=gauss_si_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=0.2 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy  --width=gauss_si_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=0.1 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy  --width=gauss_si_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=1.0 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy  --width=aad_frac_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=10.0 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy --width=aad_frac_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=0.2 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy  --width=aad_frac_norm
+python plot_width_binned.py --configuration=measurement_binned.yaml --energy=3 --thickness=0.1 --results=data/stats_and_fits_measurement_binned_data-fraction_0.9.npy  --width=aad_frac_norm
 
 return
 
