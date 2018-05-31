@@ -26,8 +26,8 @@ import matplotlib.pyplot as plt
 #import matplotlib.cm as cm
 #from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-#params = {'text.latex.preamble' : [r'\usepackage{upgreek}']}
-#plt.rcParams.update(params)
+params = {'text.latex.preamble' : [r'\usepackage{upgreek}']}
+plt.rcParams.update(params)
 
 import my_rootread as mrr
 import my_fitfuncs as mff
@@ -101,8 +101,8 @@ def process_and_plot_width(width, runindex):
         label_text = (r'slope$_{\rm fit} = $ ' +
                 '({:.2f}'.format(fit_results['slope']*1000) +
                 ' $\pm$ {:.2f})'.format(fit_results['dslope']*1000) +
-                #r'$\frac{\upmu{\rm rad}}{\rm mm}$')
-                r'$\frac{\mu{\rm rad}}{\rm mm}$')
+                r'$\frac{\upmu{\rm rad}}{\rm mm}$')
+                #r'$\frac{\mu{\rm rad}}{\rm mm}$')
         plt.plot(xdata, ydata_fit,
                 label = label_text,
                 color = 'k', lw = 1, ls = '-')
@@ -151,14 +151,14 @@ def process_and_plot_width(width, runindex):
         # calculate assumption
         ymiddle = ydata_fit[9] #ydata[np.where(xdata == 0.0)[0]]
         # calculate dep. factor
-        if False:
+        if True:
             depend_factor = data['energy'][runindex] * ymiddle # GeV mm
             # ydata 
             ydata_momentum = depend_factor / ydata
             ydata_error_momentum = depend_factor / ydata_error
             ydata_fit_momentum = depend_factor / ydata_fit
         else:
-            depend_factor = 1. / ydata[9] * data['energy'][runindex] # array, [GeV]
+            depend_factor = data['energy'][runindex] / ymiddle # array, [GeV]
             # ydata 
             ydata_momentum = depend_factor * ydata
             ydata_error_momentum = depend_factor * ydata_error
