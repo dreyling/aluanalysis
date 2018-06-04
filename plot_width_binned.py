@@ -42,7 +42,7 @@ arguments = docopt(__doc__, version='plot width of projections')
 energy = arguments['--energy']
 thickness = arguments['--thickness']
 width = arguments['--width']
-plot = arguments['--plot']
+plot_flag = bool(arguments['--plot'])
 # open yaml configuration file
 configuration = yaml.load(open(arguments['--configuration']))
 aad_correction_factor = math.pi/2. #configuration['add_correction_factor']
@@ -51,7 +51,7 @@ data = np.load(arguments['--results']) #print data.dtype.names, data['ROOT_rms00
 
 ######################################################3
 
-def process_and_plot_width(width, runindex):
+def process_and_plot_width(width, runindex, units = 'relative', plot = plot_flag):
     # xdata
     xstart = -9.
     xstop = 9.
@@ -78,7 +78,7 @@ def process_and_plot_width(width, runindex):
     ydata_fit = mff.fitfunc_linear(xdata, fit_results['slope'], fit_results['offset'])
 
     # plot
-    if bool(plot) == True:
+    if plot == True:
         # output names
         title_save = ("x-dependence_width_" + "run" + str(data['runnr'][runindex])[:-2] + "_" +
                 str(data['energy'][runindex]) + "GeV" + "_" + 
@@ -146,47 +146,51 @@ def process_and_plot_width(width, runindex):
         #################
         # 2nd plot
         fig = plt.figure(figsize=(4, 3))
-        fig.subplots_adjust(left=0.2, right=0.8, top=0.9, bottom=0.15)
+        fig.subplots_adjust(left=0.17, right=0.97, top=0.97, bottom=0.15)
 
         # calculate assumption
         ymiddle = ydata_fit[9] #ydata[np.where(xdata == 0.0)[0]]
         # calculate dep. factor
-        if True:
+        if units == 'absolute':
             depend_factor = data['energy'][runindex] * ymiddle # GeV mm
-            # ydata 
-            ydata_momentum = depend_factor / ydata
-            ydata_error_momentum = depend_factor / ydata_error
-            ydata_fit_momentum = depend_factor / ydata_fit
-        else:
-            depend_factor = data['energy'][runindex] / ymiddle # array, [GeV]
-            # ydata 
-            ydata_momentum = depend_factor * ydata
-            ydata_error_momentum = depend_factor * ydata_error
-            ydata_fit_momentum = depend_factor * ydata_fit
+        elif units == 'relative':
+            depend_factor = data['energy'][runindex] * ymiddle / data['energy'][runindex] # GeV mm / GeV
+        # ydata 
+        ydata_momentum = depend_factor / ydata
+        ydata_error_momentum = depend_factor / ydata**2. * ydata_error
+        ydata_fit_momentum = depend_factor / ydata_fit
 
         # data
+        label_text = (str(data['energy'][runindex]) + " GeV" + ", " +
+                str(data['thickness'][runindex]) + " mm") #width.replace("_", " ")
         plt.errorbar(xdata, ydata_momentum,
-                yerr = ydata_error,
-                label = width.replace("_", " "),
+                yerr = ydata_error_momentum,
+                label = label_text,
                 linestyle = 'None',
                 color = 'k',
                 #marker = markers[np.where(widths == width)[0][0]])
                 marker = 'x')
         # fit
-        #label_text = (r'slope$_{\rm fit} = $ ' +
-        label_text = (r'slope = ' +
-                '{:.1f}'.format((ydata_fit_momentum[-1] - ydata_fit_momentum[0]) / (xdata[-1] - xdata[0]) * 1000) +
-                #' $\pm$ {:.2f})'.format(depend_factor / (fit_results['dslope']*1000)) +
-                r'$\frac{{\rm MeV/c}}{\rm mm}$')
+        if units == 'absolute':
+            label_text = (r'slope = ' +
+                    '{:.1f}'.format((ydata_fit_momentum[-1] - ydata_fit_momentum[0]) / (xdata[-1] - xdata[0]) * 1000) +
+                    r'$\frac{{\rm MeV/c}}{\rm mm}$')
+        elif units == 'relative':
+            label_text = (r'slope = ' +
+                    '{:.1e}'.format((ydata_fit_momentum[-1] - ydata_fit_momentum[0]) / (xdata[-1] - xdata[0])) +
+                    r'$\frac{1}{\rm mm}$')
         plt.plot(xdata, ydata_fit_momentum,
                 label = label_text,
                 color = 'k', lw = 1, ls = '-')
         # option
         plt.legend(loc='lower right', fontsize=10)
-        plt.title(title_plot, fontsize=10)
-        plt.xlabel("x-direction [mm]")
-        plt.ylabel("momentum [GeV/c]")
         plt.axhline(ydata_fit_momentum[9], color='k', ls='--')
+        plt.xlabel("x-direction [mm]")
+        if units == 'absolute':
+            plt.title(title_plot, fontsize=10)
+            plt.ylabel("momentum [GeV/c]")
+        elif units == 'relative':
+            plt.ylabel("momentum [a.u.]")
         margin_percent = 0.05
         #ystart = np.min(ydata * (1. - margin_percent**2))
         #yend   = np.max(ydata * (1. + margin_percent))
@@ -219,6 +223,65 @@ if energy == 'all' and thickness == 'all':
     print slopes
     print dslopes
     #np.save(outfile, newlist)
+
+# thickness series
+elif energy == 'all':
+    # getting runindex with this thickness
+    runindexes = np.where(data['thickness'] == float(thickness))[0]
+    slopes =   np.zeros(len(runindexes))
+    dslopes =  np.zeros(len(runindexes))
+    slopes_momentum  = np.zeros(len(runindexes))
+    dslopes_momentum = np.zeros(len(runindexes))
+    energies = np.zeros(len(runindexes))
+    for index, runindex in enumerate(runindexes):
+        #print runindex, data['energy'][runindex]
+        energies[index] = data['energy'][runindex]
+        # slopes
+        fit_results = process_and_plot_width(width, runindex, plot=False)
+        print fit_results
+        slopes[index] = fit_results['slope']
+        dslopes[index] = fit_results['dslope']
+        # in relative momentum
+        #ymiddle =  fit_results['slope'] * 0.0 + fit_results['offset']
+        ymiddle =  fit_results['offset']
+        slopes_momentum[index]  = -1./ (ymiddle / (fit_results['slope'])) # a.u./mm
+        dslopes_momentum[index] = -1./ (ymiddle / (fit_results['dslope']))
+    # plot
+    fig = plt.figure(figsize=(4, 3))
+    fig.subplots_adjust(left=0.17, right=0.97, top=0.97, bottom=0.15)
+
+    # mrad/mm * 1000 => urad/mm
+    plt.errorbar(energies, slopes*1000,
+            yerr = dslopes*1000,
+            linestyle = 'None',
+            color = 'k',
+            marker = 'x')
+    plt.ylabel(r'slope [$\upmu{\rm rad}$/mm]')
+
+    plt.xlim(0, 5.5)
+    plt.xlabel("momentum [GeV/c]")
+    # save name in folder
+    name_save =  "output/xspread/" + 'slope_' + thickness + 'mm' + str(".pdf")
+    fig.savefig(name_save)
+    print "evince " + name_save + "&"
+
+    # plot momentum
+    fig = plt.figure(figsize=(4, 3))
+    fig.subplots_adjust(left=0.17, right=0.97, top=0.97, bottom=0.15)
+
+    plt.errorbar(energies, slopes_momentum*1000,
+            yerr = dslopes_momentum*1000,
+            linestyle = 'None',
+            color = 'k',
+            marker = 'x')
+    plt.ylabel(r'slope [$10^{-3}$ /mm]')
+
+    plt.xlim(0, 5.5)
+    plt.xlabel("momentum [GeV/c]")
+    # save name in folder
+    name_save =  "output/xspread/" + 'slope-rel-momentum_' + thickness + 'mm' + str(".pdf")
+    fig.savefig(name_save)
+    print "evince " + name_save + "&"
 
 # single plot
 else:
