@@ -157,7 +157,7 @@ def process_and_plot_width(width, runindex, units = 'relative', plot = plot_flag
             depend_factor = data['energy'][runindex] * ymiddle / data['energy'][runindex] # GeV mm / GeV
         # ydata 
         ydata_momentum = depend_factor / ydata
-        ydata_error_momentum = depend_factor / ydata**2. * ydata_error
+        ydata_error_momentum = -1. * depend_factor / ydata**2. * ydata_error
         ydata_fit_momentum = depend_factor / ydata_fit
 
         # data
@@ -237,7 +237,7 @@ elif energy == 'all':
         #print runindex, data['energy'][runindex]
         energies[index] = data['energy'][runindex]
         # slopes
-        fit_results = process_and_plot_width(width, runindex, plot=False)
+        fit_results = process_and_plot_width(width, runindex, plot=True)
         print fit_results
         slopes[index] = fit_results['slope']
         dslopes[index] = fit_results['dslope']
