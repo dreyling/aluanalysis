@@ -4,12 +4,13 @@ Reads root files for plotting and analysing.
 
 ## Installation
 
-Based on Python 2.7
-
-Required:
+ROOT compiled with python flag:
 - PyROOT for ```from ROOT import TFile```
 - root_numpy for ```from root_numpy import hist2array```
-- Python modules: numpy, scipy, matplotlib, yaml, docopt
+
+Python:
+- Python 2.7
+- numpy, scipy, matplotlib, yaml, docopt
 
 ## Work flow
 
