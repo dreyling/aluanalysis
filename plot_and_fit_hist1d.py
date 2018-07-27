@@ -84,7 +84,7 @@ if fitfunction != 'none':
     if fitfunction == 'gauss':
         print "\nGauss fit"
         fitfunc = mff.fitfunc_gauss
-        parameters = ['mu', 'si_g', 'N']
+        parameters = [r'$\mu$', r'$\sigma_g$', r'$N$']
         para0 = [0.0, 0.3, 50e3]
         para_bounds=([-np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf],
                         [+np.inf, np.inf, np.inf, np.inf, np.inf, np.inf])
@@ -92,7 +92,7 @@ if fitfunction != 'none':
     if fitfunction == 'studentt_standard':
         print "\nStudentt fit"
         fitfunc = mff.fitfunc_studentt
-        parameters = ['mu', 'nu_s', 'N']
+        parameters = [r'$\mu$', r'$\nu_s$', r'$N$']
         para0 = [0.0, 0.3, 50e3]
         para_bounds=([-np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf],
                         [+np.inf, np.inf, np.inf, np.inf, np.inf, np.inf])
@@ -100,7 +100,7 @@ if fitfunction != 'none':
     if fitfunction == 'studentt':
         print "\nnon-stand. Studentt fit"
         fitfunc = mff.fitfunc_studentt_nonstand
-        parameters = ['mu', 'nu_s', 'si_s', 'N']
+        parameters = [r'$\mu$', r'$\nu_s$', r'$\sigma_s$', r'$N$']
         para0 = [0.0, 5., 0.3, 50e3]
         para_bounds=([-np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf],
                         [+np.inf, np.inf, np.inf, np.inf, np.inf, np.inf])
