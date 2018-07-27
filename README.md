@@ -5,12 +5,12 @@ Reads root files for plotting and analysing.
 ## Installation
 
 ROOT compiled with python flag:
-- PyROOT for ```from ROOT import TFile```
-- root_numpy for ```from root_numpy import hist2array```
+- PyROOT for ```from ROOT import TFile```, see https://root.cern.ch/pyroot
 
-Python:
+Python (try Anaconda or Miniconda or the local python):
 - Python 2.7
 - numpy, scipy, matplotlib, yaml, docopt
+- root_numpy for ```from root_numpy import hist2array```, see http://scikit-hep.org/root_numpy/install.html
 
 ## Work flow
 
